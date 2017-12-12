@@ -94,6 +94,7 @@ public class Students extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        setTitle("Data Siswa");
         setFrameIcon(null);
 
         tableStudent.setModel(new javax.swing.table.DefaultTableModel(

@@ -93,10 +93,12 @@ public class Employee extends javax.swing.JInternalFrame {
         jLabel12 = new javax.swing.JLabel();
         btnCetakLaporan = new javax.swing.JButton();
         cbSearch = new javax.swing.JComboBox<>();
+        lblCountData = new javax.swing.JLabel();
+        lblData = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Data Pegawai");
+        setTitle("Data Guru");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Pegawai"));
 
@@ -357,6 +359,10 @@ public class Employee extends javax.swing.JInternalFrame {
             }
         });
 
+        lblCountData.setText("10000");
+
+        lblData.setText("Jumlah Data :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -387,7 +393,12 @@ public class Employee extends javax.swing.JInternalFrame {
                                 .addComponent(txtSearch)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel12)
-                                .addGap(14, 14, 14)))))
+                                .addGap(14, 14, 14))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblData)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCountData)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -395,7 +406,7 @@ public class Employee extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
                     .addComponent(btnEdit)
@@ -410,7 +421,11 @@ public class Employee extends javax.swing.JInternalFrame {
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblData)
+                    .addComponent(lblCountData))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -702,7 +717,6 @@ public class Employee extends javax.swing.JInternalFrame {
         model.addColumn("Status");
         try {
             String sql = null;
-            int data_count = 0;
             if (cbSearch.getModel().getSelectedItem().equals("NIK")) {
                 sql = "SELECT * from guru WHERE NIK LIKE '" + txtSearch.getText() + "%' ORDER BY Nama";
             }else if (cbSearch.getModel().getSelectedItem().equals("Nama")) {
@@ -713,9 +727,14 @@ public class Employee extends javax.swing.JInternalFrame {
             rs = st.executeQuery(sql);
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString("NIK"), rs.getString("Nama"), rs.getString("Jenis_Kelamin"), rs.getString("Tempat_Lahir"), rs.getString("Tanggal_Lahir"), rs.getString("Alamat"), rs.getString("Telepon"), rs.getString("Agama"), rs.getString("email"), rs.getString("Status")});
-                data_count++;
             }
             tableEmployee.setModel(model);
+            String sql_count = "SELECT COUNT(*) AS Jumlah FROM guru";
+            ResultSet rs2 = st.executeQuery(sql_count);
+            if(rs2.next()){
+                String data_count = rs2.getString("Jumlah");
+                lblCountData.setText("" + data_count);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -748,6 +767,8 @@ public class Employee extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblCountData;
+    private javax.swing.JLabel lblData;
     private javax.swing.JTable tableEmployee;
     private javax.swing.JLabel tx;
     private javax.swing.JTextArea txtAlamat;
