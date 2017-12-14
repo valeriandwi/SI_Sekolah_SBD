@@ -481,7 +481,7 @@ public class Employee extends javax.swing.JInternalFrame {
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.execute();
-                JOptionPane.showMessageDialog(null, "Penyimpanan data siswa berhasil");
+                JOptionPane.showMessageDialog(null, "Penyimpanan data guru berhasil");
                 resetField();
                 resetTable();
                 show_employees();

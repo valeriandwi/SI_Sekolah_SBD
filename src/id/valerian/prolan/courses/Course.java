@@ -9,7 +9,10 @@ import id.valerian.prolan.connection.db_connection;
 import static id.valerian.prolan.user.User.containsNumbers;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -30,13 +33,19 @@ public class Course extends javax.swing.JInternalFrame {
         initComponents();
         show_courses();
         try {
-            String sql = "SELECT nama_ptk FROM t_ptk WHERE jenis_ptk = 'Guru Mapel' ORDER BY nama_ptk ASC";
+            String sql = "SELECT nama FROM guru ORDER BY nama ASC";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             cbNamaPengajar.addItem("-Pilihan-");
             while (rs.next()) {
-                cbNamaPengajar.addItem(rs.getString("nama_ptk"));
+                cbNamaPengajar.addItem(rs.getString("nama"));
+            }
+            String sql2 = "SELECT mata_pelajaran from pelajaran";
+            ResultSet rs2 = st.executeQuery(sql2);
+            cbMatpel.addItem("-Pilihan-");
+            while (rs2.next()) {
+                cbMatpel.addItem(rs2.getString("mata_pelajaran"));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -53,12 +62,12 @@ public class Course extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtKdMatpel = new javax.swing.JTextField();
-        txtNama = new javax.swing.JTextField();
-        txtKKM = new javax.swing.JTextField();
+        cbMatpel = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txtKdDetail = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtNIK = new javax.swing.JTextField();
@@ -85,29 +94,26 @@ public class Course extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Mata Pelajaran"));
 
-        jLabel4.setText("KKM");
-
         jLabel2.setText("Nama Mata Pelajaran");
 
         jLabel1.setText("Kode Mata Pelajaran");
 
+        txtKdMatpel.setEnabled(false);
         txtKdMatpel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtKdMatpelKeyReleased(evt);
             }
         });
 
-        txtNama.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNamaKeyReleased(evt);
+        cbMatpel.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbMatpelItemStateChanged(evt);
             }
         });
 
-        txtKKM.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtKKMKeyReleased(evt);
-            }
-        });
+        jLabel4.setText("Kode Detail Matpel");
+
+        txtKdDetail.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,35 +123,35 @@ public class Course extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtKdMatpel, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtKKM, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbMatpel, 0, 161, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtKdMatpel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                            .addComponent(txtKdDetail))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtKdDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtKdMatpel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtKKM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(cbMatpel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Pengajar"));
@@ -303,7 +309,7 @@ public class Course extends javax.swing.JInternalFrame {
                             .addComponent(btnReset)
                             .addComponent(btnDelete)
                             .addComponent(btnEdit))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -324,16 +330,16 @@ public class Course extends javax.swing.JInternalFrame {
         txtKdMatpel.setEnabled(false);
         int i = tableCourse.getSelectedRow();
         TableModel model = tableCourse.getModel();
-        txtKdMatpel.setText(model.getValueAt(i, 0).toString());
-        txtNama.setText(model.getValueAt(i, 1).toString());
-        cbNamaPengajar.getModel().setSelectedItem(model.getValueAt(i, 2).toString());
-        txtKKM.setText(model.getValueAt(i, 3).toString());
+        txtKdDetail.setText(model.getValueAt(i, 0).toString());
+        cbMatpel.getModel().setSelectedItem(model.getValueAt(i, 1).toString());
+        txtNIK.setText(model.getValueAt(i, 2).toString());
+        cbNamaPengajar.getModel().setSelectedItem(model.getValueAt(i, 3).toString());
     }//GEN-LAST:event_tableCourseMouseClicked
 
     private void cbNamaPengajarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbNamaPengajarItemStateChanged
         try {
             if (!cbNamaPengajar.getModel().getSelectedItem().equals("-Pilihan-")) {
-                String sql = "SELECT nik FROM t_ptk WHERE nama_ptk = '" + cbNamaPengajar.getModel().getSelectedItem().toString() + "'";
+                String sql = "SELECT nik FROM guru WHERE nama = '" + cbNamaPengajar.getModel().getSelectedItem().toString() + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 Statement st = conn.createStatement();
                 rs = st.executeQuery(sql);
@@ -352,11 +358,11 @@ public class Course extends javax.swing.JInternalFrame {
         invalid = checkField();
         if (!invalid) {
             try {
-                String sql = "INSERT INTO t_matpel VALUES ('" + txtKdMatpel.getText() + "','" + txtNama.getText() + "','" + txtNIK.getText() + "','" + txtKKM.getText() + "')";
+                String sql = "INSERT INTO detail_pelajaran VALUES ('" + txtKdDetail.getText() + "','" + txtKdMatpel.getText() + "','" + txtNIK.getText() + "')";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.execute();
-                JOptionPane.showMessageDialog(null, "Penyimpanan data siswa berhasil");
+                JOptionPane.showMessageDialog(null, "Penyimpanan data mata pelajaran berhasil");
                 resetField();
                 resetTable();
                 show_courses();
@@ -370,7 +376,7 @@ public class Course extends javax.swing.JInternalFrame {
         invalid = checkField();
         if (!invalid) {
             try {
-                String sql = "UPDATE t_matpel SET nama_mapel = '" + txtNama.getText() + "',NIK = '" + txtNIK.getText() + "',KKM = '" + txtKKM.getText() + "' WHERE kd_mapel = '" + txtKdMatpel.getText() + "'";
+                String sql = "UPDATE detail_pelajaran SET kode_pelajaran = '" + txtKdMatpel.getText() + "',NIK = '" + txtNIK.getText() + "' WHERE kode_detail_pelajaran = '" + txtKdDetail.getText() + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -388,7 +394,7 @@ public class Course extends javax.swing.JInternalFrame {
         try {
             int reply = JOptionPane.showConfirmDialog(null, "Apakah Anda Yakin untuk menghapus data berikut?", title, JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                String sql = "DELETE FROM t_matpel WHERE kd_mapel = '" + txtKdMatpel.getText() + "'";
+                String sql = "DELETE FROM detail_pelajaran WHERE kode_detail_pelajaran = '" + txtKdDetail.getText() + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -414,34 +420,6 @@ public class Course extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtKdMatpelKeyReleased
 
-    private void txtNamaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaKeyReleased
-        Integer namaLength = txtNama.getText().length();
-        String subStr = txtNama.getText();
-        if (namaLength.compareTo(50) > 0) {
-            txtNama.setText(subStr.substring(0, namaLength - 1));
-            JOptionPane.showMessageDialog(this, "Maksimal karakter Nama Mata Pelajaran hanya bisa 50!", "Pesan", JOptionPane.WARNING_MESSAGE);
-        }
-        if (containsNumbers(subStr)) {
-            txtNama.setText(subStr.substring(0, namaLength - 1));
-        }
-    }//GEN-LAST:event_txtNamaKeyReleased
-
-    private void txtKKMKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKKMKeyReleased
-        Integer kkmLength = txtKKM.getText().length();
-        String subStr = txtKKM.getText();
-        if (!containsNumbers(subStr)) {
-            txtKKM.setText(subStr.substring(0, kkmLength - 1));
-        } else {
-            if (kkmLength.compareTo(3) > 0) {
-                txtKKM.setText(subStr.substring(0, kkmLength - 1));
-                JOptionPane.showMessageDialog(this, "Maksimal karakter KKM hanya bisa 3!", "Pesan", JOptionPane.WARNING_MESSAGE);
-            } else if (Integer.parseInt(subStr) > 100) {
-                txtKKM.setText("100");
-                JOptionPane.showMessageDialog(this, "Nilai maksimal adalah 100", "Pesan", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtKKMKeyReleased
-
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         show_courses();
     }//GEN-LAST:event_txtSearchKeyReleased
@@ -450,18 +428,32 @@ public class Course extends javax.swing.JInternalFrame {
         show_courses();
     }//GEN-LAST:event_cbSearchItemStateChanged
 
+    private void cbMatpelItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbMatpelItemStateChanged
+        try {
+            if (!cbMatpel.getModel().getSelectedItem().equals("-Pilihan-")) {
+                String sql = "SELECT kode_pelajaran FROM pelajaran WHERE mata_pelajaran = '" + cbMatpel.getModel().getSelectedItem().toString() + "'";
+                java.sql.Connection conn = (Connection) db_connection.configDB();
+                Statement st = conn.createStatement();
+                rs = st.executeQuery(sql);
+                if (rs.next()) {
+                    txtKdMatpel.setText(rs.getString("kode_pelajaran"));
+                }
+            } else {
+                txtKdMatpel.setText("");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_cbMatpelItemStateChanged
+
     private boolean checkField() {
         if (txtKdMatpel.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Kode Mata Pelajaran tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
             txtKdMatpel.requestFocus();
             return true;
-        } else if (txtNama.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Nama Mata Pelajaran tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtNama.requestFocus();
-            return true;
-        } else if (txtKKM.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "KKM tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtKKM.requestFocus();
+        } else if (cbMatpel.getModel().getSelectedItem().equals("-Pilihan-")) {
+            JOptionPane.showMessageDialog(null, "Nama Pelajaran Harus Dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
+            cbMatpel.requestFocus();
             return true;
         } else if (cbNamaPengajar.getModel().getSelectedItem().equals("-Pilihan-")) {
             JOptionPane.showMessageDialog(null, "Nama Pengajar Harus Dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
@@ -472,40 +464,52 @@ public class Course extends javax.swing.JInternalFrame {
     }
 
     private void resetField() {
-        btnAdd.setEnabled(true);
-        btnEdit.setEnabled(false);
-        btnDelete.setEnabled(false);
-        txtKdMatpel.setEnabled(true);
-        txtKdMatpel.setText("");
-        txtNama.setText("");
-        txtKKM.setText("");
-        cbNamaPengajar.setSelectedIndex(0);
+            btnAdd.setEnabled(true);
+            btnEdit.setEnabled(false);
+            btnDelete.setEnabled(false);
+            txtKdMatpel.setText("");
+            cbMatpel.setSelectedIndex(0);
+            cbNamaPengajar.setSelectedIndex(0);
     }
-
+    
     private void resetTable() {
         DefaultTableModel model = (DefaultTableModel) tableCourse.getModel();
         model.setRowCount(0);
     }
 
     private void show_courses() {
+        String sql = "SELECT MAX(kode_detail_pelajaran) as max FROM detail_pelajaran";
+        try{
+        java.sql.Connection conn = (Connection) db_connection.configDB();
+        Statement st = conn.createStatement();
+        rs = st.executeQuery(sql);
+        if(rs.next()){
+            int max = (rs.getInt("max"))+1;
+            txtKdDetail.setText(String.valueOf(max));
+        }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Kode");
+        model.addColumn("Kode Detail Pelajaran");
         model.addColumn("Nama Mata Pelajaran");
-        model.addColumn("Nama Pengajar");
-        model.addColumn("KKM");
+        model.addColumn("NIK");
+        model.addColumn("Nama");
+        model.addColumn("Kelompok");
         try {
             int data_count = 0;
-            String sql = null;
             if (cbSearch.getModel().getSelectedItem().equals("Mata Pelajaran")) {
-                sql = "SELECT t_matpel.NIK,t_matpel.kd_mapel,t_matpel.nama_mapel,t_ptk.Nama_PTK,t_matpel.kkm FROM t_matpel,t_ptk WHERE t_matpel.NIK = t_ptk.NIK AND t_matpel.nama_mapel LIKE '"+txtSearch.getText()+"%' ORDER BY t_matpel.kd_mapel ASC";
-            }else if (cbSearch.getModel().getSelectedItem().equals("Nama Pengajar")) {
-                sql = "SELECT t_matpel.NIK,t_matpel.kd_mapel,t_matpel.nama_mapel,t_ptk.Nama_PTK,t_matpel.kkm FROM t_matpel,t_ptk WHERE t_matpel.NIK = t_ptk.NIK AND t_ptk.Nama_PTK LIKE '"+txtSearch.getText()+"%' ORDER BY t_matpel.kd_mapel ASC";
+                sql = "SELECT detail_pelajaran.Kode_detail_pelajaran,pelajaran.mata_pelajaran,guru.nik,guru.nama,pelajaran.kelompok "
+                      + "FROM pelajaran,detail_pelajaran,guru WHERE detail_pelajaran.NIK = guru.NIK AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran and pelajaran.mata_pelajaran LIKE '"+txtSearch.getText()+"%' ORDER BY pelajaran.mata_pelajaran ASC";
+            } else if (cbSearch.getModel().getSelectedItem().equals("Nama Pengajar")) {
+                sql = "SELECT detail_pelajaran.Kode_detail_pelajaran,pelajaran.mata_pelajaran,guru.nik,guru.nama,pelajaran.kelompok "
+                      + "FROM pelajaran,detail_pelajaran,guru WHERE detail_pelajaran.NIK = guru.NIK AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran and guru.nama LIKE '"+txtSearch.getText()+"%' ORDER BY guru.nama ASC";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                model.addRow(new Object[]{rs.getString("kd_mapel"), rs.getString("nama_mapel"), rs.getString("nama_ptk"), rs.getString("kkm")});
+                model.addRow(new Object[]{rs.getString("kode_detail_pelajaran"), rs.getString("mata_pelajaran"), rs.getString("nik"), rs.getString("nama"),rs.getString("kelompok")});
                 data_count++;
             }
             tableCourse.setModel(model);
@@ -518,6 +522,7 @@ public class Course extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnReset;
+    private javax.swing.JComboBox<String> cbMatpel;
     private javax.swing.JComboBox<String> cbNamaPengajar;
     private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JLabel jLabel1;
@@ -530,10 +535,9 @@ public class Course extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableCourse;
-    private javax.swing.JTextField txtKKM;
+    private javax.swing.JTextField txtKdDetail;
     private javax.swing.JTextField txtKdMatpel;
     private javax.swing.JTextField txtNIK;
-    private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
