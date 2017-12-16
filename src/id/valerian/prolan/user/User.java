@@ -8,7 +8,10 @@ package id.valerian.prolan.user;
 import id.valerian.prolan.connection.db_connection;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +32,18 @@ public class User extends javax.swing.JInternalFrame {
     public User() {
         initComponents();
         show_user();
+        try{
+         String sql = "SELECT nama FROM guru ORDER BY nama ASC";
+            java.sql.Connection conn = (Connection) db_connection.configDB();
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            cbNama.addItem("-Pilihan-");
+            while (rs.next()) {
+                cbNama.addItem(rs.getString("nama"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
         txtUsername.requestFocus();
         this.setResizable(false);
         this.setTitle("Data Master Pengguna");
@@ -62,9 +77,9 @@ public class User extends javax.swing.JInternalFrame {
         btnDelete = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         txtPassword = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
-        txtNamaPengguna = new javax.swing.JTextField();
+        txtNIK = new javax.swing.JTextField();
         txtUsername = new javax.swing.JTextField();
+        cbNama = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -79,7 +94,7 @@ public class User extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Nama Pengguna", "HA"
+                "Username", "Password", "NIK", "Nama", "HA"
             }
         ) {
             Class[] types = new Class [] {
@@ -169,13 +184,12 @@ public class User extends javax.swing.JInternalFrame {
         lblPassword.setText("Password");
 
         lblEmail.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblEmail.setText("Email");
+        lblEmail.setText("NIK");
         lblEmail.setPreferredSize(new java.awt.Dimension(59, 15));
 
         lblNamaPengguna.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNamaPengguna.setText("Nama Pengguna");
 
-        btnAdd.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/add.png"))); // NOI18N
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +198,6 @@ public class User extends javax.swing.JInternalFrame {
             }
         });
 
-        btnEdit.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/edit.png"))); // NOI18N
         btnEdit.setText("Edit");
         btnEdit.setEnabled(false);
@@ -199,7 +212,6 @@ public class User extends javax.swing.JInternalFrame {
             }
         });
 
-        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/trash.png"))); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.setEnabled(false);
@@ -209,7 +221,6 @@ public class User extends javax.swing.JInternalFrame {
             }
         });
 
-        btnReset.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/reset.png"))); // NOI18N
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -219,29 +230,24 @@ public class User extends javax.swing.JInternalFrame {
         });
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtPasswordKeyReleased(evt);
-            }
-        });
 
-        txtEmail.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNIK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNIK.setEnabled(false);
+        txtNIK.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtEmailKeyReleased(evt);
-            }
-        });
-
-        txtNamaPengguna.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNamaPengguna.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNamaPenggunaKeyReleased(evt);
+                txtNIKKeyReleased(evt);
             }
         });
 
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtUsernameKeyReleased(evt);
+            }
+        });
+
+        cbNama.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbNamaItemStateChanged(evt);
             }
         });
 
@@ -261,9 +267,9 @@ public class User extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cbHakAkses, 0, 160, Short.MAX_VALUE)
                     .addComponent(txtPassword)
-                    .addComponent(txtEmail)
-                    .addComponent(txtNamaPengguna, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtUsername))
+                    .addComponent(txtNIK)
+                    .addComponent(txtUsername)
+                    .addComponent(cbNama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(21, 21, 21))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
@@ -290,11 +296,11 @@ public class User extends javax.swing.JInternalFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNamaPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNamaPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNIK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbHakAkses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -305,7 +311,7 @@ public class User extends javax.swing.JInternalFrame {
                     .addComponent(btnEdit)
                     .addComponent(btnDelete)
                     .addComponent(btnReset))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -350,11 +356,10 @@ public class User extends javax.swing.JInternalFrame {
         int i = tableUser.getSelectedRow();
         TableModel model = tableUser.getModel();
         txtUsername.setEnabled(false);
-        txtPassword.setEnabled(false);
         txtUsername.setText(model.getValueAt(i, 0).toString());
         txtPassword.setText(model.getValueAt(i, 1).toString());
-        txtEmail.setText(model.getValueAt(i, 3).toString());
-        txtNamaPengguna.setText(model.getValueAt(i, 2).toString());
+        cbNama.setSelectedItem(model.getValueAt(i, 2).toString());
+        txtNIK.setText(model.getValueAt(i, 3).toString());
         cbHakAkses.setSelectedItem(model.getValueAt(i, 4).toString());
     }//GEN-LAST:event_tableUserMouseClicked
 
@@ -367,7 +372,7 @@ public class User extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int hak_akses = HakAksesSelection();
-                String sql = "INSERT INTO t_pengguna(username, password, nama_pengguna, email_pengguna , hak_akses) VALUES ('" + txtUsername.getText() + "',MD5('" + txtPassword.getText() + "'),'" + txtNamaPengguna.getText() + "','" + txtEmail.getText() + "','" + hak_akses + "')";
+                String sql = "INSERT INTO pengguna(username, password, nik, hak_akses) VALUES ('" + txtUsername.getText() + "',MD5('" + txtPassword.getText() + "'),'" + txtNIK.getText() + "','" + hak_akses + "')";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -390,14 +395,29 @@ public class User extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int hak_akses = HakAksesSelection();
-                String sql = "UPDATE t_pengguna SET email_pengguna = '" + txtEmail.getText() + "',nama_pengguna = '" + txtNamaPengguna.getText() + "',hak_akses = '" + hak_akses + "' WHERE username = '" + txtUsername.getText() + "'";
+                String newpassword = txtPassword.getText();
+                String sql2 = "SELECT password FROM pengguna WHERE username = '" + txtUsername.getText() + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.executeUpdate();
+                Statement st = conn.createStatement();
+                rs = st.executeQuery(sql2);
+                if(rs.next()){
+                    String oldpassword = rs.getString("password");
+                    String sql = null;
+                    if(newpassword.equals(oldpassword)){
+                        sql = "UPDATE pengguna SET nik = '" + txtNIK.getText() + "',hak_akses = '" + hak_akses + "' WHERE username = '" + txtUsername.getText() + "'";
+                        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                        pst.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
+                    }else if(!newpassword.equals(oldpassword)){
+                        sql = "UPDATE pengguna SET nik = '" + txtNIK.getText() + "',password = MD5('" + newpassword + "'),hak_akses = '" + hak_akses + "' WHERE username = '" + txtUsername.getText() + "'";
+                        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                        pst.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
+                    }
+                }
                 resetField();
                 resetTable();
                 show_user();
-                JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
@@ -408,7 +428,7 @@ public class User extends javax.swing.JInternalFrame {
         try {
             int reply = JOptionPane.showConfirmDialog(null, "Apakah Anda Yakin untuk menghapus data berikut?", title, JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                String sql = "DELETE FROM t_pengguna WHERE username = '" + txtUsername.getText() + "'";
+                String sql = "DELETE FROM pengguna WHERE username = '" + txtUsername.getText() + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -435,35 +455,14 @@ public class User extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtUsernameKeyReleased
 
-    private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
-        Integer passwordLength = txtPassword.getText().length();
-        String subStr = txtPassword.getText();
-        if (passwordLength.compareTo(25) > 0) {
-            txtPassword.setText(subStr.substring(0, passwordLength - 1));
-            JOptionPane.showMessageDialog(this, "Maksimal karakter password hanya bisa 25!", "Pesan", JOptionPane.WARNING_MESSAGE);
+    private void txtNIKKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNIKKeyReleased
+        Integer nikLength = txtNIK.getText().length();
+        String subStr = txtNIK.getText();
+        if (nikLength.compareTo(10) > 0) {
+            txtNIK.setText(subStr.substring(0, nikLength - 1));
+            JOptionPane.showMessageDialog(this, "Maksimal karakter nik hanya bisa 10!", "Pesan", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_txtPasswordKeyReleased
-
-    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
-        Integer emailLength = txtEmail.getText().length();
-        String subStr = txtEmail.getText();
-        if (emailLength.compareTo(50) > 0) {
-            txtEmail.setText(subStr.substring(0, emailLength - 1));
-            JOptionPane.showMessageDialog(this, "Maksimal karakter email hanya bisa 50!", "Pesan", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_txtEmailKeyReleased
-
-    private void txtNamaPenggunaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaPenggunaKeyReleased
-        Integer namaLength = txtNamaPengguna.getText().length();
-        String subStr = txtNamaPengguna.getText();
-        if (namaLength.compareTo(50) > 0) {
-            txtNamaPengguna.setText(subStr.substring(0, namaLength - 1));
-            JOptionPane.showMessageDialog(this, "Maksimal karakter email hanya bisa 50!", "Pesan", JOptionPane.WARNING_MESSAGE);
-        }
-        if (containsNumbers(subStr)) {
-            txtNamaPengguna.setText(subStr.substring(0, namaLength - 1));
-        }
-    }//GEN-LAST:event_txtNamaPenggunaKeyReleased
+    }//GEN-LAST:event_txtNIKKeyReleased
 
     private void cbSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSearchActionPerformed
         show_user();
@@ -472,6 +471,24 @@ public class User extends javax.swing.JInternalFrame {
     private void cbSearchItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSearchItemStateChanged
         show_user();
     }//GEN-LAST:event_cbSearchItemStateChanged
+
+    private void cbNamaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbNamaItemStateChanged
+        try {
+            if (!cbNama.getModel().getSelectedItem().equals("-Pilihan-")) {
+                String sql = "SELECT nik FROM guru WHERE nama = '" + cbNama.getModel().getSelectedItem().toString() + "'";
+                java.sql.Connection conn = (Connection) db_connection.configDB();
+                Statement st = conn.createStatement();
+                rs = st.executeQuery(sql);
+                if (rs.next()) {
+                    txtNIK.setText(rs.getString("nik"));
+                }
+            } else {
+                txtNIK.setText("");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_cbNamaItemStateChanged
     /**
      * Function to check the field is number.
      */
@@ -505,19 +522,19 @@ public class User extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Password tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
             txtPassword.requestFocus();
             return true;
-        } else if (txtEmail.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Email tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtEmail.requestFocus();
-            return true;
-        } else if (txtNamaPengguna.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Password tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtNamaPengguna.requestFocus();
+        } else if (txtNIK.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "NIK tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
+            txtNIK.requestFocus();
             return true;
         } else if (cbHakAkses.getModel().getSelectedItem().equals("-Pilihan-")) {
             JOptionPane.showMessageDialog(null, "Hak akses tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
             cbHakAkses.requestFocus();
             return true;
-        } else {
+        } else if (cbNama.getModel().getSelectedItem().equals("-Pilihan-")) {
+            JOptionPane.showMessageDialog(null, "Nama tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
+            cbNama.requestFocus();
+            return true;
+        }else {
             return false;
         }
     }
@@ -553,11 +570,11 @@ public class User extends javax.swing.JInternalFrame {
         txtPassword.setEnabled(true);
         txtUsername.setText("");
         txtPassword.setText("");
-        txtEmail.setText("");
-        txtNamaPengguna.setText("");
+        txtNIK.setText("");
         txtUsername.requestFocus(true);
         txtSearch.setText("");
         cbHakAkses.setSelectedIndex(0);
+        cbNama.setSelectedIndex(0);
     }
 
     private void resetTable() {
@@ -576,15 +593,13 @@ public class User extends javax.swing.JInternalFrame {
         model.addColumn("Username");
         model.addColumn("Password");
         model.addColumn("Nama Pengguna");
-        model.addColumn("Email");
+        model.addColumn("NIK");
         model.addColumn("Hak Akses");
         try {
             if (cbSearch.getModel().getSelectedItem().equals("Username")) {
-                sql = "SELECT * FROM t_pengguna WHERE username LIKE '" + txtSearch.getText() + "%'";
+                sql = "SELECT * FROM pengguna,guru WHERE pengguna.nik = guru.nik AND username LIKE '" + txtSearch.getText() + "%'";
             } else if (cbSearch.getModel().getSelectedItem().equals("Nama Pengguna")) {
-                sql = "SELECT * FROM t_pengguna WHERE nama_pengguna LIKE '" + txtSearch.getText() + "%'";
-            } else if (cbSearch.getModel().getSelectedItem().equals("Email")) {
-                sql = "SELECT * FROM t_pengguna WHERE email_pengguna LIKE '" + txtSearch.getText() + "%'";
+                sql = "SELECT * FROM pengguna,guru WHERE pengguna.nik = guru.nik AND guru.nama LIKE '" + txtSearch.getText() + "%'";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
@@ -604,7 +619,7 @@ public class User extends javax.swing.JInternalFrame {
                         hak_akses = "Pengajar";
                         break;
                 }
-                model.addRow(new Object[]{rs.getString("username"), rs.getString("password"), rs.getString("nama_pengguna"), rs.getString("email_pengguna"), hak_akses});
+                model.addRow(new Object[]{rs.getString("username"), rs.getString("password"),rs.getString("nama"), rs.getString("nik"), hak_akses});
             }
             tableUser.setModel(model);
 
@@ -620,6 +635,7 @@ public class User extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnReset;
     private javax.swing.JComboBox<String> cbHakAkses;
+    private javax.swing.JComboBox<String> cbNama;
     private javax.swing.JComboBox<String> cbSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -632,8 +648,7 @@ public class User extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JTable tableUser;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtNamaPengguna;
+    private javax.swing.JTextField txtNIK;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtUsername;
