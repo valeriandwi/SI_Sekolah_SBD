@@ -67,6 +67,7 @@ public class MenuUtama extends javax.swing.JFrame {
             miPTK.setVisible(false);
             miMatpel.setVisible(false);
             miAbsensi.setVisible(false);
+            miEkskul.setVisible(false);
             miLaporanSiswa.setVisible(false);
             miLaporanPTK.setVisible(false);
             miLaporanAbsensi.setVisible(false);
@@ -107,7 +108,7 @@ public class MenuUtama extends javax.swing.JFrame {
         miMatpel = new javax.swing.JMenuItem();
         miNilai = new javax.swing.JMenuItem();
         miAbsensi = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        miEkskul = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miLaporanSiswa = new javax.swing.JMenuItem();
         miLaporanPTK = new javax.swing.JMenuItem();
@@ -190,14 +191,14 @@ public class MenuUtama extends javax.swing.JFrame {
         });
         jMenu1.add(miAbsensi);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Ekskul");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        miEkskul.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miEkskul.setText("Ekskul");
+        miEkskul.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                miEkskulActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(miEkskul);
 
         mbMenuUtama.add(jMenu1);
 
@@ -385,11 +386,11 @@ public class MenuUtama extends javax.swing.JFrame {
         gc.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void miEkskulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEkskulActionPerformed
         Extracurricular ec = new Extracurricular();
         jDesktopPane1.add(ec);
         ec.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_miEkskulActionPerformed
 
     /**
      * @param args the command line arguments
@@ -432,12 +433,12 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenuBar mbMenuUtama;
     private javax.swing.JMenuItem miAbsensi;
+    private javax.swing.JMenuItem miEkskul;
     private javax.swing.JMenuItem miLaporanAbsensi;
     private javax.swing.JMenuItem miLaporanNilai;
     private javax.swing.JMenuItem miLaporanPTK;

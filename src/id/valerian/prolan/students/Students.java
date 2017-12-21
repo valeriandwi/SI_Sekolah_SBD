@@ -463,7 +463,6 @@ public class Students extends javax.swing.JInternalFrame {
     private void btnCetakLaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakLaporanActionPerformed
         try {
             HashMap parameter = new HashMap();
-            parameter.put("jurusan", "");
             parameter.put("kelas", "");
             Connection conn = db_connection.configDB();
             File file = new File("src/id/valerian/prolan/report/reportStudents.jrxml");
