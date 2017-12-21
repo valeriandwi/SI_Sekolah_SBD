@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2017 at 02:40 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 5.6.31
+-- Generation Time: Dec 21, 2017 at 04:02 AM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 5.6.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -29,12 +29,19 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `absensi` (
+  `kode_absen` varchar(5) NOT NULL,
   `NISN` varchar(10) NOT NULL,
-  `Sakit` tinyint(3) NOT NULL DEFAULT '0',
-  `Izin` tinyint(3) NOT NULL DEFAULT '0',
-  `Tanpa_Keterangan` tinyint(3) NOT NULL DEFAULT '0',
-  `Kode_Semester` varchar(5) NOT NULL
+  `Kode_Semester` varchar(5) NOT NULL,
+  `jenis_absen` enum('Sakit','Izin','Alpha') DEFAULT NULL,
+  `tgl_absen` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `absensi`
+--
+
+INSERT INTO `absensi` (`kode_absen`, `NISN`, `Kode_Semester`, `jenis_absen`, `tgl_absen`) VALUES
+('1', '13141001', '20171', 'Izin', '2017-12-21');
 
 -- --------------------------------------------------------
 
@@ -43,10 +50,19 @@ CREATE TABLE `absensi` (
 --
 
 CREATE TABLE `detail_ekskul` (
+  `kode_detail_ekskul` varchar(5) NOT NULL,
   `NISN` varchar(10) NOT NULL,
   `Kd_Ekskul` varchar(3) NOT NULL,
-  `Keterangan_Ekskul` text
+  `nilai` enum('A','B','C','D') DEFAULT NULL,
+  `kode_semester` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `detail_ekskul`
+--
+
+INSERT INTO `detail_ekskul` (`kode_detail_ekskul`, `NISN`, `Kd_Ekskul`, `nilai`, `kode_semester`) VALUES
+('1', '13141000', 'E02', 'A', '20171');
 
 -- --------------------------------------------------------
 
@@ -253,6 +269,7 @@ INSERT INTO `guru` (`NIK`, `Nama`, `Jenis_Kelamin`, `Tempat_Lahir`, `Tanggal_Lah
 --
 
 CREATE TABLE `nilai` (
+  `kode_nilai` varchar(10) NOT NULL,
   `NISN` varchar(10) NOT NULL,
   `Kode_Semester` varchar(5) NOT NULL,
   `Kode_Detail_Pelajaran` varchar(5) NOT NULL,
@@ -263,6 +280,13 @@ CREATE TABLE `nilai` (
   `NH_Spiritual` enum('SB','B','C','K') NOT NULL DEFAULT 'K',
   `Keterangan` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nilai`
+--
+
+INSERT INTO `nilai` (`kode_nilai`, `NISN`, `Kode_Semester`, `Kode_Detail_Pelajaran`, `NA_Pengetahuan`, `NH_Pengetahuan`, `NA_Keterampilan`, `NH_Keterampilan`, `NH_Spiritual`, `Keterangan`) VALUES
+('1', '13141000', '20171', '1', '4', 'A', '2', 'C', 'C', 'LULUS');
 
 -- --------------------------------------------------------
 
@@ -304,7 +328,7 @@ CREATE TABLE `pengguna` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `nik` varchar(10) NOT NULL,
-  `aktif` varchar(1) NOT NULL,
+  `aktif` varchar(1) NOT NULL DEFAULT '0',
   `hak_akses` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -313,7 +337,8 @@ CREATE TABLE `pengguna` (
 --
 
 INSERT INTO `pengguna` (`username`, `password`, `nik`, `aktif`, `hak_akses`) VALUES
-('admin', '21232f297a57a5a743894a0e4a801fc3', '3201501001', '0', '1');
+('admin', '21232f297a57a5a743894a0e4a801fc3', '3273226808', '0', '1'),
+('admin2', '21232f297a57a5a743894a0e4a801fc3', '3204122003', '0', '2');
 
 -- --------------------------------------------------------
 
@@ -1559,8 +1584,10 @@ ALTER TABLE `absensi`
 -- Indexes for table `detail_ekskul`
 --
 ALTER TABLE `detail_ekskul`
+  ADD PRIMARY KEY (`kode_detail_ekskul`),
   ADD KEY `NISN` (`NISN`),
-  ADD KEY `Kd_Ekskul` (`Kd_Ekskul`);
+  ADD KEY `Kd_Ekskul` (`Kd_Ekskul`),
+  ADD KEY `kode_semester` (`kode_semester`);
 
 --
 -- Indexes for table `detail_pelajaran`
@@ -1586,6 +1613,7 @@ ALTER TABLE `guru`
 -- Indexes for table `nilai`
 --
 ALTER TABLE `nilai`
+  ADD PRIMARY KEY (`kode_nilai`),
   ADD KEY `NISN` (`NISN`),
   ADD KEY `Kode_Semester` (`Kode_Semester`),
   ADD KEY `Kode_Detail_Pelajaran` (`Kode_Detail_Pelajaran`);
@@ -1631,7 +1659,8 @@ ALTER TABLE `absensi`
 --
 ALTER TABLE `detail_ekskul`
   ADD CONSTRAINT `detail_ekskul_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
-  ADD CONSTRAINT `detail_ekskul_ibfk_2` FOREIGN KEY (`Kd_Ekskul`) REFERENCES `ekskul` (`Kd_Ekskul`);
+  ADD CONSTRAINT `detail_ekskul_ibfk_2` FOREIGN KEY (`Kd_Ekskul`) REFERENCES `ekskul` (`Kd_Ekskul`),
+  ADD CONSTRAINT `detail_ekskul_ibfk_3` FOREIGN KEY (`kode_semester`) REFERENCES `semester` (`Kode_Semester`);
 
 --
 -- Constraints for table `detail_pelajaran`
@@ -1648,12 +1677,6 @@ ALTER TABLE `nilai`
   ADD CONSTRAINT `nilai_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
   ADD CONSTRAINT `nilai_ibfk_2` FOREIGN KEY (`Kode_Semester`) REFERENCES `semester` (`Kode_Semester`),
   ADD CONSTRAINT `nilai_ibfk_3` FOREIGN KEY (`Kode_Detail_Pelajaran`) REFERENCES `detail_pelajaran` (`Kode_Detail_Pelajaran`);
-
---
--- Constraints for table `pengguna`
---
-ALTER TABLE `pengguna`
-  ADD CONSTRAINT `pengguna_ibfk_1` FOREIGN KEY (`nik`) REFERENCES `guru` (`NIK`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -13,6 +13,7 @@ import id.valerian.prolan.connection.db_connection;
 import id.valerian.prolan.courses.Course;
 import id.valerian.prolan.employees.Employee;
 import id.valerian.prolan.employees.reportEmployee;
+import id.valerian.prolan.extracurricular.Extracurricular;
 import id.valerian.prolan.grade.Grade;
 import id.valerian.prolan.grade.reportGrade;
 import id.valerian.prolan.students.Students;
@@ -106,6 +107,7 @@ public class MenuUtama extends javax.swing.JFrame {
         miMatpel = new javax.swing.JMenuItem();
         miNilai = new javax.swing.JMenuItem();
         miAbsensi = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miLaporanSiswa = new javax.swing.JMenuItem();
         miLaporanPTK = new javax.swing.JMenuItem();
@@ -153,7 +155,7 @@ public class MenuUtama extends javax.swing.JFrame {
         jMenu1.add(miSiswa);
 
         miPTK.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        miPTK.setLabel("Tenaga Kerja");
+        miPTK.setText("Guru");
         miPTK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miPTKActionPerformed(evt);
@@ -187,6 +189,15 @@ public class MenuUtama extends javax.swing.JFrame {
             }
         });
         jMenu1.add(miAbsensi);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Ekskul");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         mbMenuUtama.add(jMenu1);
 
@@ -374,6 +385,12 @@ public class MenuUtama extends javax.swing.JFrame {
         gc.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        Extracurricular ec = new Extracurricular();
+        jDesktopPane1.add(ec);
+        ec.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -415,6 +432,7 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;

@@ -40,57 +40,57 @@ public class Grade extends javax.swing.JInternalFrame {
      */
     public Grade() {
         initComponents();
-        btnGroupSmst.add(jRadioButton1);
-        btnGroupSmst.add(jRadioButton2);
         show_grades();
         try {
-            String sql = "SELECT kd_mapel from t_matpel";
+            String sql = "SELECT kode_detail_pelajaran from detail_pelajaran";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             cbKdMapel.addItem("-Pilihan-");
             while (rs.next()) {
-                cbKdMapel.addItem(rs.getString("kd_mapel"));
+                cbKdMapel.addItem(rs.getString("kode_detail_pelajaran"));
+            }
+            String sql2 = "SELECT kode_semester from semester";
+            rs = st.executeQuery(sql2);
+            cbKS.addItem("-Pilihan-");
+            while (rs.next()) {
+                cbKS.addItem(rs.getString("kode_semester"));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        int yearNow = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
-        cbTA.addItem(yearNow + "/" + (yearNow + 1));
-        for (int i = 0; i < 3; i++) {
-            yearNow -= 1;
-            cbTA.addItem(yearNow + "/" + (yearNow + 1));
-        }
+        setKeterangan();
     }
 
     private void show_grades() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
-        model.addColumn("Tahun Ajaran");
-        model.addColumn("Semester");
+        model.addColumn("Kode Smst");
         model.addColumn("Kode MP");
         model.addColumn("Mata Pelajaran");
-        model.addColumn("NIPD");
+        model.addColumn("NISN");
         model.addColumn("Nama");
-        model.addColumn("Nilai");
+        model.addColumn("N_Pengetahuan");
+        model.addColumn("N_Keterampilan");
+        model.addColumn("N_Spiritual");
         model.addColumn("Keterangan");
         try {
             String sql = null;
             int data_count = 0;
             if (cbSearch.getModel().getSelectedItem().equals("Nama Siswa")) {
-                sql = "SELECT t_nilai.tahun_ajaran,t_nilai.id_nilai,t_nilai.semester, t_nilai.kd_mapel, t_matpel.nama_mapel, t_nilai.NIPD, t_siswa.Nama_Siswa, t_nilai.nilai, t_matpel.KKM,t_nilai.Keterangan\n"
-                        + "FROM (t_ptk INNER JOIN t_matpel ON t_ptk.NIK = t_matpel.NIK) INNER JOIN ((t_kelas INNER JOIN t_siswa ON t_kelas.id_kelas = t_siswa.id_kelas) INNER JOIN t_nilai ON t_siswa.NIPD = t_nilai.NIPD) ON t_matpel.kd_mapel = t_nilai.kd_mapel AND t_siswa.nama_siswa LIKE '" + txtSearch.getText() + "%'\n"
-                        + "ORDER BY t_nilai.semester, t_matpel.nama_mapel;";
+                sql = "SELECT * FROM detail_pelajaran,nilai,guru,semester,siswa,pelajaran "
+                    + "WHERE siswa.nisn = nilai.nisn AND semester.kode_semester = nilai.kode_semester AND detail_pelajaran.kode_detail_pelajaran = nilai.kode_detail_pelajaran "
+                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND siswa.nama LIKE '"+txtSearch.getText()+"%'";
             } else if (cbSearch.getModel().getSelectedItem().equals("Mata Pelajaran")) {
-                sql = "SELECT t_nilai.tahun_ajaran,t_nilai.id_nilai,t_nilai.semester, t_nilai.kd_mapel, t_matpel.nama_mapel, t_nilai.NIPD, t_siswa.Nama_Siswa, t_nilai.nilai, t_matpel.KKM,t_nilai.Keterangan\n"
-                        + "FROM (t_ptk INNER JOIN t_matpel ON t_ptk.NIK = t_matpel.NIK) INNER JOIN ((t_kelas INNER JOIN t_siswa ON t_kelas.id_kelas = t_siswa.id_kelas) INNER JOIN t_nilai ON t_siswa.NIPD = t_nilai.NIPD) ON t_matpel.kd_mapel = t_nilai.kd_mapel AND t_matpel.nama_mapel LIKE '" + txtSearch.getText() + "%'\n"
-                        + "ORDER BY t_nilai.semester, t_matpel.nama_mapel;";
+                sql = "SELECT * FROM detail_pelajaran,nilai,guru,semester,siswa,pelajaran "
+                    + "WHERE siswa.nisn = nilai.nisn AND semester.kode_semester = nilai.kode_semester AND detail_pelajaran.kode_detail_pelajaran = nilai.kode_detail_pelajaran "
+                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND pelajaran.mata_pelajaran LIKE '"+txtSearch.getText()+"%'";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                model.addRow(new Object[]{rs.getString("id_nilai"), rs.getString("tahun_ajaran"), rs.getString("semester"), rs.getString("kd_mapel"), rs.getString("nama_mapel"), rs.getString("NIPD"), rs.getString("Nama_Siswa"), rs.getString("nilai"), rs.getString("Keterangan"), rs.getString("id_nilai")});
+                model.addRow(new Object[]{rs.getString("kode_nilai"), rs.getString("kode_semester"), rs.getString("kode_detail_pelajaran"), rs.getString("mata_pelajaran"), rs.getString("nisn"), rs.getString("siswa.nama"), rs.getString("nh_pengetahuan"), rs.getString("nh_keterampilan"), rs.getString("nh_spiritual"), rs.getString("keterangan")});
                 data_count++;
             }
             tableGrade.setModel(model);
@@ -108,21 +108,15 @@ public class Grade extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnGroupSmst = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        txtNIPD = new javax.swing.JTextField();
+        txtNISN = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtKelas = new javax.swing.JTextField();
-        txtJurusan = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        cbTA = new javax.swing.JComboBox<>();
+        cbKS = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cbKdMapel = new javax.swing.JComboBox<>();
@@ -130,9 +124,13 @@ public class Grade extends javax.swing.JInternalFrame {
         txtMatPel = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtPengajar = new javax.swing.JTextField();
-        txtNilai = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        cbNP = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        cbNK = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        cbNS = new javax.swing.JComboBox<>();
         txtKeterangan = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableGrade = new javax.swing.JTable();
@@ -151,38 +149,28 @@ public class Grade extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Siswa"));
 
-        jLabel1.setText("Semester");
-
-        jRadioButton1.setText("1");
-
-        jRadioButton2.setText("2");
-
-        txtNIPD.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtNISN.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNIPDFocusLost(evt);
+                txtNISNFocusLost(evt);
             }
         });
-        txtNIPD.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNISN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNIPDKeyReleased(evt);
+                txtNISNKeyReleased(evt);
             }
         });
 
-        jLabel2.setText("NIPD");
+        jLabel2.setText("NISN");
 
         jLabel3.setText("Nama");
 
         txtNama.setEnabled(false);
 
-        jLabel4.setText("Jurusan");
-
         jLabel5.setText("Kelas");
 
         txtKelas.setEnabled(false);
 
-        txtJurusan.setEnabled(false);
-
-        jLabel11.setText("Tahun Ajaran");
+        jLabel11.setText("Kode Semester");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -193,28 +181,18 @@ public class Grade extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtJurusan)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addComponent(jRadioButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtNama)
-                            .addComponent(txtNIPD)
+                            .addComponent(txtNISN)
                             .addComponent(txtKelas)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbTA, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 9, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addComponent(cbKS, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -222,33 +200,24 @@ public class Grade extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(cbTA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(cbKS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNIPD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNISN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtJurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Pelajaran"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Nilai"));
 
         jLabel6.setText("Kode Mata Pelajaran");
 
@@ -266,15 +235,34 @@ public class Grade extends javax.swing.JInternalFrame {
 
         txtPengajar.setEnabled(false);
 
-        txtNilai.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNilaiKeyReleased(evt);
+        jLabel9.setText("Nilai Pengetahuan");
+
+        jLabel10.setText("Keterangan");
+
+        cbNP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+        cbNP.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbNPItemStateChanged(evt);
             }
         });
 
-        jLabel9.setText("Nilai");
+        jLabel13.setText("Nilai Keterampilan");
 
-        jLabel10.setText("Keterangan");
+        cbNK.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+        cbNK.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbNKItemStateChanged(evt);
+            }
+        });
+
+        jLabel14.setText("Nilai Spiritual");
+
+        cbNS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SB", "B", "C", "K" }));
+        cbNS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbNSItemStateChanged(evt);
+            }
+        });
 
         txtKeterangan.setEnabled(false);
 
@@ -289,14 +277,18 @@ public class Grade extends javax.swing.JInternalFrame {
                     .addComponent(jLabel7)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel14)
                     .addComponent(jLabel10))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtNilai)
-                    .addComponent(cbKdMapel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPengajar)
-                    .addComponent(txtKeterangan, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
-                    .addComponent(txtMatPel))
+                    .addComponent(txtPengajar, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(txtMatPel)
+                    .addComponent(txtKeterangan)
+                    .addComponent(cbNP, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbNK, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbNS, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbKdMapel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -316,13 +308,21 @@ public class Grade extends javax.swing.JInternalFrame {
                     .addComponent(txtPengajar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNilai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbNP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbNK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbNS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         tableGrade.setModel(new javax.swing.table.DefaultTableModel(
@@ -409,25 +409,30 @@ public class Grade extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAdd)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnAdd)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnEdit))
+                                            .addComponent(btnCetakLaporan, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnReset)
+                                            .addComponent(btnDelete))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEdit)
-                                .addGap(10, 10, 10)
-                                .addComponent(btnDelete)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnReset))
-                            .addComponent(btnCetakLaporan)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12)))
+                                .addComponent(jLabel12)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -435,18 +440,19 @@ public class Grade extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
                             .addComponent(btnEdit)
-                            .addComponent(btnDelete)
-                            .addComponent(btnReset))
+                            .addComponent(btnDelete))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCetakLaporan)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCetakLaporan)
+                            .addComponent(btnReset))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -455,7 +461,7 @@ public class Grade extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12))
-                .addGap(22, 22, 22))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -464,13 +470,13 @@ public class Grade extends javax.swing.JInternalFrame {
     private void cbKdMapelItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbKdMapelItemStateChanged
         try {
             if (!cbKdMapel.getModel().getSelectedItem().equals("-Pilihan-")) {
-                String sql = "SELECT t_matpel.nama_mapel,t_ptk.Nama_PTK FROM t_matpel INNER JOIN t_ptk ON t_matpel.kd_mapel = '" + cbKdMapel.getModel().getSelectedItem().toString() + "' AND t_matpel.NIK = t_ptk.NIK";
+                String sql = "SELECT pelajaran.mata_pelajaran,guru.nama FROM pelajaran,detail_pelajaran,guru WHERE pelajaran.kode_pelajaran = detail_pelajaran.kode_pelajaran AND guru.nik = detail_pelajaran.nik";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 Statement st = conn.createStatement();
                 rs = st.executeQuery(sql);
                 if (rs.next()) {
-                    txtMatPel.setText(rs.getString("nama_mapel"));
-                    txtPengajar.setText(rs.getString("Nama_PTK"));
+                    txtMatPel.setText(rs.getString("mata_pelajaran"));
+                    txtPengajar.setText(rs.getString("nama"));
                 }
                 setKeterangan();
             } else {
@@ -483,44 +489,21 @@ public class Grade extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_cbKdMapelItemStateChanged
 
-    private void txtNilaiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNilaiKeyReleased
-        setKeterangan();
-        Integer nilaiLength = txtNilai.getText().length();
-        String subStr = txtNilai.getText();
-        if (!containsNumbers(subStr)) {
-            txtNilai.setText(subStr.substring(0, nilaiLength - 1));
-        } else {
-            if (nilaiLength.compareTo(3) > 0) {
-                txtNilai.setText(subStr.substring(0, nilaiLength - 1));
-                JOptionPane.showMessageDialog(this, "Maksimal karakter KKM hanya bisa 3!", "Pesan", JOptionPane.WARNING_MESSAGE);
-            } else if (Integer.parseInt(subStr) > 100) {
-                txtNilai.setText("100");
-                JOptionPane.showMessageDialog(this, "Nilai maksimal adalah 100", "Pesan", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_txtNilaiKeyReleased
-
     private void tableGradeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableGradeMouseClicked
         btnAdd.setEnabled(false);
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(true);
         TableModel model = tableGrade.getModel();
         int i = tableGrade.getSelectedRow();
-        txtNIPD.setEnabled(false);
-        txtNIPD.setText(model.getValueAt(i, 5).toString());
-        cbKdMapel.getModel().setSelectedItem(model.getValueAt(i, 3).toString());
-        txtNilai.setText(model.getValueAt(i, 7).toString());
-        switch (model.getValueAt(i, 2).toString()) {
-            case "1":
-                jRadioButton1.setSelected(true);
-                break;
-            case "2":
-                jRadioButton2.setSelected(true);
-                break;
-        }
-        txtKeterangan.setText(model.getValueAt(i, 8).toString());
+        txtNISN.setEnabled(false);
+        txtNISN.setText(model.getValueAt(i, 4).toString());
+        cbKdMapel.getModel().setSelectedItem(model.getValueAt(i, 2).toString());
+        cbNP.getModel().setSelectedItem(model.getValueAt(i, 6).toString());
+        cbNK.getModel().setSelectedItem(model.getValueAt(i, 7).toString());
+        cbNS.getModel().setSelectedItem(model.getValueAt(i, 8).toString());
         idSelected = model.getValueAt(i, 0).toString();
-        cbTA.getModel().setSelectedItem(model.getValueAt(i, 1).toString());
+        cbKS.getModel().setSelectedItem(model.getValueAt(i, 1).toString());
+        txtKeterangan.setText(model.getValueAt(i, 9).toString());
         getDetailStudents();
     }//GEN-LAST:event_tableGradeMouseClicked
 
@@ -529,15 +512,16 @@ public class Grade extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int maxID = 0;
-                String sqlmax = "SELECT MAX(id_nilai) FROM t_nilai";
+                String sqlmax = "SELECT MAX(kode_nilai) as max FROM nilai";
                 java.sql.Connection conn1 = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn1.prepareStatement(sqlmax);
                 rs = pst.executeQuery();
                 if (rs.next()) {
-                    maxID = rs.getInt(1);
+                    maxID = rs.getInt("max");
                 }
                 int maxIDnow = maxID + 1;
-                String sql = "INSERT INTO t_nilai VALUES ('" + maxIDnow + "','" + cbTA.getModel().getSelectedItem().toString() + "','" + checkSemester() + "','" + cbKdMapel.getModel().getSelectedItem().toString() + "','" + txtNIPD.getText() + "','" + txtNilai.getText() + "','" + txtKeterangan.getText() + "')";
+                String sql = "INSERT INTO `nilai` (`kode_nilai`, `NISN`, `Kode_Semester`, `Kode_Detail_Pelajaran`, `NA_Pengetahuan`, `NH_Pengetahuan`, `NA_Keterampilan`, `NH_Keterampilan`, `NH_Spiritual`, `Keterangan`) "
+                            + "VALUES ('"+maxIDnow+"', '"+txtNISN.getText()+"', '"+cbKS.getModel().getSelectedItem().toString()+"', '"+cbKdMapel.getModel().getSelectedItem().toString()+"', '"+convertNilai(cbNP.getModel().getSelectedItem().toString())+"', '"+cbNP.getModel().getSelectedItem().toString()+"', '"+convertNilai(cbNK.getModel().getSelectedItem().toString())+"', '"+cbNK.getModel().getSelectedItem().toString()+"','"+cbNS.getModel().getSelectedItem().toString()+"','"+txtKeterangan.getText()+"')";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst2 = conn.prepareStatement(sql);
                 pst2.execute();
@@ -550,12 +534,15 @@ public class Grade extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed
-
+    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         invalid = checkField();
         if (!invalid) {
             try {
-                String sql = "UPDATE t_nilai SET semester = '" + checkSemester() + "',tahun_ajaran = '" + cbTA.getModel().getSelectedItem().toString() + "',kd_mapel = '" + cbKdMapel.getModel().getSelectedItem().toString() + "',nilai = '" + txtNilai.getText() + "',keterangan = '" + txtKeterangan.getText() + "' WHERE id_nilai = '" + idSelected + "'";
+                String sql = "UPDATE nilai SET kode_semester = '"+cbKS.getModel().getSelectedItem().toString()+"',kode_detail_pelajaran='"+cbKdMapel.getModel().getSelectedItem().toString()+"'"
+                        + ",na_pengetahuan='"+convertNilai(cbNP.getModel().getSelectedItem().toString())+"',nh_pengetahuan='"+cbNP.getModel().getSelectedItem().toString()+"'"
+                        + ",na_keterampilan='"+convertNilai(cbNK.getModel().getSelectedItem().toString())+"',nh_keterampilan='"+cbNK.getModel().getSelectedItem().toString()+"'"
+                        + ",nh_spiritual='"+cbNS.getModel().getSelectedItem().toString()+"',keterangan='"+txtKeterangan.getText()+"' WHERE kode_nilai = '"+idSelected+"'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -573,7 +560,7 @@ public class Grade extends javax.swing.JInternalFrame {
         try {
             int reply = JOptionPane.showConfirmDialog(null, "Apakah Anda Yakin untuk menghapus data berikut?", title, JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                String sql = "DELETE FROM t_nilai WHERE id_nilai = '" + idSelected + "'";
+                String sql = "DELETE FROM nilai WHERE kode_nilai = '" + idSelected + "'";
                 java.sql.Connection conn = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -609,26 +596,25 @@ public class Grade extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnCetakLaporanActionPerformed
 
-    private void txtNIPDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNIPDFocusLost
-        if (!txtNIPD.getText().equals("")) {
+    private void txtNISNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNISNFocusLost
+        if (!txtNISN.getText().equals("")) {
             getDetailStudents();
         }
-    }//GEN-LAST:event_txtNIPDFocusLost
+    }//GEN-LAST:event_txtNISNFocusLost
 
-    private void txtNIPDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNIPDKeyReleased
-        Integer nipdLength = txtNIPD.getText().length();
-        String subStr = txtNIPD.getText();
+    private void txtNISNKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNISNKeyReleased
+        Integer nipdLength = txtNISN.getText().length();
+        String subStr = txtNISN.getText();
         if (nipdLength.compareTo(nipdLength - 1) > 0) {
             txtNama.setText("");
-            txtJurusan.setText("");
             txtKelas.setText("");
         }
-        if (!txtNIPD.getText().equals("")) {
+        if (!txtNISN.getText().equals("")) {
             if (!containsNumbers(subStr)) {
-                txtNIPD.setText(subStr.substring(0, nipdLength - 1));
+                txtNISN.setText(subStr.substring(0, nipdLength - 1));
             } else {
                 if (nipdLength.compareTo(8) > 0) {
-                    txtNIPD.setText(subStr.substring(0, nipdLength - 1));
+                    txtNISN.setText(subStr.substring(0, nipdLength - 1));
                     JOptionPane.showMessageDialog(this, "Maksimal karakter NIPD hanya bisa 8!", "Pesan", JOptionPane.WARNING_MESSAGE);
                 }
                 if (nipdLength.compareTo(7) > 0) {
@@ -636,7 +622,7 @@ public class Grade extends javax.swing.JInternalFrame {
                 }
             }
         }
-    }//GEN-LAST:event_txtNIPDKeyReleased
+    }//GEN-LAST:event_txtNISNKeyReleased
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         show_grades();
@@ -646,33 +632,55 @@ public class Grade extends javax.swing.JInternalFrame {
         show_grades();
     }//GEN-LAST:event_cbSearchItemStateChanged
 
-    private int checkSemester() {
-        int semester = 0;
-        if (jRadioButton1.isSelected()) {
-            semester = 1;
-        } else if (jRadioButton2.isSelected()) {
-            semester = 2;
-        }
-        return semester;
-    }
+    private void cbNPItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbNPItemStateChanged
+        setKeterangan();
+    }//GEN-LAST:event_cbNPItemStateChanged
 
+    private void cbNKItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbNKItemStateChanged
+        setKeterangan();
+    }//GEN-LAST:event_cbNKItemStateChanged
+
+    private void cbNSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbNSItemStateChanged
+        setKeterangan();
+    }//GEN-LAST:event_cbNSItemStateChanged
+
+    private void setKeterangan(){
+        int NP = convertNilai(cbNP.getModel().getSelectedItem().toString());
+        int NK = convertNilai(cbNK.getModel().getSelectedItem().toString());
+        int NS = convertNilai(cbNS.getModel().getSelectedItem().toString());
+        int average = (NP+NK+NS)/3;
+        if(average > 1){
+            txtKeterangan.setText("LULUS");
+        }else{
+            txtKeterangan.setText("TIDAK LULUS");
+        } 
+    }
+    
+    private int convertNilai(String NH){
+        switch(NH){
+            case "A": return 4;
+            case "B": return 3;
+            case "C": return 2;
+            case "D": return 1;
+            case "SB" : return 4;
+            case "K" : return 1;
+        }
+        return 0;
+    }
     private void resetField() {
-        jRadioButton1.setSelected(false);
-        jRadioButton2.setSelected(false);
-        txtNIPD.setEnabled(true);
+        txtNISN.setEnabled(true);
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
         btnAdd.setEnabled(true);
-        txtNIPD.setText("");
+        txtNISN.setText("");
         txtNama.setText("");
-        txtJurusan.setText("");
         txtKelas.setText("");
         txtPengajar.setText("");
         txtMatPel.setText("");
         txtKeterangan.setText("");
         cbKdMapel.setSelectedIndex(0);
-        txtNilai.setText("");
         txtSearch.setText("");
+        setKeterangan();
     }
 
     private void resetTable() {
@@ -681,71 +689,33 @@ public class Grade extends javax.swing.JInternalFrame {
     }
 
     private boolean checkField() {
-        if (btnGroupSmst.getSelection() == null) {
-            JOptionPane.showMessageDialog(null, "Semester harus dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
-            return true;
-        } else if (btnGroupSmst.getSelection() == null) {
-            JOptionPane.showMessageDialog(null, "Semester harus dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
-            return true;
-        } else if (txtNIPD.getText().equals("")) {
+        if (txtNISN.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "NIPD tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtNIPD.requestFocus();
+            txtNISN.requestFocus();
             return true;
         } else if (cbKdMapel.getModel().getSelectedItem().equals("-Pilihan")) {
             JOptionPane.showMessageDialog(null, "Kode Mata Pelajaran harus dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
             cbKdMapel.requestFocus();
             return true;
-        } else if (txtNilai.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Nilai tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtNilai.requestFocus();
-            return true;
-        }
+        } 
         return false;
     }
 
     private void getDetailStudents() {
         try {
-            String sql = "SELECT t_siswa.Nama_siswa,t_kelas.jurusan,t_kelas.tingkat_kelas FROM t_siswa INNER JOIN t_kelas ON t_siswa.id_kelas = t_kelas.id_kelas AND t_siswa.NIPD = '" + txtNIPD.getText().toString() + "'";
+            String sql = "SELECT nama,kelas from siswa WHERE nisn = '"+txtNISN.getText()+"'";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             if (rs.next()) {
-                txtNama.setText(rs.getString("nama_siswa"));
-                txtJurusan.setText(rs.getString("jurusan"));
-                txtKelas.setText(rs.getString("tingkat_kelas"));
+                txtNama.setText(rs.getString("nama"));
+                txtKelas.setText(rs.getString("kelas"));
             } else {
                 JOptionPane.showMessageDialog(null, "NIPD tidak ditemukan!");
-                txtNIPD.setText("");
-                txtNIPD.requestFocus(true);
+                txtNISN.setText("");
+                txtNISN.requestFocus(true);
                 txtNama.setText("");
-                txtJurusan.setText("");
                 txtKelas.setText("");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
-
-    private void setKeterangan() {
-        try {
-            int KKM = 0;
-            if (!cbKdMapel.getModel().getSelectedItem().equals("-Pilihan-")) {
-                String sql = "SELECT KKM FROM t_matpel WHERE kd_mapel = '" + cbKdMapel.getModel().getSelectedItem().toString() + "'";
-                java.sql.Connection conn = (Connection) db_connection.configDB();
-                Statement st = conn.createStatement();
-                rs = st.executeQuery(sql);
-                if (rs.next()) {
-                    KKM = Integer.parseInt(rs.getString("KKM"));
-                }
-                if (!(txtNilai.getText().length() == 0)) {
-                    if (Integer.parseInt(txtNilai.getText().toString()) < KKM) {
-                        txtKeterangan.setText("TIDAK LULUS");
-                    } else {
-                        txtKeterangan.setText("LULUS");
-                    }
-                } else {
-                    txtKeterangan.setText("");
-                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -757,18 +727,20 @@ public class Grade extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCetakLaporan;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.ButtonGroup btnGroupSmst;
     private javax.swing.JButton btnReset;
+    private javax.swing.JComboBox<String> cbKS;
     private javax.swing.JComboBox<String> cbKdMapel;
+    private javax.swing.JComboBox<String> cbNK;
+    private javax.swing.JComboBox<String> cbNP;
+    private javax.swing.JComboBox<String> cbNS;
     private javax.swing.JComboBox<String> cbSearch;
-    private javax.swing.JComboBox<String> cbTA;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -776,17 +748,13 @@ public class Grade extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableGrade;
-    private javax.swing.JTextField txtJurusan;
     private javax.swing.JTextField txtKelas;
     private javax.swing.JTextField txtKeterangan;
     private javax.swing.JTextField txtMatPel;
-    private javax.swing.JTextField txtNIPD;
+    private javax.swing.JTextField txtNISN;
     private javax.swing.JTextField txtNama;
-    private javax.swing.JTextField txtNilai;
     private javax.swing.JTextField txtPengajar;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
