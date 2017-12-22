@@ -113,8 +113,6 @@ public class Grade extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtKelas = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         cbKS = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
@@ -166,10 +164,6 @@ public class Grade extends javax.swing.JInternalFrame {
 
         txtNama.setEnabled(false);
 
-        jLabel5.setText("Kelas");
-
-        txtKelas.setEnabled(false);
-
         jLabel11.setText("Kode Semester");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -182,13 +176,11 @@ public class Grade extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel3))
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNama)
-                            .addComponent(txtNISN)
-                            .addComponent(txtKelas)))
+                            .addComponent(txtNISN)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
@@ -210,11 +202,7 @@ public class Grade extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Nilai"));
@@ -461,7 +449,7 @@ public class Grade extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -607,7 +595,6 @@ public class Grade extends javax.swing.JInternalFrame {
         String subStr = txtNISN.getText();
         if (nipdLength.compareTo(nipdLength - 1) > 0) {
             txtNama.setText("");
-            txtKelas.setText("");
         }
         if (!txtNISN.getText().equals("")) {
             if (!containsNumbers(subStr)) {
@@ -674,7 +661,6 @@ public class Grade extends javax.swing.JInternalFrame {
         btnAdd.setEnabled(true);
         txtNISN.setText("");
         txtNama.setText("");
-        txtKelas.setText("");
         txtPengajar.setText("");
         txtMatPel.setText("");
         txtKeterangan.setText("");
@@ -709,13 +695,11 @@ public class Grade extends javax.swing.JInternalFrame {
             rs = st.executeQuery(sql);
             if (rs.next()) {
                 txtNama.setText(rs.getString("nama"));
-                txtKelas.setText(rs.getString("kelas"));
             } else {
                 JOptionPane.showMessageDialog(null, "NIPD tidak ditemukan!");
                 txtNISN.setText("");
                 txtNISN.requestFocus(true);
                 txtNama.setText("");
-                txtKelas.setText("");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -741,7 +725,6 @@ public class Grade extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -750,7 +733,6 @@ public class Grade extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableGrade;
-    private javax.swing.JTextField txtKelas;
     private javax.swing.JTextField txtKeterangan;
     private javax.swing.JTextField txtMatPel;
     private javax.swing.JTextField txtNISN;

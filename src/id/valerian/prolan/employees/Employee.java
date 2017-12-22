@@ -595,7 +595,7 @@ public class Employee extends javax.swing.JInternalFrame {
         try {
             HashMap parameter = new HashMap();
             Connection conn = db_connection.configDB();
-            File file = new File("src/id/valerian/prolan/report/reportEmployee.jrxml");
+            File file = new File("src/id/valerian/prolan/report/reportEmployees.jrxml");
             JasperDesign jasperDesign = JRXmlLoader.load(file);
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);

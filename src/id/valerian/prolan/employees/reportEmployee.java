@@ -36,13 +36,13 @@ public class reportEmployee extends javax.swing.JInternalFrame {
 
     public void setJenis() {
         try {
-            String sql = "SELECT DISTINCT jenis_ptk from t_ptk";
+            String sql = "SELECT DISTINCT tempat_lahir from guru ORDER BY tempat_lahir";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
             cbJenis.addItem("Semua");
             while (rs.next()) {
-                cbJenis.addItem(rs.getString("jenis_ptk"));
+                cbJenis.addItem(rs.getString("tempat_lahir"));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -81,7 +81,7 @@ public class reportEmployee extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Cetak Laporan Berdasarkan :");
 
-        jLabel2.setText("Jenis Tenaga Kerja ");
+        jLabel2.setText("Tempat Lahir :");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -165,12 +165,12 @@ public class reportEmployee extends javax.swing.JInternalFrame {
         try {
             HashMap parameter = new HashMap();
             if (cbJenis.getSelectedIndex() == 0) {
-                parameter.put("jenis_ptk", "");
+                parameter.put("tempat_lahir", "");
             } else {
-                parameter.put("jenis_ptk", cbJenis.getModel().getSelectedItem().toString());
+                parameter.put("tempat_lahir", cbJenis.getModel().getSelectedItem().toString());
             }
             Connection conn = db_connection.configDB();
-            File file = new File("src/id/valerian/prolan/report/reportEmployee.jrxml");
+            File file = new File("src/id/valerian/prolan/report/reportEmployees.jrxml");
             JasperDesign jasperDesign = JRXmlLoader.load(file);
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
