@@ -185,7 +185,7 @@ public class Extracurricular extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Nilai");
 
-        cbNilai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+        cbNilai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "T", "A", "B", "C", "D" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -200,9 +200,8 @@ public class Extracurricular extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cbNilai, 0, 172, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbKdEkskul, 0, 172, Short.MAX_VALUE)
-                        .addComponent(txtEkskul)))
+                    .addComponent(cbKdEkskul, 0, 172, Short.MAX_VALUE)
+                    .addComponent(txtEkskul))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(

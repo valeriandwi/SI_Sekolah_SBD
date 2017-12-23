@@ -42,7 +42,6 @@ public class studentChart extends javax.swing.JInternalFrame {
     public studentChart() {
         initComponents();
         btnGroup.add(jRadioButton1);
-        btnGroup.add(jRadioButton2);
         btnGroup.add(jRadioButton3);
         show_chart();
     }
@@ -51,13 +50,10 @@ public class studentChart extends javax.swing.JInternalFrame {
         try {
             String sql = null;
             if (jRadioButton1.isSelected()) {
-                sql = "SELECT DISTINCT `Jenis_Kelamin` AS JenisKelamin,COUNT(NIPD) FROM t_siswa GROUP BY Jenis_Kelamin";
+                sql = "SELECT DISTINCT `jk` AS JenisKelamin,COUNT(NISN) FROM siswa GROUP BY jk";
                 radioSelectedName = "Jenis Kelamin";
-            } else if (jRadioButton2.isSelected()) {
-                sql = "SELECT DISTINCT t_kelas.jurusan AS Jurusan,COUNT(NIPD) FROM t_kelas,t_siswa WHERE t_siswa.id_kelas = t_kelas.id_kelas GROUP BY t_kelas.jurusan";
-                radioSelectedName = "Jurusan";
             } else if (jRadioButton3.isSelected()) {
-                sql = "SELECT DISTINCT t_kelas.tingkat_kelas AS TingkatKelas,COUNT(NIPD) FROM t_kelas,t_siswa WHERE t_siswa.id_kelas = t_kelas.id_kelas GROUP BY t_kelas.tingkat_kelas";
+                sql = "SELECT DISTINCT kelas AS TingkatKelas,COUNT(NISN) FROM siswa GROUP BY kelas";
                 radioSelectedName = "Tingkat Kelas";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
@@ -67,7 +63,7 @@ public class studentChart extends javax.swing.JInternalFrame {
             chart = ChartFactory.createPieChart("Grafik Siswa Berdasarkan "+radioSelectedName+"\n" + dateFormat.format(date), dataset, true, true, false);
             ChartPanel chartpanel = new ChartPanel(chart);
             PiePlot plot = (PiePlot) chart.getPlot();
-            PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {2}");
+            PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");
             plot.setLabelGenerator(labelGenerator);
             jPanel1.removeAll();
             jPanel1.add(chartpanel, BorderLayout.CENTER);
@@ -88,7 +84,6 @@ public class studentChart extends javax.swing.JInternalFrame {
 
         btnGroup = new javax.swing.ButtonGroup();
         jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jRadioButton3 = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
@@ -103,13 +98,6 @@ public class studentChart extends javax.swing.JInternalFrame {
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
-            }
-        });
-
-        jRadioButton2.setText("Jurusan");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
             }
         });
 
@@ -144,11 +132,9 @@ public class studentChart extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jRadioButton1)
-                        .addGap(10, 10, 10)
-                        .addComponent(jRadioButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jRadioButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
                         .addComponent(btnSimpan)))
                 .addContainerGap())
         );
@@ -160,11 +146,10 @@ public class studentChart extends javax.swing.JInternalFrame {
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton3)
                     .addComponent(jLabel1)
-                    .addComponent(jRadioButton2)
                     .addComponent(btnSimpan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -173,10 +158,6 @@ public class studentChart extends javax.swing.JInternalFrame {
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         show_chart();
     }//GEN-LAST:event_jRadioButton1ActionPerformed
-
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        show_chart();
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         show_chart();
@@ -232,7 +213,6 @@ public class studentChart extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     // End of variables declaration//GEN-END:variables
 }

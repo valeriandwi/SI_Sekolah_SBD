@@ -13,7 +13,9 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="kode_semester" class="java.lang.String"/>
+	<parameter name="kode_semester" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<parameter name="nisn" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
@@ -32,10 +34,12 @@
      nilai.`Keterangan` AS nilai_Keterangan
 FROM
      `siswa` siswa INNER JOIN `nilai` nilai ON siswa.`NISN` = nilai.`NISN`
-     INNER JOIN `semester` semester ON nilai.`Kode_Semester` = semester.`Kode_Semester`,
-     `detail_pelajaran` detail_pelajaran INNER JOIN `pelajaran` pelajaran ON detail_pelajaran.`Kode_Pelajaran` = pelajaran.`Kode_Pelajaran`
+     INNER JOIN `semester` semester ON nilai.`Kode_Semester` = semester.`Kode_Semester`
+     INNER JOIN `detail_pelajaran` detail_pelajaran ON nilai.`Kode_Detail_Pelajaran` = detail_pelajaran.`Kode_Detail_Pelajaran`
+     INNER JOIN `pelajaran` pelajaran ON detail_pelajaran.`Kode_Pelajaran` = pelajaran.`Kode_Pelajaran`
      INNER JOIN `guru` guru ON detail_pelajaran.`NIK` = guru.`NIK`
-WHERE nilai.kode_semester LIKE '%$P!{kode_semester}%' AND nilai.nisn LIKE '%$P!{nisn}%']]>
+WHERE 
+     nilai.kode_semester LIKE '%$P!{kode_semester}%' AND nilai.nisn LIKE '%$P!{nisn}%']]>
 	</queryString>
 	<field name="semester_Tahun_Pelajaran" class="java.lang.String"/>
 	<field name="semester_Semester" class="java.lang.String"/>

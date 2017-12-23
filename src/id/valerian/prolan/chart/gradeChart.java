@@ -42,18 +42,7 @@ public class gradeChart extends javax.swing.JInternalFrame {
     public gradeChart() {
         initComponents();
         try {
-            String sql = "SELECT DISTINCT jurusan FROM t_kelas";
-            java.sql.Connection conn = (Connection) db_connection.configDB();
-            Statement st = conn.createStatement();
-            rs = st.executeQuery(sql);
-            while (rs.next()) {
-                cbJurusan.addItem(rs.getString(1));
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        try {
-            String sql = "SELECT DISTINCT tahun_ajaran FROM t_nilai";
+            String sql = "SELECT DISTINCT kode_semester FROM semester";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
@@ -69,19 +58,18 @@ public class gradeChart extends javax.swing.JInternalFrame {
     public void show_chart() {
         try {
             String sql;
-            sql = "SELECT t_matpel.nama_mapel AS MataPelajaran,COUNT(*) FROM t_nilai,t_matpel,t_kelas,t_siswa "
-                    + "WHERE t_nilai.kd_mapel = t_matpel.kd_mapel AND t_nilai.nipd = t_siswa.nipd "
-                    + "AND t_siswa.id_kelas = t_kelas.id_kelas AND t_nilai.keterangan='LULUS' "
-                    + "AND t_kelas.jurusan LIKE '"+cbJurusan.getSelectedItem().toString()+"' "
-                    + "AND t_kelas.tingkat_kelas LIKE '"+cbKelas.getSelectedItem().toString()+"' "
-                    + "AND t_nilai.tahun_ajaran LIKE '"+cbTA.getSelectedItem().toString()+"' "
-                    + "GROUP BY t_matpel.kd_mapel";
+            sql = "SELECT pelajaran.mata_pelajaran AS MataPelajaran,COUNT(*) FROM nilai,pelajaran,detail_pelajaran,siswa "
+                    + "WHERE nilai.kode_detail_pelajaran = detail_pelajaran.kode_detail_pelajaran AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran "
+                    + "AND siswa.nisn = nilai.nisn AND nilai.keterangan='LULUS' "
+                    + "AND siswa.kelas LIKE '"+cbKelas.getSelectedItem().toString()+"' "
+                    + "AND nilai.kode_semester LIKE '"+cbTA.getSelectedItem().toString()+"' "
+                    + "GROUP BY pelajaran.kode_pelajaran";
             java.sql.Connection conn = (Connection) db_connection.configDB();
             JDBCPieDataset dataset = new JDBCPieDataset(conn, sql);
-            chart = ChartFactory.createPieChart("Grafik Kelulusan \nTahun Ajaran : "+cbTA.getSelectedItem().toString()+"\nKelas : "+cbKelas.getSelectedItem().toString()+"\nJurusan: "+cbJurusan.getSelectedItem().toString(), dataset, true, true, false);
+            chart = ChartFactory.createPieChart("Grafik Kelulusan \nTahun Ajaran : "+cbTA.getSelectedItem().toString()+"\nKelas : "+cbKelas.getSelectedItem().toString(), dataset, true, true, false);
             ChartPanel chartpanel = new ChartPanel(chart);
             PiePlot plot = (PiePlot) chart.getPlot();
-            PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {2}");
+            PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");
             plot.setLabelGenerator(labelGenerator);
             jPanel1.removeAll();
             jPanel1.add(chartpanel, BorderLayout.CENTER);
@@ -101,10 +89,8 @@ public class gradeChart extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        cbJurusan = new javax.swing.JComboBox<>();
         cbKelas = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cbTA = new javax.swing.JComboBox<>();
         jToggleButton1 = new javax.swing.JToggleButton();
@@ -133,11 +119,9 @@ public class gradeChart extends javax.swing.JInternalFrame {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        cbKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "11", "12" }));
+        cbKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "VII", "VIII", "IX" }));
 
         jLabel1.setText("Kelas :");
-
-        jLabel2.setText("Jurusan");
 
         jLabel3.setText("Tahun Ajaran");
 
@@ -166,27 +150,18 @@ public class gradeChart extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cbJurusan, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cbTA, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jToggleButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
-                                .addComponent(btnSimpan)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbTA, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jToggleButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+                        .addComponent(btnSimpan)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -200,12 +175,8 @@ public class gradeChart extends javax.swing.JInternalFrame {
                     .addComponent(cbTA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton1)
                     .addComponent(btnSimpan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbJurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -267,11 +238,9 @@ public class gradeChart extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JComboBox<String> cbJurusan;
     private javax.swing.JComboBox<String> cbKelas;
     private javax.swing.JComboBox<String> cbTA;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToggleButton jToggleButton1;
