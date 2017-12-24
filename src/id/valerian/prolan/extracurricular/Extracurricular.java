@@ -482,12 +482,8 @@ public class Extracurricular extends javax.swing.JInternalFrame {
     private void btnCetakLaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakLaporanActionPerformed
         try {
             HashMap parameter = new HashMap();
-            parameter.put("tahun_ajaran", "");
-            parameter.put("kelas", "");
-            parameter.put("jurusan", "");
-            parameter.put("nama_mapel", "");
             Connection conn = db_connection.configDB();
-            File file = new File("src/id/valerian/prolan/report/reportGrades.jrxml");
+            File file = new File("src/id/valerian/prolan/report/reportExtracurricular.jrxml");
             JasperDesign jasperDesign = JRXmlLoader.load(file);
             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);

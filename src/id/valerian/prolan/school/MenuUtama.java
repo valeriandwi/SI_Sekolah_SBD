@@ -14,6 +14,7 @@ import id.valerian.prolan.courses.Course;
 import id.valerian.prolan.employees.Employee;
 import id.valerian.prolan.employees.reportEmployee;
 import id.valerian.prolan.extracurricular.Extracurricular;
+import id.valerian.prolan.extracurricular.reportExtracurricular;
 import id.valerian.prolan.grade.Grade;
 import id.valerian.prolan.grade.reportGrade;
 import id.valerian.prolan.students.Students;
@@ -114,6 +115,7 @@ public class MenuUtama extends javax.swing.JFrame {
         miLaporanPTK = new javax.swing.JMenuItem();
         miLaporanNilai = new javax.swing.JMenuItem();
         miLaporanAbsensi = new javax.swing.JMenuItem();
+        miLaporanAbsensi1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
@@ -242,6 +244,15 @@ public class MenuUtama extends javax.swing.JFrame {
             }
         });
         jMenu2.add(miLaporanAbsensi);
+
+        miLaporanAbsensi1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miLaporanAbsensi1.setText("Laporan Ekskul");
+        miLaporanAbsensi1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miLaporanAbsensi1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miLaporanAbsensi1);
 
         mbMenuUtama.add(jMenu2);
 
@@ -392,6 +403,12 @@ public class MenuUtama extends javax.swing.JFrame {
         ec.setVisible(true);
     }//GEN-LAST:event_miEkskulActionPerformed
 
+    private void miLaporanAbsensi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLaporanAbsensi1ActionPerformed
+        reportExtracurricular re = new reportExtracurricular();
+        jDesktopPane1.add(re);
+        re.setVisible(true);
+    }//GEN-LAST:event_miLaporanAbsensi1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -440,6 +457,7 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JMenuItem miAbsensi;
     private javax.swing.JMenuItem miEkskul;
     private javax.swing.JMenuItem miLaporanAbsensi;
+    private javax.swing.JMenuItem miLaporanAbsensi1;
     private javax.swing.JMenuItem miLaporanNilai;
     private javax.swing.JMenuItem miLaporanPTK;
     private javax.swing.JMenuItem miLaporanSiswa;
