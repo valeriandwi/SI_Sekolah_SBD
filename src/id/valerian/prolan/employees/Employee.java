@@ -638,10 +638,6 @@ public class Employee extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Alamat tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
             txtAlamat.requestFocus();
             return true;
-        } else if (txtNIK.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "NIK tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtNIK.requestFocus();
-            return true;
         } else if (cbAgama.getModel().getSelectedItem().equals("-Pilihan-")) {
             JOptionPane.showMessageDialog(null, "Agama tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
             cbAgama.requestFocus();

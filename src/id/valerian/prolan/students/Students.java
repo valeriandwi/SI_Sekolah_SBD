@@ -699,9 +699,9 @@ public class Students extends javax.swing.JInternalFrame {
         try {
             String sql = null;
             if (cbSearch.getModel().getSelectedItem().equals("NISN")) {
-                sql = "SELECT * FROM siswa WHERE NISN LIKE '" + txtSearch.getText() + "%' ORDER BY siswa.NISN";
+                sql = "SELECT * FROM siswa WHERE NISN LIKE '" + txtSearch.getText() + "%' ORDER BY kelas,nisn DESC";
             }else if (cbSearch.getModel().getSelectedItem().equals("Nama")) {
-                sql = "SELECT * FROM siswa WHERE Nama LIKE '" + txtSearch.getText() + "%' ORDER BY siswa.Nama";
+                sql = "SELECT * FROM siswa WHERE Nama LIKE '" + txtSearch.getText() + "%' ORDER BY kelas,nama DESC";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();

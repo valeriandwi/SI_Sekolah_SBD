@@ -392,13 +392,21 @@ public class Attendance extends javax.swing.JInternalFrame {
 
     private boolean checkField() {
         Integer nipdLength = txtNISN.getText().length();
-        if (nipdLength.compareTo(8) < 0) {
-            JOptionPane.showMessageDialog(this, "NIPD harus berupa 8 angka", "Pesan", JOptionPane.WARNING_MESSAGE);
+        if (nipdLength.compareTo(10) < 0) {
+            JOptionPane.showMessageDialog(this, "NISN harus berupa 10 angka", "Pesan", JOptionPane.WARNING_MESSAGE);
             txtNISN.requestFocus(true);
             return true;
         } else if (txtNISN.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "NIPD tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "NISN tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
             txtNISN.requestFocus();
+            return true;
+        } else if (cbKS.getModel().getSelectedItem().toString() == "-Pilihan-") {
+            JOptionPane.showMessageDialog(null, "Kode Semester harus dipilih!", "Pesan", JOptionPane.WARNING_MESSAGE);
+            cbKS.requestFocus();
+            return true;
+        } else if (txtTanggal.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Tanggal tidak boleh kosong!", "Pesan", JOptionPane.WARNING_MESSAGE);
+            txtTanggal.requestFocus();
             return true;
         }
         return false;

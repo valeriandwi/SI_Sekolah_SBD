@@ -600,11 +600,11 @@ public class Grade extends javax.swing.JInternalFrame {
             if (!containsNumbers(subStr)) {
                 txtNISN.setText(subStr.substring(0, nipdLength - 1));
             } else {
-                if (nipdLength.compareTo(8) > 0) {
+                if (nipdLength.compareTo(10) > 0) {
                     txtNISN.setText(subStr.substring(0, nipdLength - 1));
-                    JOptionPane.showMessageDialog(this, "Maksimal karakter NIPD hanya bisa 8!", "Pesan", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Maksimal karakter NIPD hanya bisa 10!", "Pesan", JOptionPane.WARNING_MESSAGE);
                 }
-                if (nipdLength.compareTo(7) > 0) {
+                if (nipdLength.compareTo(9) > 0) {
                     getDetailStudents();
                 }
             }
@@ -682,6 +682,10 @@ public class Grade extends javax.swing.JInternalFrame {
         } else if (cbKdMapel.getModel().getSelectedItem().equals("-Pilihan")) {
             JOptionPane.showMessageDialog(null, "Kode Mata Pelajaran harus dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
             cbKdMapel.requestFocus();
+            return true;
+        } else if (cbKS.getModel().getSelectedItem().equals("-Pilihan")) {
+            JOptionPane.showMessageDialog(null, "Kode Semester harus dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
+            cbKS.requestFocus();
             return true;
         } 
         return false;

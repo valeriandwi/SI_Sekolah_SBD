@@ -447,11 +447,7 @@ public class Course extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbMatpelItemStateChanged
 
     private boolean checkField() {
-        if (txtKdMatpel.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Kode Mata Pelajaran tidak boleh kosong", "Pesan", JOptionPane.WARNING_MESSAGE);
-            txtKdMatpel.requestFocus();
-            return true;
-        } else if (cbMatpel.getModel().getSelectedItem().equals("-Pilihan-")) {
+        if (cbMatpel.getModel().getSelectedItem().equals("-Pilihan-")) {
             JOptionPane.showMessageDialog(null, "Nama Pelajaran Harus Dipilih", "Pesan", JOptionPane.WARNING_MESSAGE);
             cbMatpel.requestFocus();
             return true;
@@ -470,6 +466,7 @@ public class Course extends javax.swing.JInternalFrame {
             txtKdMatpel.setText("");
             cbMatpel.setSelectedIndex(0);
             cbNamaPengajar.setSelectedIndex(0);
+            show_courses();
     }
     
     private void resetTable() {
