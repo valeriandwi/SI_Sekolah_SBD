@@ -119,6 +119,7 @@ public class MenuUtama extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -277,6 +278,20 @@ public class MenuUtama extends javax.swing.JFrame {
 
         mbMenuUtama.add(jMenu3);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/database.png"))); // NOI18N
+        jMenu4.setText("Backup");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu4ActionPerformed(evt);
+            }
+        });
+        mbMenuUtama.add(jMenu4);
+
         jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/users.png"))); // NOI18N
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/id/valerian/prolan/images/exit-1.png"))); // NOI18N
@@ -409,6 +424,18 @@ public class MenuUtama extends javax.swing.JFrame {
         re.setVisible(true);
     }//GEN-LAST:event_miLaporanAbsensi1ActionPerformed
 
+    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
+        Backup bc = new Backup();
+        jDesktopPane1.add(bc);
+        bc.setVisible(true);
+    }//GEN-LAST:event_jMenu4ActionPerformed
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        Backup bc = new Backup();
+        jDesktopPane1.add(bc);
+        bc.setVisible(true);
+    }//GEN-LAST:event_jMenu4MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -448,6 +475,7 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem7;

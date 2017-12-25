@@ -1,107 +1,153 @@
--- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
+-- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 24, 2017 at 12:05 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 5.6.31
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: sekolah
+-- ------------------------------------------------------
+-- Server version	10.1.28-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Database: `sekolah`
+-- Current Database: `sekolah`
 --
 
--- --------------------------------------------------------
+/*!40000 DROP DATABASE IF EXISTS `sekolah`*/;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `sekolah` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `sekolah`;
 
 --
 -- Table structure for table `absensi`
 --
 
+DROP TABLE IF EXISTS `absensi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `absensi` (
   `kode_absen` varchar(5) NOT NULL,
   `NISN` varchar(10) NOT NULL,
   `Kode_Semester` varchar(5) NOT NULL,
   `jenis_absen` enum('Sakit','Izin','Alpha') DEFAULT NULL,
-  `tgl_absen` date NOT NULL
+  `tgl_absen` date NOT NULL,
+  KEY `NISN` (`NISN`),
+  KEY `Kode_Semester` (`Kode_Semester`),
+  CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
+  CONSTRAINT `absensi_ibfk_2` FOREIGN KEY (`Kode_Semester`) REFERENCES `semester` (`Kode_Semester`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `absensi`
+--
+
+LOCK TABLES `absensi` WRITE;
+/*!40000 ALTER TABLE `absensi` DISABLE KEYS */;
+/*!40000 ALTER TABLE `absensi` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `detail_ekskul`
 --
 
+DROP TABLE IF EXISTS `detail_ekskul`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `detail_ekskul` (
   `kode_detail_ekskul` varchar(5) NOT NULL,
   `NISN` varchar(10) NOT NULL,
   `Kd_Ekskul` varchar(3) NOT NULL,
-  `nilai` enum('A','B','C','D') DEFAULT NULL,
-  `kode_semester` varchar(5) DEFAULT NULL
+  `nilai` enum('T','A','B','C','D') DEFAULT NULL,
+  `kode_semester` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`kode_detail_ekskul`),
+  KEY `NISN` (`NISN`),
+  KEY `Kd_Ekskul` (`Kd_Ekskul`),
+  KEY `kode_semester` (`kode_semester`),
+  CONSTRAINT `detail_ekskul_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
+  CONSTRAINT `detail_ekskul_ibfk_2` FOREIGN KEY (`Kd_Ekskul`) REFERENCES `ekskul` (`Kd_Ekskul`),
+  CONSTRAINT `detail_ekskul_ibfk_3` FOREIGN KEY (`kode_semester`) REFERENCES `semester` (`Kode_Semester`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `detail_ekskul`
+--
+
+LOCK TABLES `detail_ekskul` WRITE;
+/*!40000 ALTER TABLE `detail_ekskul` DISABLE KEYS */;
+INSERT INTO `detail_ekskul` VALUES ('1','0049021050','E01','A','20171');
+/*!40000 ALTER TABLE `detail_ekskul` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `detail_pelajaran`
 --
 
+DROP TABLE IF EXISTS `detail_pelajaran`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `detail_pelajaran` (
   `Kode_Detail_Pelajaran` varchar(5) NOT NULL,
   `Kode_Pelajaran` varchar(4) NOT NULL,
-  `NIK` varchar(10) NOT NULL
+  `NIK` varchar(10) NOT NULL,
+  PRIMARY KEY (`Kode_Detail_Pelajaran`),
+  KEY `Kode_Pelajaran` (`Kode_Pelajaran`),
+  KEY `NIK` (`NIK`),
+  CONSTRAINT `detail_pelajaran_ibfk_1` FOREIGN KEY (`Kode_Pelajaran`) REFERENCES `pelajaran` (`Kode_Pelajaran`),
+  CONSTRAINT `detail_pelajaran_ibfk_2` FOREIGN KEY (`NIK`) REFERENCES `guru` (`NIK`),
+  CONSTRAINT `detail_pelajaran_ibfk_3` FOREIGN KEY (`NIK`) REFERENCES `guru` (`NIK`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `detail_pelajaran`
 --
 
-INSERT INTO `detail_pelajaran` (`Kode_Detail_Pelajaran`, `Kode_Pelajaran`, `NIK`) VALUES
-('1', 'P001', '1050221609');
-
--- --------------------------------------------------------
+LOCK TABLES `detail_pelajaran` WRITE;
+/*!40000 ALTER TABLE `detail_pelajaran` DISABLE KEYS */;
+INSERT INTO `detail_pelajaran` VALUES ('1','P001','1050221609');
+/*!40000 ALTER TABLE `detail_pelajaran` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `ekskul`
 --
 
+DROP TABLE IF EXISTS `ekskul`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ekskul` (
   `Kd_Ekskul` varchar(3) NOT NULL,
-  `Ekskul` varchar(25) NOT NULL
+  `Ekskul` varchar(25) NOT NULL,
+  PRIMARY KEY (`Kd_Ekskul`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ekskul`
 --
 
-INSERT INTO `ekskul` (`Kd_Ekskul`, `Ekskul`) VALUES
-('E01', 'Basket'),
-('E02', 'Futsal'),
-('E03', 'Catur'),
-('E04', 'Paskibraka'),
-('E05', 'Pramuka'),
-('E06', 'Sepak Bola'),
-('E07', 'Pencinta Alam'),
-('E08', 'Paduan Suara'),
-('E09', 'Remaja Mesjid'),
-('E10', 'Drumband');
-
--- --------------------------------------------------------
+LOCK TABLES `ekskul` WRITE;
+/*!40000 ALTER TABLE `ekskul` DISABLE KEYS */;
+INSERT INTO `ekskul` VALUES ('E01','Basket'),('E02','Futsal'),('E03','Catur'),('E04','Paskibraka'),('E05','Pramuka'),('E06','Sepak Bola'),('E07','Pencinta Alam'),('E08','Paduan Suara'),('E09','Remaja Mesjid'),('E10','Drumband');
+/*!40000 ALTER TABLE `ekskul` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `guru`
 --
 
+DROP TABLE IF EXISTS `guru`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guru` (
   `NIK` varchar(10) NOT NULL,
   `Nama` varchar(40) NOT NULL,
@@ -112,148 +158,28 @@ CREATE TABLE `guru` (
   `Agama` varchar(15) NOT NULL,
   `Status` varchar(10) NOT NULL,
   `Telepon` varchar(15) NOT NULL,
-  `Email` varchar(30) NOT NULL
+  `Email` varchar(30) NOT NULL,
+  PRIMARY KEY (`NIK`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `guru`
 --
 
-INSERT INTO `guru` (`NIK`, `Nama`, `Jenis_Kelamin`, `Tempat_Lahir`, `Tanggal_Lahir`, `Alamat`, `Agama`, `Status`, `Telepon`, `Email`) VALUES
-('1050221609', 'Giri Lisyono Raharjo', 'L', 'Bandung', '1989-09-16', 'Margahayu J-11 No.21', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('1234567890', 'Rully Suzeta', 'L', 'Bandung', '1974-01-19', 'Jl. Bojongsoang Komp. Griya Permata Sari Blok A 13', 'Islam', 'Aktif', '08156040756', 'rulli@yahoo.com'),
-('1312030312', 'Herdiansyah Agus', 'L', 'Pasaman Baru', '1991-12-03', 'Gellong girang No.134', 'Islam', 'Aktif', '081220264176', 'herdiansyah.a@gmail.com'),
-('1504032802', 'Mario Emilzoli', 'L', 'Bukittinggi', '1988-02-28', 'J.Raya Timur No.20', 'Islam', 'Aktif', '089655072253', 'mario@smk-pi.sch.id.com'),
-('3175042309', 'Fajar Winata', 'L', 'Jakarta', '1990-09-23', 'Jl. H. Ali No 5', 'Islam', 'Aktif', '081221718831', 'fajarwinata@hotmail.com'),
-('3175076005', 'Lisa Bela', 'P', 'Jakarta', '1993-05-20', 'Jl. Bina Karya No. 6', 'Kristen', 'Aktif', '089636973649', 'bellalisabella20@rocketmail.co'),
-('3202331808', 'Agus Fadilah', 'L', 'Sukabumi', '1991-08-18', 'Jl.Cijaura Girang 3 No.23c Rt.13 Kec.Buahbatu Band', 'Islam', 'Aktif', '082321778188', 'info@smk-pi.sch.id'),
-('3204005307', 'Iis Maesaroh', 'P', 'Tasikmalaya', '1977-07-13', 'Komp. Adi Negara 2 Blok A.7 No. 15 Cileunyi Wetan ', 'Islam', 'Aktif', '08112288672', 'info@smk-pi.sch.id'),
-('3204051808', 'Agus Wardiyanto', 'L', 'Brebes', '1990-08-18', 'Komp.BP.H,Darya', 'Islam', 'Aktif', '085860514582', 'info@smk-pi.sch.id'),
-('3204052303', 'Yudhi Sudarmanto', 'L', 'Malang', '1969-03-23', 'Cibiru', 'Islam', 'Aktif', '085624062440', 'info@smk-pi.sch.id'),
-('3204064206', 'Sulis Yuniasari', 'P', 'Bandung', '1992-06-02', 'Jl.Bocong Kacor', 'Islam', 'Aktif', '081320020737', 'info@smk-pi.sch.id'),
-('3204081701', 'Memet Jumhana', 'L', 'Bandung', '1958-01-17', 'Komplek Griya Bandung Asri Jl. Sedap Malam No. 1 B', 'Islam', 'Aktif', '0888218196090', 'info@smk-pi.sch.id'),
-('3204085805', 'Selly Selilah', 'P', 'Bandung', '1976-05-18', 'Jl.Bojongsoang No.1', 'Islam', 'Aktif', '08122308231', 'mamaheca@gmail.com'),
-('3204090411', 'Fauzul Iman', 'L', 'Serang', '1987-11-04', 'Jl.Dakota V No.65 Blok B', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3204090911', 'Pepe Sugandi', 'L', 'Bandung', '1963-11-09', 'Komp Nata endah Blok C 42', 'Islam', 'Aktif', '08985939079', 'p2_sugandi@yahoo.com'),
-('3204092803', 'Simon Leonard HS', 'L', 'Bandung', '1977-03-28', 'Kopo Permain II Blok 20B/14', 'Kristen', 'Aktif', '08117509980', 'info@smk-pi.sch.id'),
-('3204092904', 'Iwan Setiawan', 'L', 'Bandung', '1957-04-29', 'Komplek Sukamenak Indah I - 35', 'Islam', 'Aktif', '081322847477', 'iwansetiawan@smk-pi.com'),
-('3204095007', 'Sri Rahayu', 'P', 'sukabumi', '1976-07-10', 'Komp Permata Kopo Blok6A No.101', 'Islam', 'Aktif', '089618808669', 'sri_rahayu@smk-pi.sch.id'),
-('3204095202', 'Dwi Aquarius', 'P', 'Tegal', '1982-02-12', 'Jl. Sayati Hilir No.109', 'Islam', 'Aktif', '0878234077020', 'info@smk-pi.sch.id'),
-('3204096101', 'Lingga Asmara', 'P', 'Bandung', '1976-01-21', 'Jl. Sukamenak Gg. Mesjid Al Hidayah No. 15 Rt. 02 ', 'Islam', 'Aktif', '085860659994', 'linggaasmara76@gmail.com'),
-('3204101008', 'Arief Budiman', 'L', 'Bandung', '1958-08-10', 'Jl.CCI XI No.1', 'Islam', 'Aktif', '081221698083', 'budiman@smk-pi.sch.id'),
-('3204101309', 'Toto Sukmanto', 'L', 'Bandung', '1956-09-13', 'Jl.Permai 8 No.14 Komp Margahayu Permai', 'Islam', 'Aktif', '081320407747', 'totosukmanto@smk-pi.com'),
-('3204105412', 'Maimunah', 'P', 'Medan', '1962-12-14', 'Jl. CCM 4 No. 99 Rt. 07 Rw.16 Kel. Mekar Rahayu Ke', 'Islam', 'Aktif', '08121159932', 'maimunahwardono@gmail.com'),
-('3204110106', 'Maman Maulana', 'L', 'Majalaya', '1944-06-01', 'Perumahan Bukit Bunga Kopo Blok B No.6A', 'Islam', 'Aktif', '085861881555', 'info@smk-pi.sch.id'),
-('3204112305', 'Andi Roboy', 'L', 'Bandung', '1973-05-23', 'Taman Bunga Sukamukti Blok F1 N0.2 Rt.02 Rw.15 Kab', 'Islam', 'Aktif', '085794204851', 'info@smk-pi.sch.id'),
-('3204122003', 'Agus Tubagus Azis', 'L', 'Tasikmalaya', '1963-03-20', 'Bojongasih No. 36', 'Islam', 'Aktif', '08562203451', 'agusazis@smk-pi.sch.id'),
-('3204125011', 'Maryamah', 'P', 'Bandung', '1979-11-10', 'Jl. Cibaduyut Tarate VII No. 155 RT. 5/2 Kel. Cang', 'Islam', 'Aktif', '0811222032', 'maryamah@smk-pi.sch.id'),
-('3204125505', 'Tita Puspasari', 'P', 'Garut', '1988-05-15', 'Jl.Cibiuk Kp.Margalela No.118', 'Islam', 'Aktif', '08986855447', 'info@smk-pi.sch.id'),
-('3204141708', 'Edi Tatan', 'L', 'Bandung', '1966-02-26', 'Jl. Pasantren RT. 2/3', 'Islam', 'Aktif', '082315057074', 'info@smk-pi.sch.id'),
-('3204167007', 'Iis Rini Yuliani', 'P', 'Bandung', '1975-07-30', 'Perum Lebakwangi Asri Blok C3 No. 13 RT. 6/13', 'Islam', 'Aktif', '082116088177', 'iisrini@smk-pi.sch.id'),
-('3204281004', 'Yadi Hikmah Setiana', 'L', 'Bandung', '1988-12-10', 'Kp.Neglasari No.432', 'Islam', 'Aktif', '085222426662', 'HIKMAH.DIE@GMAIL.COM'),
-('3204282403', 'Wawan Gunawan', 'L', 'Sukabumi', '1965-05-04', 'Kp Selagedang', 'Islam', 'Aktif', '085722384199', 'wawan@smk-pi.sch.id'),
-('3204286408', 'Arti Sri Antika Dewi', 'P', 'Bandung', '1989-08-24', 'Jl.Bakung XVII No.35', 'Islam', 'Aktif', '085720316351', 'artisriantikadewi@gmail.com'),
-('3204294808', 'Herizka Fauzia Wahyu', 'P', 'Bandung', '1995-08-08', 'Jl. Laswi Belakang No. 671', 'Islam', 'Aktif', '08987141660', 'herizka@smk-pi.sch.id'),
-('3204306004', 'Gina Lusiana', 'P', 'Bandung', '1989-04-20', 'Sukarame', 'Islam', 'Aktif', '087722044678', 'info@smk-pi.sch.id'),
-('3204320311', 'Engkus Subagja', 'L', 'Garut', '1968-11-03', 'Kp. Babakan RT. 2/9', 'Islam', 'Aktif', '085220868599', 'info@smk-pi.sch.id'),
-('3204320603', 'Dedy Suhardiman', 'L', 'Tasikmalaya', '1969-03-06', 'Bojong koneng no.36', 'Islam', 'Aktif', '081323749669', ''),
-('3204325412', 'Etty Lisnawati', 'P', 'Bandung', '1953-12-14', 'Kav. Rancaemas Blok H Rt. 04 Rw. 16', 'Islam', 'Aktif', '08211585903', 'info@smk-pi.sch.id'),
-('3204352309', 'H. Oman Sudjana', 'L', 'Bandung', '1946-11-23', 'Jl. Cipaku Majalaya Rt. 02 Rw. 02', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3204370101', 'Atang', 'L', 'Bandung', '1960-01-01', 'Komp. Soreang Indah C 28 RT. 1/15', 'Islam', 'Aktif', '085860790081', 'info@smk-pi.sch.id'),
-('3205142109', 'Ipan Tedi K', 'L', 'Garut', '1988-09-21', 'Kp. Ciwahang', 'Islam', 'Aktif', '085220132963', 'ipantedikurnadi@yahoo.com'),
-('3206245203', 'Ai Femi Priandani', 'P', 'Tasikmalaya', '1987-03-12', 'Jl. Pelindung Hewan', 'Islam', 'Aktif', '089639200560', 'femiprianda@gmail.com'),
-('3209053101', 'Ryan Nuari', 'L', 'Cianjur', '1991-01-31', 'Dusun 03', 'Islam', 'Aktif', '085322551211', 'ryan@smk-pi.sch.id'),
-('3210014612', 'Isoh Siti Masitoh', 'P', 'Cianjur', '1990-12-06', 'Puncak baru', 'Islam', 'Aktif', '082318340891', 'info@smk-pi.sch.id'),
-('3211151011', 'Irwan', 'P', 'Sumedang', '1981-11-10', 'Jl.Letda Lukito', 'Islam', 'Aktif', '082116772508', 'irwan@smk-pi.sch.id'),
-('3211165205', 'Iin Martina', 'P', 'Sumedang', '1985-05-12', 'Cikondang', 'Islam', 'Aktif', '085222939153', 'iinmartina23@gmail.com'),
-('3211172012', 'Femy Firmansyah', 'L', 'Sumedang', '1991-12-20', 'Mekar Bakti', 'Islam', 'Aktif', '089619578356', 'f_firmansyah85@yahoo.com'),
-('3214016406', 'Rahayu Kusumawati', 'P', 'Purwakarta', '1987-06-24', 'Jl. Raya Warung Lahang', 'Islam', 'Aktif', '085285266685', 'gara_trombozier@gmail.com'),
-('3214094709', 'Dewi Pratiwi', 'L', 'Pacitan', '1986-09-07', 'Kp.Pameungpeuk No.14', 'Islam', 'Aktif', '085221138230', 'info@smk-pi.sch.id'),
-('3215075412', 'Dessy Eka Wulan Sari', 'P', 'Karawang', '1990-12-14', 'Ds Sindangmukti Rt 10 Rw 005', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273010303', 'Tohari', 'L', 'Cirebon', '1944-03-03', 'sarijadi', 'Islam', 'Aktif', '', ''),
-('3273010606', 'Syarif Pamungkas', 'L', 'Ciamis', '1960-06-06', 'Jl.Geger Kalong Tengah No.24-Z', 'Islam', 'Aktif', '08122013014', 'syarif@smk-pi.sch.id'),
-('3273011103', 'Achmad Chalid', 'L', 'Bandung', '1969-03-11', 'Jl. Sersan Sodik Gg. Pada Tawekal Rt. 01 Rw. 03 No', 'Islam', 'Aktif', '085323482017', 'info@smk-pi.sch.id'),
-('3273030104', 'Giri Triyanto', 'L', 'Surabaya', '1966-04-01', 'Jl. Cibolerang F-3', 'Islam', 'Aktif', '081910506113', 'grietie@gmail.com'),
-('3273030112', 'Didin Haryadi', 'L', 'Tasikmalaya', '1955-12-01', 'Komp. Cibolerang Indah Blok. J/13 Rt. 02 Rw. 07', 'Islam', 'Aktif', '081322507281', 'info@smk-pi.sch.id'),
-('3273031811', 'Agisna Ya Huziati', 'L', 'Bandung', '1995-11-18', 'Jl. Caringin Gg. Lumbung 5 No.14', 'Islam', 'Aktif', '085722731499', 'agis@smk-pi.sch.id'),
-('3273035103', 'Riska Narulita Sari', 'P', 'Bandung', '1992-03-11', 'Jl.Cibolerang', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273036512', 'Neneng Iriani', 'P', 'Yogyakarta', '1970-12-25', 'Jl. Pagarsih No. 313', 'Islam', 'Aktif', '085862031970', 'info@smk-pi.sch.id'),
-('3273041004', 'Cepi Rohman Herdiansyah', 'L', 'Bandung', '1996-04-10', 'Gg. Mukalmi No.129', 'Islam', 'Aktif', '089657290177', 'cepi@smk-pi.sch.id'),
-('3273041711', 'Kunkun Mulyawan', 'L', 'Sumedang', '1958-11-17', 'Perum Tanjuungsari Permai Blok O 32', 'Islam', 'Aktif', '081224550866', 'kunkun@smk-pi.com'),
-('3273042912', 'Bobby Rinaldo Sukma D', 'L', 'Bandung', '1996-12-29', 'Jl. Terusan Pasirkoja', 'Islam', 'Aktif', '085659979667', 'bobby@smk-pi.sch.id'),
-('3273046003', 'Tina Martina', 'P', 'Bandung', '1971-03-20', 'J.Kopo Gg Panyileukan No.21', 'Islam', 'Aktif', '082118482132', 'martina@smk-pi.sch.id'),
-('3273050908', 'Muslim Setiadi', 'L', 'Klaten', '1987-08-09', 'Jl.Sukamanah No.193', 'Islam', 'Aktif', '081391576620', 'info@smk-pi.sch.id'),
-('3273055112', 'Budiarti', 'P', 'Solo', '1948-12-11', 'Jl. Garuda Maleber Utara No 74 A/187 A', 'Islam', 'Aktif', '5202834', 'info@smk-pi.sch.id'),
-('3273076703', 'Nina Mariyana', 'P', 'Bandung', '1978-03-27', 'Jl.Cibarengkok No.211/182', 'Islam', 'Aktif', '08122266395', 'nina_mariana782000@yahoo.com'),
-('3273084209', 'Eulis Ana Somantri', 'P', 'Bandung', '1970-09-02', 'Jl. Ciumbuleuit Atas Cipicung Hilir No. 2 Rt. 06 R', 'Islam', 'Aktif', '08122123560', 'info@smk-pi.sch.id'),
-('3273100305', 'Denny Hendriansyah', 'L', 'Subang', '1971-05-03', 'Jl. Otista Gg. Muhammadiyah No.246/95 Tegallega Ba', 'Islam', 'Aktif', '085860082060', 'denny@smk-pi.sch.id'),
-('3273100406', 'Ahmad Gojali', 'L', 'Bandung', '1976-06-04', 'Jl.Pelindung Hewan Gg.Darussalam No.145/96 RT.04/0', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273100704', 'Senna Heru Megawan', 'L', 'Bandung', '1996-04-07', 'Jl. Moh Toha Gg.Cisureuh X No. 31', 'Islam', 'Aktif', '085295984881', 'sennaherum@gmail.com'),
-('3273100711', 'Surya Bahtiyar', 'L', 'Bandung', '1996-11-07', 'Jl. Pasir Koja Gg. Rahayu II No. 71 B/91', 'Islam', 'Aktif', '0882188434205', 'surya@smk-pi.sch.id'),
-('3273101107', 'Ence Rukandi', 'L', 'Bandung', '1958-07-06', 'Jl. Pelindung Hewan Gg. M. Darussalam No. 143/96', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273101509', 'Jaja Saepudin', 'L', 'Bandung', '1973-09-15', 'Jl. Pelindung Hewan Gg. Mesjid Darussalam RT. 4/8 ', 'Islam', 'Aktif', '082116088177', 'info@smk-pi.sch.id'),
-('3273101801', 'Deddy', 'L', 'Bandung', '1963-01-18', 'Jl.Inhofftank Gg.Perikanan II RT.03/05 Bdg', 'Islam', 'Aktif', '082120117536', 'deddy@smk-pi.com'),
-('3273101803', 'Ilin', 'L', 'Garut', '1961-03-18', 'Jl. Inhofftank Gg. Perikanan I No. 39 RT. 3/4 Kel.', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273101811', 'Endang Sulaeman', 'L', 'Bandung', '1969-11-18', 'Jl. Pelindung Hewan Gg. Mesjid Darussalam', 'Islam', 'Aktif', '085294141707', 'info@smk-pi.sch.id'),
-('3273102006', 'Kiki Sandi Muhammad Ramdani', 'L', 'Bandung', '1983-06-20', 'Jl. Karasak Utara Dalam 3 No.24 Bandung', 'Islam', 'Aktif', '081222225045', 'kikisandi06@gmail.com'),
-('3273102107', 'Komarudin', 'L', 'Bekasi', '1959-07-21', 'Gg. Mesjid Darussalam RT. 5/8 Kel. Pelindung Hewan', 'Islam', 'Aktif', '081322216283', 'info@smk-pi.sch.id'),
-('3273102811', 'Beni Arief Syarifudin', 'L', 'Bandung', '1970-11-28', 'Jl.Inhofftank Gg.Perikanan II No.25', 'Islam', 'Aktif', '081321840695', 'ariefbeni@yahoo.com'),
-('3273104203', 'Siti Hodijah', 'P', 'Bandung', '1968-03-02', 'Jl. Karasak Utara Dalam III Gg. B', 'Islam', 'Aktif', '085294756669', 'info@smk-pi.sch.id'),
-('3273104405', 'Kokom Komariah', 'P', 'Bandung', '1966-04-05', 'Jl. Inhofftank Gg. Mesjid Al Ikhsan No. 41 RT. 7/6', 'Islam', 'Aktif', '085222417555', 'info@smk-pi.sch.id'),
-('3273104912', 'Elin Maulina Fitrijanti', 'P', 'Bandung', '1969-12-09', 'Jl. Pelindung Hewan Gg. Darusallam No. 65/96A', 'Islam', 'Aktif', '087722438288', 'maulinaelin98@yahoo.com'),
-('3273106005', 'Eneng Siti Masrifah', 'P', 'Bandung', '1973-05-20', 'Jl. Inhofftank No. 78 RT. 4/6', 'Islam', 'Aktif', '081322652902', 'info@smk-pi.sch.id'),
-('3273106012', 'Dewi Widaningsih', 'P', 'Bandung', '1970-12-20', 'Jl. Pelindung Hewan Rt. 02 Rw. 08 Kel. Pelindung H', 'Islam', 'Aktif', '087823593136', 'dewi@smk-pi.sch.id'),
-('3273106404', 'Siti Aminah', 'P', 'Bandung', '1961-04-24', 'Jl. Pelindung Hewan Gg. Mesjid Darussalam No. 65/9', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273106607', 'Nia Jamilah', 'P', 'Bandung', '1985-07-26', 'Jl.Moh.Toha Gg.H.Mukti', 'Islam', 'Aktif', '085659925300', 'info@smk-pi.sch.id'),
-('3273106800', 'Yuli Mardianti', 'P', 'Bandung', '1974-07-28', 'Babakan Ciseureuh No.10', 'Islam', 'Aktif', '085320424390', 'info@smk-pi.sch.id'),
-('3273114706', 'Molek Yuniar', 'P', 'Bandung', '1972-06-07', 'Jl.Sumadinata No.50A/18C', 'Islam', 'Aktif', '085720215917', ''),
-('3273115812', 'Dessy Yuliyawati', 'P', 'Bandung', '1975-12-18', 'Komp Bumi Sari Indah Blok J No.4 Rt12/Rw17', 'Islam', 'Aktif', '081322202443', 'Dessyyulyawati@yahoo.co.id'),
-('3273121011', 'Rubaman', 'L', 'Bandung', '1953-11-10', 'Jl. Babakan Jati I No. 65 Rt. 02 Rw. 08 Kel. Binon', 'Islam', 'Aktif', '081320008101', 'info@smk-pi.sch.id'),
-('3273122006', 'Aris Dianto', 'L', 'Bandung', '1989-06-20', 'Jl. Karees Sapuran No.91/121', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273124311', 'Nurul Diningsih', 'P', 'Bandung', '1993-11-03', 'Jembatan opat', 'Islam', 'Aktif', '085221249422', 'nuruldiningsih@yahoo.com'),
-('3273127112', 'Mundiati', 'P', 'Bandung', '1973-12-31', 'Jl. Kebon Gedang VII No. 295 B/126 D Rt. 02 Rw. 07', 'Islam', 'Aktif', '081809810010', 'info@smk-pi.sch.id'),
-('3273131011', 'Ahmad Yani', 'L', 'Tegal', '1968-11-10', 'Srimahi Gg,muh.iwan no.9 A', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273140403', 'Iwan Setiawan', 'L', 'Padalarang', '1970-03-04', 'Jl.Supratman 36', 'Islam', 'Aktif', '089617069286', 'info@smk-pi.sch.id'),
-('3273140906', 'Ihwan Rahman Bahtiar', 'L', 'Majalengka', '1987-07-09', 'Komp Suci Residence F 12', 'Islam', 'Aktif', '085724755549', 'achita.weng@gmail.com'),
-('3273141507', 'Asep Ganda Permana', 'L', 'Bandung', '1969-07-15', 'Jl. Babakan Cikutra RT.02/08 Neglasari Bandung', 'Islam', 'Aktif', '088809468518', 'apgan_permana69@yahoo.com'),
-('3273150407', 'Pega Kurnia', 'L', 'Bandung', '1996-07-04', 'Cibolerang Barat', 'Islam', 'Aktif', '085659108040', 'kurniapega4@gmail.com'),
-('3273152309', 'Muh.Gozali', 'L', 'Bandung', '1987-09-23', 'Jl.Cibuntu Selatan', 'Islam', 'Aktif', '085624292963', 'gozali@smk-pi.sch.id'),
-('3273156210', 'Riksa Chramatika Sugesti', 'P', 'Bandung', '1969-10-22', 'Komp. Perumnas Cijerah II Blok 22 Gg. Sayuran 2 No', 'Islam', 'Aktif', '081322726759', 'info@smk-pi.sch.id'),
-('3273162101', 'Juanda', 'L', 'Bandung', '1960-01-21', 'Jl. Ahmad Yani Sukarame I No. 50 RT. 3/9 Kel. Cica', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273166910', 'Nila Novita', 'P', 'Bandung', '1974-10-29', 'Jl.Kebon Jayanti No.113 A/134 B Rt.01/03 Bandung', 'Islam', 'Aktif', '08122026278', 'nila@smk-pi.sch.id'),
-('3273170807', 'Suherman', 'L', 'Sidoarjo', '1932-07-08', 'Jl. Kopo Gg. Pakasih RT. 5/7 Kel. Kebonlega Kec. B', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273171111', 'Iwan Permana', 'L', 'Bandung', '1987-11-11', 'Jl.Babakan TVRI II No.88', 'Islam', 'Aktif', '0857221634444', 'iwanpermana240@yahoo.com'),
-('3273171204', 'Nanang Abdul Gani', 'L', 'Tasikmalaya', '1962-04-11', 'Jl.Inhoftank No.86', 'Islam', 'Aktif', '08156082024', 'info@smk-pi.sch.id'),
-('3273172501', 'Hadi Suteja', 'L', 'Bandung', '1973-01-25', 'Jl. Leuwi panjang Gg. Rukunsari I No. 145 RT. 5/2', 'Islam', 'Aktif', '085294493803', 'info@smk-pi.sch.id'),
-('3273172606', 'Arief Setiawan', 'L', 'Bandung', '1982-06-26', 'Jl. Muarasari II No. 28 Rt 03/Rw 11 Kel.Kebonlega ', 'Islam', 'Aktif', '081809167666', 'arief@smk-pi.sch.id'),
-('3273174209', 'Irma Nurmala', 'P', 'Bandung', '1992-09-02', 'Jl.Sauyunan Raya No.29 Bandung', 'Islam', 'Aktif', '089656557329', 'info@smk-pi.sch.id'),
-('3273176405', 'Ela Nurlaela', 'P', 'Bandung', '1964-05-24', 'Jl. Inhofftank No. 85 RT. 2/3', 'Islam', 'Aktif', '0811214950', 'info@smk-pi.sch.id'),
-('3273176409', 'Sumiati', 'P', 'Bandung', '1977-09-24', 'Jl. Muarasari II No. 28 Rt 03/Rw 11 Kel.Kebonlega ', 'Islam', 'Aktif', '08122312412', 'sumiati@smk-pi.sch.id'),
-('3273196602', 'Sudarti', 'P', 'Bandung', '1963-02-26', 'Jl. Baranangsiang No. 104/34 B RT. 2/10 Kel. Kebon', 'Islam', 'Aktif', '08156200448', 'info@smk-pi.sch.id'),
-('3273210503', 'Usman Jamaludin', 'L', 'Bandung', '1969-03-05', 'Jl. Ters. Batu Nunggal Sukamulya C No. 3', 'Islam', 'Aktif', '085314147126', ''),
-('3273216401', 'Sinta Ifada Dewi', 'L', 'Garut', '1969-01-24', 'Perum Sarie Bunga Bakung B.62', 'Islam', 'Aktif', '082130510126', 'sintaifada@yahoo.com'),
-('3273225511', 'Ratih Kindawati', 'P', 'Garut', '1972-11-15', 'Komp Sari Bunga Bakung Blok A 108', 'Islam', 'Aktif', '081320202356', 'ratihkindawati@smk-pi.sch.id'),
-('3273226003', 'Sarah Noor Fauziah', 'P', 'Bandung', '1990-03-20', 'Jl. Bunga Bakung VII No. 5', 'Islam', 'Aktif', '085722773396', 'sarahnoorfauziah@gmail.com'),
-('3273226604', 'Nurita', 'P', 'Bandung', '1968-04-26', 'Jl. Margaluyu RT. 3/8 Kel. Margasari Kec. Buahbatu', 'Islam', 'Aktif', '087822178576', 'info@smk-pi.sch.id'),
-('3273226808', 'A. Purwati Widhyastuti', 'P', 'Magelang', '1960-08-28', 'Jl. Taman Yupiter Blok E II No. 86 Rt. 05 Rw. 02 K', 'Islam', 'Aktif', '085624737806', 'info@smk-pi.sch.id'),
-('3273235505', 'Nadia Cassinie', 'P', 'Bandung', '1970-05-15', 'Jl. Riung Purna X No. 30 Riung Bandung', 'Islam', 'Aktif', '081320757792', 'nadia@smk-pi.sch.id'),
-('3273250309', 'Ajie Nugraha', 'L', 'Bandung', '1987-09-03', 'Komp. Tirtawening No.136', 'Islam', 'Aktif', '085721939696', 'ajie.nugraha.87@gmail.com'),
-('3273272808', 'Esron Manurung', 'L', 'Parapat', '1952-08-28', 'Jl Riung Sakuyu Blok IKA No.3', 'Kristen', 'Aktif', '081321841120', 'info@smk-pi.sch.id'),
-('3273280307', 'Herman Bangun', 'L', 'Tebing Tinggi', '1958-07-03', 'Bumi Panyileukan G.13 No.20 Bandung', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273300407', 'Myliso Sakada Purnama', 'L', 'Jakarta', '1992-07-04', 'Jl. Arcamanik 123 A / 6 Baru', 'Islam', 'Aktif', '', 'info@smk-pi.sch.id'),
-('3273301810', 'Hamdani', 'L', 'Bandung', '1969-10-18', 'Kp. Tagog Pasir Impun RT. 2/1 Kel. Pasir Impun Kec', 'Islam', 'Aktif', '082126096752', 'info@smk-pi.sch.id'),
-('3275106602', 'Djulaeha', 'P', 'Bandung', '1958-02-26', 'Jl.InhofftankGg.Prikanan Tengah RT.04/04 Bdg', 'Islam', 'Aktif', '081321544342', 'info@smk-pi.sch.id'),
-('3276010706', 'Muh. Luqman', 'L', 'Jakarta', '1989-06-07', 'Pancoran Mas Depok', 'Islam', 'Aktif', '081808145670', 'info@smk-pi.sch.id'),
-('3277014312', 'Annita Komariati P', 'P', 'Bandung', '1966-12-03', 'Jl. Rorosonggrang VI/66', 'Islam', 'Aktif', '081394365908', 'akomariati@yahoo.com'),
-('3277016802', 'Novi Febriyani', 'P', 'Bandung', '1992-02-28', 'Jl. Rancabentang No. 294', 'Islam', 'Aktif', '08987930228', 'febriyani_novi@yahoo.com'),
-('3449752654', 'Enok Amimah', 'P', 'Bandung', '1974-11-17', 'Komp. Sanggar Indah Banjaran Blok E VI No. 16', 'Islam', 'Aktif', '081221761767', 'info@smk-pi.sch.id');
-
--- --------------------------------------------------------
+LOCK TABLES `guru` WRITE;
+/*!40000 ALTER TABLE `guru` DISABLE KEYS */;
+INSERT INTO `guru` VALUES ('1050221609','Giri Lisyono Raharjo','L','Bandung','1989-09-16','Margahayu J-11 No.21','Islam','Aktif','','info@smk-pi.sch.id'),('1234567890','Rully Suzeta','L','Bandung','1974-01-19','Jl. Bojongsoang Komp. Griya Permata Sari Blok A 13','Islam','Aktif','08156040756','rulli@yahoo.com'),('1312030312','Herdiansyah Agus','L','Pasaman Baru','1991-12-03','Gellong girang No.134','Islam','Aktif','081220264176','herdiansyah.a@gmail.com'),('1504032802','Mario Emilzoli','L','Bukittinggi','1988-02-28','J.Raya Timur No.20','Islam','Aktif','089655072253','mario@smk-pi.sch.id.com'),('3175042309','Fajar Winata','L','Jakarta','1990-09-23','Jl. H. Ali No 5','Islam','Aktif','081221718831','fajarwinata@hotmail.com'),('3175076005','Lisa Bela','P','Jakarta','1993-05-20','Jl. Bina Karya No. 6','Kristen','Aktif','089636973649','bellalisabella20@rocketmail.co'),('3202331808','Agus Fadilah','L','Sukabumi','1991-08-18','Jl.Cijaura Girang 3 No.23c Rt.13 Kec.Buahbatu Band','Islam','Aktif','082321778188','info@smk-pi.sch.id'),('3204005307','Iis Maesaroh','P','Tasikmalaya','1977-07-13','Komp. Adi Negara 2 Blok A.7 No. 15 Cileunyi Wetan ','Islam','Aktif','08112288672','info@smk-pi.sch.id'),('3204051808','Agus Wardiyanto','L','Brebes','1990-08-18','Komp.BP.H,Darya','Islam','Aktif','085860514582','info@smk-pi.sch.id'),('3204052303','Yudhi Sudarmanto','L','Malang','1969-03-23','Cibiru','Islam','Aktif','085624062440','info@smk-pi.sch.id'),('3204064206','Sulis Yuniasari','P','Bandung','1992-06-02','Jl.Bocong Kacor','Islam','Aktif','081320020737','info@smk-pi.sch.id'),('3204081701','Memet Jumhana','L','Bandung','1958-01-17','Komplek Griya Bandung Asri Jl. Sedap Malam No. 1 B','Islam','Aktif','0888218196090','info@smk-pi.sch.id'),('3204085805','Selly Selilah','P','Bandung','1976-05-18','Jl.Bojongsoang No.1','Islam','Aktif','08122308231','mamaheca@gmail.com'),('3204090411','Fauzul Iman','L','Serang','1987-11-04','Jl.Dakota V No.65 Blok B','Islam','Aktif','','info@smk-pi.sch.id'),('3204090911','Pepe Sugandi','L','Bandung','1963-11-09','Komp Nata endah Blok C 42','Islam','Aktif','08985939079','p2_sugandi@yahoo.com'),('3204092803','Simon Leonard HS','L','Bandung','1977-03-28','Kopo Permain II Blok 20B/14','Kristen','Aktif','08117509980','info@smk-pi.sch.id'),('3204092904','Iwan Setiawan','L','Bandung','1957-04-29','Komplek Sukamenak Indah I - 35','Islam','Aktif','081322847477','iwansetiawan@smk-pi.com'),('3204095007','Sri Rahayu','P','sukabumi','1976-07-10','Komp Permata Kopo Blok6A No.101','Islam','Aktif','089618808669','sri_rahayu@smk-pi.sch.id'),('3204095202','Dwi Aquarius','P','Tegal','1982-02-12','Jl. Sayati Hilir No.109','Islam','Aktif','0878234077020','info@smk-pi.sch.id'),('3204096101','Lingga Asmara','P','Bandung','1976-01-21','Jl. Sukamenak Gg. Mesjid Al Hidayah No. 15 Rt. 02 ','Islam','Aktif','085860659994','linggaasmara76@gmail.com'),('3204101008','Arief Budiman','L','Bandung','1958-08-10','Jl.CCI XI No.1','Islam','Aktif','081221698083','budiman@smk-pi.sch.id'),('3204101309','Toto Sukmanto','L','Bandung','1956-09-13','Jl.Permai 8 No.14 Komp Margahayu Permai','Islam','Aktif','081320407747','totosukmanto@smk-pi.com'),('3204105412','Maimunah','P','Medan','1962-12-14','Jl. CCM 4 No. 99 Rt. 07 Rw.16 Kel. Mekar Rahayu Ke','Islam','Aktif','08121159932','maimunahwardono@gmail.com'),('3204110106','Maman Maulana','L','Majalaya','1944-06-01','Perumahan Bukit Bunga Kopo Blok B No.6A','Islam','Aktif','085861881555','info@smk-pi.sch.id'),('3204112305','Andi Roboy','L','Bandung','1973-05-23','Taman Bunga Sukamukti Blok F1 N0.2 Rt.02 Rw.15 Kab','Islam','Aktif','085794204851','info@smk-pi.sch.id'),('3204122003','Agus Tubagus Azis','L','Tasikmalaya','1963-03-20','Bojongasih No. 36','Islam','Aktif','08562203451','agusazis@smk-pi.sch.id'),('3204125011','Maryamah','P','Bandung','1979-11-10','Jl. Cibaduyut Tarate VII No. 155 RT. 5/2 Kel. Cang','Islam','Aktif','0811222032','maryamah@smk-pi.sch.id'),('3204125505','Tita Puspasari','P','Garut','1988-05-15','Jl.Cibiuk Kp.Margalela No.118','Islam','Aktif','08986855447','info@smk-pi.sch.id'),('3204141708','Edi Tatan','L','Bandung','1966-02-26','Jl. Pasantren RT. 2/3','Islam','Aktif','082315057074','info@smk-pi.sch.id'),('3204167007','Iis Rini Yuliani','P','Bandung','1975-07-30','Perum Lebakwangi Asri Blok C3 No. 13 RT. 6/13','Islam','Aktif','082116088177','iisrini@smk-pi.sch.id'),('3204281004','Yadi Hikmah Setiana','L','Bandung','1988-12-10','Kp.Neglasari No.432','Islam','Aktif','085222426662','HIKMAH.DIE@GMAIL.COM'),('3204282403','Wawan Gunawan','L','Sukabumi','1965-05-04','Kp Selagedang','Islam','Aktif','085722384199','wawan@smk-pi.sch.id'),('3204286408','Arti Sri Antika Dewi','P','Bandung','1989-08-24','Jl.Bakung XVII No.35','Islam','Aktif','085720316351','artisriantikadewi@gmail.com'),('3204294808','Herizka Fauzia Wahyu','P','Bandung','1995-08-08','Jl. Laswi Belakang No. 671','Islam','Aktif','08987141660','herizka@smk-pi.sch.id'),('3204306004','Gina Lusiana','P','Bandung','1989-04-20','Sukarame','Islam','Aktif','087722044678','info@smk-pi.sch.id'),('3204320311','Engkus Subagja','L','Garut','1968-11-03','Kp. Babakan RT. 2/9','Islam','Aktif','085220868599','info@smk-pi.sch.id'),('3204320603','Dedy Suhardiman','L','Tasikmalaya','1969-03-06','Bojong koneng no.36','Islam','Aktif','081323749669',''),('3204325412','Etty Lisnawati','P','Bandung','1953-12-14','Kav. Rancaemas Blok H Rt. 04 Rw. 16','Islam','Aktif','08211585903','info@smk-pi.sch.id'),('3204352309','H. Oman Sudjana','L','Bandung','1946-11-23','Jl. Cipaku Majalaya Rt. 02 Rw. 02','Islam','Aktif','','info@smk-pi.sch.id'),('3204370101','Atang','L','Bandung','1960-01-01','Komp. Soreang Indah C 28 RT. 1/15','Islam','Aktif','085860790081','info@smk-pi.sch.id'),('3205142109','Ipan Tedi K','L','Garut','1988-09-21','Kp. Ciwahang','Islam','Aktif','085220132963','ipantedikurnadi@yahoo.com'),('3206245203','Ai Femi Priandani','P','Tasikmalaya','1987-03-12','Jl. Pelindung Hewan','Islam','Aktif','089639200560','femiprianda@gmail.com'),('3209053101','Ryan Nuari','L','Cianjur','1991-01-31','Dusun 03','Islam','Aktif','085322551211','ryan@smk-pi.sch.id'),('3210014612','Isoh Siti Masitoh','P','Cianjur','1990-12-06','Puncak baru','Islam','Aktif','082318340891','info@smk-pi.sch.id'),('3211151011','Irwan','P','Sumedang','1981-11-10','Jl.Letda Lukito','Islam','Aktif','082116772508','irwan@smk-pi.sch.id'),('3211165205','Iin Martina','P','Sumedang','1985-05-12','Cikondang','Islam','Aktif','085222939153','iinmartina23@gmail.com'),('3211172012','Femy Firmansyah','L','Sumedang','1991-12-20','Mekar Bakti','Islam','Aktif','089619578356','f_firmansyah85@yahoo.com'),('3214016406','Rahayu Kusumawati','P','Purwakarta','1987-06-24','Jl. Raya Warung Lahang','Islam','Aktif','085285266685','gara_trombozier@gmail.com'),('3214094709','Dewi Pratiwi','L','Pacitan','1986-09-07','Kp.Pameungpeuk No.14','Islam','Aktif','085221138230','info@smk-pi.sch.id'),('3215075412','Dessy Eka Wulan Sari','P','Karawang','1990-12-14','Ds Sindangmukti Rt 10 Rw 005','Islam','Aktif','','info@smk-pi.sch.id'),('3273010303','Tohari','L','Cirebon','1944-03-03','sarijadi','Islam','Aktif','',''),('3273010606','Syarif Pamungkas','L','Ciamis','1960-06-06','Jl.Geger Kalong Tengah No.24-Z','Islam','Aktif','08122013014','syarif@smk-pi.sch.id'),('3273011103','Achmad Chalid','L','Bandung','1969-03-11','Jl. Sersan Sodik Gg. Pada Tawekal Rt. 01 Rw. 03 No','Islam','Aktif','085323482017','info@smk-pi.sch.id'),('3273030104','Giri Triyanto','L','Surabaya','1966-04-01','Jl. Cibolerang F-3','Islam','Aktif','081910506113','grietie@gmail.com'),('3273030112','Didin Haryadi','L','Tasikmalaya','1955-12-01','Komp. Cibolerang Indah Blok. J/13 Rt. 02 Rw. 07','Islam','Aktif','081322507281','info@smk-pi.sch.id'),('3273031811','Agisna Ya Huziati','L','Bandung','1995-11-18','Jl. Caringin Gg. Lumbung 5 No.14','Islam','Aktif','085722731499','agis@smk-pi.sch.id'),('3273035103','Riska Narulita Sari','P','Bandung','1992-03-11','Jl.Cibolerang','Islam','Aktif','','info@smk-pi.sch.id'),('3273036512','Neneng Iriani','P','Yogyakarta','1970-12-25','Jl. Pagarsih No. 313','Islam','Aktif','085862031970','info@smk-pi.sch.id'),('3273041004','Cepi Rohman Herdiansyah','L','Bandung','1996-04-10','Gg. Mukalmi No.129','Islam','Aktif','089657290177','cepi@smk-pi.sch.id'),('3273041711','Kunkun Mulyawan','L','Sumedang','1958-11-17','Perum Tanjuungsari Permai Blok O 32','Islam','Aktif','081224550866','kunkun@smk-pi.com'),('3273042912','Bobby Rinaldo Sukma D','L','Bandung','1996-12-29','Jl. Terusan Pasirkoja','Islam','Aktif','085659979667','bobby@smk-pi.sch.id'),('3273046003','Tina Martina','P','Bandung','1971-03-20','J.Kopo Gg Panyileukan No.21','Islam','Aktif','082118482132','martina@smk-pi.sch.id'),('3273050908','Muslim Setiadi','L','Klaten','1987-08-09','Jl.Sukamanah No.193','Islam','Aktif','081391576620','info@smk-pi.sch.id'),('3273055112','Budiarti','P','Solo','1948-12-11','Jl. Garuda Maleber Utara No 74 A/187 A','Islam','Aktif','5202834','info@smk-pi.sch.id'),('3273076703','Nina Mariyana','P','Bandung','1978-03-27','Jl.Cibarengkok No.211/182','Islam','Aktif','08122266395','nina_mariana782000@yahoo.com'),('3273084209','Eulis Ana Somantri','P','Bandung','1970-09-02','Jl. Ciumbuleuit Atas Cipicung Hilir No. 2 Rt. 06 R','Islam','Aktif','08122123560','info@smk-pi.sch.id'),('3273100305','Denny Hendriansyah','L','Subang','1971-05-03','Jl. Otista Gg. Muhammadiyah No.246/95 Tegallega Ba','Islam','Aktif','085860082060','denny@smk-pi.sch.id'),('3273100406','Ahmad Gojali','L','Bandung','1976-06-04','Jl.Pelindung Hewan Gg.Darussalam No.145/96 RT.04/0','Islam','Aktif','','info@smk-pi.sch.id'),('3273100704','Senna Heru Megawan','L','Bandung','1996-04-07','Jl. Moh Toha Gg.Cisureuh X No. 31','Islam','Aktif','085295984881','sennaherum@gmail.com'),('3273100711','Surya Bahtiyar','L','Bandung','1996-11-07','Jl. Pasir Koja Gg. Rahayu II No. 71 B/91','Islam','Aktif','0882188434205','surya@smk-pi.sch.id'),('3273101107','Ence Rukandi','L','Bandung','1958-07-06','Jl. Pelindung Hewan Gg. M. Darussalam No. 143/96','Islam','Aktif','','info@smk-pi.sch.id'),('3273101509','Jaja Saepudin','L','Bandung','1973-09-15','Jl. Pelindung Hewan Gg. Mesjid Darussalam RT. 4/8 ','Islam','Aktif','082116088177','info@smk-pi.sch.id'),('3273101801','Deddy','L','Bandung','1963-01-18','Jl.Inhofftank Gg.Perikanan II RT.03/05 Bdg','Islam','Aktif','082120117536','deddy@smk-pi.com'),('3273101803','Ilin','L','Garut','1961-03-18','Jl. Inhofftank Gg. Perikanan I No. 39 RT. 3/4 Kel.','Islam','Aktif','','info@smk-pi.sch.id'),('3273101811','Endang Sulaeman','L','Bandung','1969-11-18','Jl. Pelindung Hewan Gg. Mesjid Darussalam','Islam','Aktif','085294141707','info@smk-pi.sch.id'),('3273102006','Kiki Sandi Muhammad Ramdani','L','Bandung','1983-06-20','Jl. Karasak Utara Dalam 3 No.24 Bandung','Islam','Aktif','081222225045','kikisandi06@gmail.com'),('3273102107','Komarudin','L','Bekasi','1959-07-21','Gg. Mesjid Darussalam RT. 5/8 Kel. Pelindung Hewan','Islam','Aktif','081322216283','info@smk-pi.sch.id'),('3273102811','Beni Arief Syarifudin','L','Bandung','1970-11-28','Jl.Inhofftank Gg.Perikanan II No.25','Islam','Aktif','081321840695','ariefbeni@yahoo.com'),('3273104203','Siti Hodijah','P','Bandung','1968-03-02','Jl. Karasak Utara Dalam III Gg. B','Islam','Aktif','085294756669','info@smk-pi.sch.id'),('3273104405','Kokom Komariah','P','Bandung','1966-04-05','Jl. Inhofftank Gg. Mesjid Al Ikhsan No. 41 RT. 7/6','Islam','Aktif','085222417555','info@smk-pi.sch.id'),('3273104912','Elin Maulina Fitrijanti','P','Bandung','1969-12-09','Jl. Pelindung Hewan Gg. Darusallam No. 65/96A','Islam','Aktif','087722438288','maulinaelin98@yahoo.com'),('3273106005','Eneng Siti Masrifah','P','Bandung','1973-05-20','Jl. Inhofftank No. 78 RT. 4/6','Islam','Aktif','081322652902','info@smk-pi.sch.id'),('3273106012','Dewi Widaningsih','P','Bandung','1970-12-20','Jl. Pelindung Hewan Rt. 02 Rw. 08 Kel. Pelindung H','Islam','Aktif','087823593136','dewi@smk-pi.sch.id'),('3273106404','Siti Aminah','P','Bandung','1961-04-24','Jl. Pelindung Hewan Gg. Mesjid Darussalam No. 65/9','Islam','Aktif','','info@smk-pi.sch.id'),('3273106607','Nia Jamilah','P','Bandung','1985-07-26','Jl.Moh.Toha Gg.H.Mukti','Islam','Aktif','085659925300','info@smk-pi.sch.id'),('3273106800','Yuli Mardianti','P','Bandung','1974-07-28','Babakan Ciseureuh No.10','Islam','Aktif','085320424390','info@smk-pi.sch.id'),('3273114706','Molek Yuniar','P','Bandung','1972-06-07','Jl.Sumadinata No.50A/18C','Islam','Aktif','085720215917',''),('3273115812','Dessy Yuliyawati','P','Bandung','1975-12-18','Komp Bumi Sari Indah Blok J No.4 Rt12/Rw17','Islam','Aktif','081322202443','Dessyyulyawati@yahoo.co.id'),('3273121011','Rubaman','L','Bandung','1953-11-10','Jl. Babakan Jati I No. 65 Rt. 02 Rw. 08 Kel. Binon','Islam','Aktif','081320008101','info@smk-pi.sch.id'),('3273122006','Aris Dianto','L','Bandung','1989-06-20','Jl. Karees Sapuran No.91/121','Islam','Aktif','','info@smk-pi.sch.id'),('3273124311','Nurul Diningsih','P','Bandung','1993-11-03','Jembatan opat','Islam','Aktif','085221249422','nuruldiningsih@yahoo.com'),('3273127112','Mundiati','P','Bandung','1973-12-31','Jl. Kebon Gedang VII No. 295 B/126 D Rt. 02 Rw. 07','Islam','Aktif','081809810010','info@smk-pi.sch.id'),('3273131011','Ahmad Yani','L','Tegal','1968-11-10','Srimahi Gg,muh.iwan no.9 A','Islam','Aktif','','info@smk-pi.sch.id'),('3273140403','Iwan Setiawan','L','Padalarang','1970-03-04','Jl.Supratman 36','Islam','Aktif','089617069286','info@smk-pi.sch.id'),('3273140906','Ihwan Rahman Bahtiar','L','Majalengka','1987-07-09','Komp Suci Residence F 12','Islam','Aktif','085724755549','achita.weng@gmail.com'),('3273141507','Asep Ganda Permana','L','Bandung','1969-07-15','Jl. Babakan Cikutra RT.02/08 Neglasari Bandung','Islam','Aktif','088809468518','apgan_permana69@yahoo.com'),('3273150407','Pega Kurnia','L','Bandung','1996-07-04','Cibolerang Barat','Islam','Aktif','085659108040','kurniapega4@gmail.com'),('3273152309','Muh.Gozali','L','Bandung','1987-09-23','Jl.Cibuntu Selatan','Islam','Aktif','085624292963','gozali@smk-pi.sch.id'),('3273156210','Riksa Chramatika Sugesti','P','Bandung','1969-10-22','Komp. Perumnas Cijerah II Blok 22 Gg. Sayuran 2 No','Islam','Aktif','081322726759','info@smk-pi.sch.id'),('3273162101','Juanda','L','Bandung','1960-01-21','Jl. Ahmad Yani Sukarame I No. 50 RT. 3/9 Kel. Cica','Islam','Aktif','','info@smk-pi.sch.id'),('3273166910','Nila Novita','P','Bandung','1974-10-29','Jl.Kebon Jayanti No.113 A/134 B Rt.01/03 Bandung','Islam','Aktif','08122026278','nila@smk-pi.sch.id'),('3273170807','Suherman','L','Sidoarjo','1932-07-08','Jl. Kopo Gg. Pakasih RT. 5/7 Kel. Kebonlega Kec. B','Islam','Aktif','','info@smk-pi.sch.id'),('3273171111','Iwan Permana','L','Bandung','1987-11-11','Jl.Babakan TVRI II No.88','Islam','Aktif','0857221634444','iwanpermana240@yahoo.com'),('3273171204','Nanang Abdul Gani','L','Tasikmalaya','1962-04-11','Jl.Inhoftank No.86','Islam','Aktif','08156082024','info@smk-pi.sch.id'),('3273172501','Hadi Suteja','L','Bandung','1973-01-25','Jl. Leuwi panjang Gg. Rukunsari I No. 145 RT. 5/2','Islam','Aktif','085294493803','info@smk-pi.sch.id'),('3273172606','Arief Setiawan','L','Bandung','1982-06-26','Jl. Muarasari II No. 28 Rt 03/Rw 11 Kel.Kebonlega ','Islam','Aktif','081809167666','arief@smk-pi.sch.id'),('3273174209','Irma Nurmala','P','Bandung','1992-09-02','Jl.Sauyunan Raya No.29 Bandung','Islam','Aktif','089656557329','info@smk-pi.sch.id'),('3273176405','Ela Nurlaela','P','Bandung','1964-05-24','Jl. Inhofftank No. 85 RT. 2/3','Islam','Aktif','0811214950','info@smk-pi.sch.id'),('3273176409','Sumiati','P','Bandung','1977-09-24','Jl. Muarasari II No. 28 Rt 03/Rw 11 Kel.Kebonlega ','Islam','Aktif','08122312412','sumiati@smk-pi.sch.id'),('3273196602','Sudarti','P','Bandung','1963-02-26','Jl. Baranangsiang No. 104/34 B RT. 2/10 Kel. Kebon','Islam','Aktif','08156200448','info@smk-pi.sch.id'),('3273210503','Usman Jamaludin','L','Bandung','1969-03-05','Jl. Ters. Batu Nunggal Sukamulya C No. 3','Islam','Aktif','085314147126',''),('3273216401','Sinta Ifada Dewi','L','Garut','1969-01-24','Perum Sarie Bunga Bakung B.62','Islam','Aktif','082130510126','sintaifada@yahoo.com'),('3273225511','Ratih Kindawati','P','Garut','1972-11-15','Komp Sari Bunga Bakung Blok A 108','Islam','Aktif','081320202356','ratihkindawati@smk-pi.sch.id'),('3273226003','Sarah Noor Fauziah','P','Bandung','1990-03-20','Jl. Bunga Bakung VII No. 5','Islam','Aktif','085722773396','sarahnoorfauziah@gmail.com'),('3273226604','Nurita','P','Bandung','1968-04-26','Jl. Margaluyu RT. 3/8 Kel. Margasari Kec. Buahbatu','Islam','Aktif','087822178576','info@smk-pi.sch.id'),('3273226808','A. Purwati Widhyastuti','P','Magelang','1960-08-28','Jl. Taman Yupiter Blok E II No. 86 Rt. 05 Rw. 02 K','Islam','Aktif','085624737806','info@smk-pi.sch.id'),('3273235505','Nadia Cassinie','P','Bandung','1970-05-15','Jl. Riung Purna X No. 30 Riung Bandung','Islam','Aktif','081320757792','nadia@smk-pi.sch.id'),('3273250309','Ajie Nugraha','L','Bandung','1987-09-03','Komp. Tirtawening No.136','Islam','Aktif','085721939696','ajie.nugraha.87@gmail.com'),('3273272808','Esron Manurung','L','Parapat','1952-08-28','Jl Riung Sakuyu Blok IKA No.3','Kristen','Aktif','081321841120','info@smk-pi.sch.id'),('3273280307','Herman Bangun','L','Tebing Tinggi','1958-07-03','Bumi Panyileukan G.13 No.20 Bandung','Islam','Aktif','','info@smk-pi.sch.id'),('3273300407','Myliso Sakada Purnama','L','Jakarta','1992-07-04','Jl. Arcamanik 123 A / 6 Baru','Islam','Aktif','','info@smk-pi.sch.id'),('3273301810','Hamdani','L','Bandung','1969-10-18','Kp. Tagog Pasir Impun RT. 2/1 Kel. Pasir Impun Kec','Islam','Aktif','082126096752','info@smk-pi.sch.id'),('3275106602','Djulaeha','P','Bandung','1958-02-26','Jl.InhofftankGg.Prikanan Tengah RT.04/04 Bdg','Islam','Aktif','081321544342','info@smk-pi.sch.id'),('3276010706','Muh. Luqman','L','Jakarta','1989-06-07','Pancoran Mas Depok','Islam','Aktif','081808145670','info@smk-pi.sch.id'),('3277014312','Annita Komariati P','P','Bandung','1966-12-03','Jl. Rorosonggrang VI/66','Islam','Aktif','081394365908','akomariati@yahoo.com'),('3277016802','Novi Febriyani','P','Bandung','1992-02-28','Jl. Rancabentang No. 294','Islam','Aktif','08987930228','febriyani_novi@yahoo.com'),('3449752654','Enok Amimah','P','Bandung','1974-11-17','Komp. Sanggar Indah Banjaran Blok E VI No. 16','Islam','Aktif','081221761767','info@smk-pi.sch.id');
+/*!40000 ALTER TABLE `guru` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `nilai`
 --
 
+DROP TABLE IF EXISTS `nilai`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nilai` (
   `kode_nilai` varchar(10) NOT NULL,
   `NISN` varchar(10) NOT NULL,
@@ -264,86 +190,111 @@ CREATE TABLE `nilai` (
   `NA_Keterampilan` enum('1','2','3','4') NOT NULL DEFAULT '1',
   `NH_Keterampilan` enum('A','B','C','D') NOT NULL DEFAULT 'D',
   `NH_Spiritual` enum('SB','B','C','K') NOT NULL DEFAULT 'K',
-  `Keterangan` text
+  `Keterangan` text,
+  PRIMARY KEY (`kode_nilai`),
+  KEY `NISN` (`NISN`),
+  KEY `Kode_Semester` (`Kode_Semester`),
+  KEY `Kode_Detail_Pelajaran` (`Kode_Detail_Pelajaran`),
+  CONSTRAINT `nilai_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
+  CONSTRAINT `nilai_ibfk_2` FOREIGN KEY (`Kode_Semester`) REFERENCES `semester` (`Kode_Semester`),
+  CONSTRAINT `nilai_ibfk_3` FOREIGN KEY (`Kode_Detail_Pelajaran`) REFERENCES `detail_pelajaran` (`Kode_Detail_Pelajaran`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `nilai`
+--
+
+LOCK TABLES `nilai` WRITE;
+/*!40000 ALTER TABLE `nilai` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nilai` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `pelajaran`
 --
 
+DROP TABLE IF EXISTS `pelajaran`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pelajaran` (
   `Kode_Pelajaran` varchar(4) NOT NULL,
   `Mata_Pelajaran` varchar(40) NOT NULL,
-  `Kelompok` char(1) NOT NULL
+  `Kelompok` char(1) NOT NULL,
+  PRIMARY KEY (`Kode_Pelajaran`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `pelajaran`
 --
 
-INSERT INTO `pelajaran` (`Kode_Pelajaran`, `Mata_Pelajaran`, `Kelompok`) VALUES
-('P001', 'Al-Quran Hadist', 'A'),
-('P002', 'Pendidikan Kewargaan negara', 'A'),
-('P003', 'Bahasa Indonesia', 'A'),
-('P004', 'Bahasa Arab', 'A'),
-('P005', 'Matematika', 'A'),
-('P006', 'Ilmu Pengetahuan Alam', 'A'),
-('P007', 'Ilmu Pengetahuan Sosial', 'A'),
-('P008', 'Bahasa Inggris', 'A'),
-('P009', 'Seni Budaya', 'B'),
-('P010', 'Pendidikan Jasmani, Olahraga dan Kesehat', 'B'),
-('P011', 'Prakarya dan Kewirausahaan', 'B'),
-('P012', 'Bahasa Sunda', 'B');
-
--- --------------------------------------------------------
+LOCK TABLES `pelajaran` WRITE;
+/*!40000 ALTER TABLE `pelajaran` DISABLE KEYS */;
+INSERT INTO `pelajaran` VALUES ('P001','Al-Quran Hadist','A'),('P002','Pendidikan Kewargaan negara','A'),('P003','Bahasa Indonesia','A'),('P004','Bahasa Arab','A'),('P005','Matematika','A'),('P006','Ilmu Pengetahuan Alam','A'),('P007','Ilmu Pengetahuan Sosial','A'),('P008','Bahasa Inggris','A'),('P009','Seni Budaya','B'),('P010','Pendidikan Jasmani, Olahraga dan Kesehat','B'),('P011','Prakarya dan Kewirausahaan','B'),('P012','Bahasa Sunda','B');
+/*!40000 ALTER TABLE `pelajaran` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `pengguna`
 --
 
+DROP TABLE IF EXISTS `pengguna`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pengguna` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `nik` varchar(10) NOT NULL,
   `aktif` varchar(1) NOT NULL DEFAULT '0',
-  `hak_akses` varchar(1) NOT NULL
+  `hak_akses` varchar(1) NOT NULL,
+  PRIMARY KEY (`username`),
+  KEY `nik` (`nik`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `pengguna`
 --
 
-INSERT INTO `pengguna` (`username`, `password`, `nik`, `aktif`, `hak_akses`) VALUES
-('admin', '21232f297a57a5a743894a0e4a801fc3', '3273226808', '0', '1'),
-('admin2', '21232f297a57a5a743894a0e4a801fc3', '3204122003', '0', '2');
-
--- --------------------------------------------------------
+LOCK TABLES `pengguna` WRITE;
+/*!40000 ALTER TABLE `pengguna` DISABLE KEYS */;
+INSERT INTO `pengguna` VALUES ('admin','21232f297a57a5a743894a0e4a801fc3','3273226808','1','1'),('admin2','21232f297a57a5a743894a0e4a801fc3','3204122003','0','2');
+/*!40000 ALTER TABLE `pengguna` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `semester`
 --
 
+DROP TABLE IF EXISTS `semester`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `semester` (
   `Kode_Semester` varchar(5) NOT NULL,
   `Semester` enum('1','2') DEFAULT '1',
-  `Tahun_Pelajaran` varchar(9) NOT NULL
+  `Tahun_Pelajaran` varchar(9) NOT NULL,
+  PRIMARY KEY (`Kode_Semester`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `semester`
 --
 
-INSERT INTO `semester` (`Kode_Semester`, `Semester`, `Tahun_Pelajaran`) VALUES
-('20171', '1', '2017/2018');
-
--- --------------------------------------------------------
+LOCK TABLES `semester` WRITE;
+/*!40000 ALTER TABLE `semester` DISABLE KEYS */;
+INSERT INTO `semester` VALUES ('20171','1','2017/2018');
+/*!40000 ALTER TABLE `semester` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `siswa`
 --
 
+DROP TABLE IF EXISTS `siswa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `siswa` (
   `NISN` varchar(10) NOT NULL,
   `Nama` varchar(40) NOT NULL,
@@ -353,1306 +304,28 @@ CREATE TABLE `siswa` (
   `agama` varchar(15) NOT NULL,
   `tmp_lahir` varchar(30) NOT NULL,
   `tgl_lahir` date NOT NULL,
-  `pek_ortu` varchar(50) DEFAULT NULL
+  `pek_ortu` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`NISN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`NISN`, `Nama`, `Kelas`, `alamat`, `jk`, `agama`, `tmp_lahir`, `tgl_lahir`, `pek_ortu`) VALUES
-('0021085083', 'Adik Ilham Maulana', 'IX', 'Jl.Kebon sirih 3 No.249/5B', 'L', 'Islam', 'Ciamis', '2002-12-11', 'Wiraswasta'),
-('0021701055', 'Parulian Alexander Sihombing', 'IX', 'Jl.Situ Tarate', 'L', 'Kristen', 'Bandung', '2002-11-20', 'Karyawan Swasta'),
-('0025030837', 'Raden Mochamad Lutfi', 'IX', 'Jl. Pa Gatot 4 No 64 G', 'L', 'Islam', 'Bandung', '2002-01-01', 'Wiraswasta'),
-('0027410303', 'Muhammad Ansori', 'VIII', 'Jl.Denki II No.462/203A', 'L', 'Islam', 'Bandung', '2002-08-11', 'Wiraswasta'),
-('0028720104', 'Meggi Mesha', 'VIII', 'Komp Margahayu Kencana No.E.15', 'L', 'Islam', 'Padang', '2002-12-04', 'Wiraswasta'),
-('0029960070', 'Rangga Setiadi', 'VIII', 'Jl.Jend Sudirman Gg Ibu Enung No.156/79', 'L', 'Islam', 'Bandung', '2002-10-05', 'Buruh'),
-('0031020048', 'Kriston Wahyu Budiman Silalahi', 'VIII', 'Soekarno hatta Gg.Pusri', 'L', 'Islam', 'Bandung', '2003-10-07', ''),
-('0031049011', 'Sumpena', 'VIII', 'Jl.Soekarno Hatta Gg Hasan II', 'L', 'Islam', 'Bandung', '2003-07-28', 'Buruh'),
-('0031087036', 'Dadan Ruhiyat', 'VIII', 'Kp.Sasak Dua Banjaran', 'L', 'Islam', 'Bandung', '2003-10-31', ''),
-('0031131036', 'Adam Rizki Dwi Yoga Zaki Bagarif', 'IX', 'Nata Endah Blok J No.24', 'L', 'Islam', 'Bandung', '2003-02-20', 'Wiraswasta'),
-('0031461007', 'Hasan Abdul Rohman', 'IX', 'Pagarsih Gg Pamar Hadi', 'L', 'Islam', 'Bandung', '2003-03-11', 'Buruh'),
-('0031571016', 'Guntur Aurelian', 'IX', 'Jl.Indrayasa', 'L', 'Islam', 'Bandung', '2003-10-16', 'Karyawan Swasta'),
-('0032570758', 'Ade Herlina Desmia Wati', 'VIII', 'Ahmad Yani Gg.samsi 5 No.306', 'P', 'Islam', 'Jakarta', '2003-12-29', 'Karyawan Swasta'),
-('0032710293', 'Fajar Mochammad Ghufron Firmansy', 'VIII', 'Gg Ento No.25/65', 'L', 'Islam', 'Bandung', '2003-05-21', 'Buruh'),
-('0032821043', 'Oki Hidayat Prasetya', 'IX', 'Jl.Margacinta No.81', 'L', 'Islam', 'Bandung', '2003-10-02', 'Buruh'),
-('0032930158', 'Achmad Nur Fauzhi', 'VIII', 'Jl.Astanaanyar', 'L', 'Islam', 'Cianjur', '2003-09-06', 'Wiraswasta'),
-('0033050332', 'Padhlika Islami Kusumah', 'VIII', 'Jl.Inhofftank Gg Panyeuseuhan No.9', 'L', 'Islam', 'Bandung', '2003-08-28', 'Wiraswasta'),
-('0033501019', 'Ahmad Selamet', 'IX', 'Jl.Mohtoha Gg Murdasan', 'L', 'Islam', 'Bandung', '2003-10-09', 'Lainnya'),
-('0033690398', 'Adi Sukma', 'VIII', 'Babakan garut', 'L', 'Islam', 'Bandung', '2003-10-20', 'Buruh'),
-('0033861026', 'Muhamad Nur', 'IX', 'Ds.Bolero', 'L', 'Islam', 'Bandung', '2003-06-28', 'Wiraswasta'),
-('0034071029', 'Iboy Suherman', 'IX', 'Gg Empang Ciburuy', 'L', 'Islam', 'Tasikmalaya', '2003-11-17', ''),
-('0034101051', 'Nazar Mauludian Anugrah', 'IX', 'Jl.Kopo Gg.Pabrik kulit selatan', 'L', 'Islam', 'Garut', '2003-07-09', 'Wiraswasta'),
-('0034120036', 'Sigit Ginanjar', 'VIII', 'Jl.Karasak Lama', 'L', 'Islam', 'Bandung', '2003-11-08', 'Karyawan Swasta'),
-('0034340849', 'Diki Wahyudi Tarigan', 'VII', 'Desa Nanjung No 39', 'L', 'Islam', 'Namo Suro', '2003-09-13', 'Wiraswasta'),
-('0034571031', 'Ramadan Januari D', 'IX', 'Jl.Mohtoha Blk No.186', 'L', 'Islam', 'Bandung', '2003-02-23', ''),
-('0034720151', 'Soni Robi Sugandi', 'VIII', 'Gg Rahayu II No.78/91A', 'L', 'Islam', 'Bandung', '2003-11-03', 'Buruh'),
-('0034810045', 'Algi Herdiana', 'VIII', 'Jl.Babakan Ciparay', 'L', 'Islam', 'Bandung', '2003-07-05', 'Tidak bekerja'),
-('0034891027', 'Aan Abdul Rohman', 'IX', 'Jl.Kopo Gg.Babakan Asih No.372 / 198', 'L', 'Islam', 'Bandung', '2003-12-15', 'Lainnya'),
-('0034951005', 'Muhamad Hardianto', 'IX', 'Jl.Caringin Blok Kupat', 'L', 'Islam', 'Cianjur', '2003-10-10', 'Buruh'),
-('0035391045', 'Fajar Hermawan', 'IX', 'Kampung Babakan Antasari', 'L', 'Islam', 'Bandung', '2003-09-09', 'Wiraswasta'),
-('0035421063', 'Reza Rochmansyah', 'IX', 'Moch.Toha Gg.Naradireja Sekekuda', 'L', 'Islam', 'Bandung', '2003-10-23', 'Wiraswasta'),
-('0035971000', 'Abu Rizal Ahmad', 'IX', 'Jl.Kopo Gg H. Hamim No.412', 'L', 'Islam', 'Sumedang', '2003-11-02', 'Buruh'),
-('0035991017', 'Muhammad Rizal Mauludin', 'IX', 'Cijerah Blok IV Gg Perkutut No.127', 'L', 'Islam', 'Bandung', '2003-07-20', 'Karyawan Swasta'),
-('0037331042', 'Andri Fa Al Ghofar', 'IX', 'Gg.Manunggal II C Kp.Sayuran', 'L', 'Islam', 'Bandung', '2003-12-23', 'Karyawan Swasta'),
-('0037421012', 'Ghallih Yudit Aditia', 'IX', 'Jl.Baru Raya VII', 'L', 'Islam', 'Gombong', '2003-02-04', 'Buruh'),
-('0037781025', 'Hendri Rendiyansyah', 'IX', 'Jl.Indrayasa ,warung nangka', 'L', 'Islam', 'Bandung', '2003-12-17', 'Karyawan Swasta'),
-('0037950638', 'Aji Mustopa', 'VIII', 'Pajagalan IV no.74/22 D', 'L', 'Islam', 'bandung', '2003-04-28', 'Wiraswasta'),
-('0038000271', 'Reza Pahlevi Hasugian', 'VIII', 'Kp.Cembul Pojok', 'L', 'Islam', 'Medan', '2003-07-22', 'Wiraswasta'),
-('0038180154', 'Wendra Agus Merdhika', 'VIII', 'Jl.Citepus I', 'L', 'Islam', 'Toboali', '2003-08-17', ''),
-('0038510632', 'Ujang Firmansyah', 'VIII', 'inhofftank', 'L', 'Islam', 'Garut', '2003-04-08', ''),
-('0038520689', 'Den Restu Singgih', 'VIII', 'inhofftank', 'L', 'Islam', 'bandung', '2003-11-28', 'Wiraswasta'),
-('0038761047', 'Mutiara Aprilia', 'IX', 'Komplek Baleendah Permai No 220 J Padi Endah 5', 'P', 'Islam', 'Bogor', '2003-04-06', 'PNS/TNI/Polri'),
-('0039401004', 'Dicky Irwandi', 'IX', 'Kp Mekarsari', 'L', 'Islam', 'Bandung', '2003-10-23', 'PNS/TNI/Polri'),
-('0039440317', 'Visal Aryandi', 'VII', 'Jl.Sukapakir Tengah', 'L', 'Islam', 'Bandung', '2003-07-31', 'Karyawan Swasta'),
-('0039460238', 'Ucu Deni', 'VII', 'Kp.Babakan', 'L', 'Islam', 'Bandung', '2003-07-10', 'Wiraswasta'),
-('0041000066', 'Muhamad Rafi Oktapian', 'VIII', 'cibaduyut raya gg.durman', 'L', 'Islam', 'bandung', '2004-10-01', 'Karyawan Swasta'),
-('0041002044', 'Farhan Musaidan', 'VIII', 'Kancra dalam III no.21', 'L', 'Islam', 'bandung', '2004-11-18', 'Wiraswasta'),
-('0041004104', 'Davit Al Baqi', 'IX', 'Jl.Inhofftank Blok Desa XII No.24', 'L', 'Islam', 'Bandung', '2004-03-06', 'Buruh'),
-('0041012039', 'Muhammad Zamzam Multazam', 'VIII', 'Kopo cirangrang', 'L', 'Islam', 'Bandung', '2004-12-05', ''),
-('0041016001', 'Gusti Pratama Hidayat', 'VIII', 'Jl.Karasak No.38', 'L', 'Islam', 'Bekasi', '2004-08-29', 'Tidak bekerja'),
-('0041019081', 'Rahayu Wanti Destiani', 'VIII', 'Ters.Pasirkoja No.72 Gg.H.Taufiq', 'P', 'Islam', 'Bandung', '2004-12-02', 'Wiraswasta'),
-('0041020373', 'Denis Ramadhan Rohaedi', 'VIII', 'Pagarsih Gg.Sukapura', 'L', 'Islam', 'Bandung', '2004-12-19', 'Wiraswasta'),
-('0041020443', 'Fahmi Ramdhani', 'VIII', 'Gg.Jamhari 217c/95', 'L', 'Islam', 'bandung', '2004-12-30', 'Karyawan Swasta'),
-('0041022019', 'Yogi Firmansyah', 'VII', 'Jl.Cibaduyut', 'L', 'Islam', 'Bandung', '2004-11-18', 'Buruh'),
-('0041023063', 'Seno Lifiano', 'VIII', 'babakan tarogong gg.laksana', 'L', 'Islam', 'Bandung', '2004-11-16', ''),
-('0041027103', 'Rizaldi Sukma Bayu Pamungkas', 'IX', 'Kp.Situ Aksan Gg Madrasah', 'L', 'Islam', 'Bandung', '2004-07-29', ''),
-('0041031014', 'Rinto Pambudi', 'VIII', 'Jl.babakan Tarogong Gg Laksana I No.72', 'L', 'Islam', 'Bandung', '2004-04-22', 'Wiraswasta'),
-('0041035010', 'Irfan Firmansyah', 'VIII', 'Jl.Bbk Tarogong Gg Bahrul Ihsan No.503/196B', 'L', 'Islam', 'Bandung', '2004-07-05', 'Wiraswasta'),
-('0041035069', 'Fauzan Syahrul Ramadhan', 'VIII', 'Kopo Gg.Babakan Tarogong II No.294/196 B', 'L', 'Islam', 'bandung', '2004-12-22', 'Karyawan Swasta'),
-('0041037040', 'Andrian Permana', 'VIII', 'Inhoftank', 'L', 'Islam', 'Bandung', '2004-11-05', 'Karyawan Swasta'),
-('0041038015', 'Zulkipli Saja,ah', 'VIII', 'Parung Halang', 'L', 'Islam', 'Bandung', '2004-12-21', 'Tidak bekerja'),
-('0041039009', 'Exel Indra Ramasandika Daffaputr', 'VIII', 'Jl.Pelanduk No.6', 'L', 'Islam', 'Bandung', '2004-12-21', 'Wiraswasta'),
-('0041039069', 'Ihsan Ismawan', 'VIII', 'Pagarsih Barat Gg.Madrasah', 'L', 'Islam', 'bandung', '2004-11-07', 'Wiraswasta'),
-('0041040100', 'Syifa Septiana Muhammad Firizqi', 'IX', 'Jl.Peta Gg Jamhari No.225/95', 'L', 'Islam', 'Bandung', '2004-09-08', 'Wiraswasta'),
-('0041046037', 'Dicky Irawan', 'VIII', 'Mengger Girang', 'L', 'Islam', 'Bandung', '2004-12-18', ''),
-('0041048007', 'Virgil Givari Setiadi', 'VIII', 'Kopo Gg Panyileukan No.429/196B', 'L', 'Islam', 'Banfung', '2004-09-16', 'Wiraswasta'),
-('0041050170', 'Diki Sanusi', 'VIII', 'Jl.Sampora', 'L', 'Islam', 'Bandung', '2004-03-16', 'Buruh'),
-('0041056100', 'Muhamad Misbahudin', 'IX', 'Jl.Mohtoha Gg H Mukti', 'L', 'Islam', 'Tegal', '2004-06-05', 'Wiraswasta'),
-('0041058029', 'Deden Johari', 'VIII', 'Jl.Cibolerang', 'L', 'Islam', 'Bandung', '2004-01-20', 'PNS/TNI/Polri'),
-('0041060039', 'Riyan Ihwan', 'VIII', 'leuwi melang', 'L', 'Islam', 'Bandung', '2004-11-18', ''),
-('0041060075', 'Yuli Susanti', 'VIII', 'jl.inhofftank', 'P', 'Islam', 'Bandung', '2004-12-23', ''),
-('0041061041', 'Riyan Hidayat', 'IX', 'Kp.Sekeandur', 'L', 'Islam', 'Bandung', '2004-06-13', 'Karyawan Swasta'),
-('0041067015', 'Acep Wahyu Hidayat', 'VIII', 'Kp Peuris', 'L', 'Islam', 'Bandung', '2004-08-26', 'Wiraswasta'),
-('0041072053', 'Nur Ristiyanto', 'VIII', 'Babakan Tarogong gg.anom', 'L', 'Islam', 'Bandung', '2004-11-23', 'Wiraswasta'),
-('0041078027', 'Rifa Maulana', 'VIII', 'Jl.Inhofftank Gg Blok Desa XII', 'L', 'Islam', 'Bandung', '2004-06-04', 'Buruh'),
-('0041080101', 'Aditya Febrian Pratama', 'IX', 'Jl. Terusan Cibaduyut Gg. Tarate III 133', 'L', 'Islam', 'Bandung', '2004-02-25', 'Wiraswasta'),
-('0041081014', 'Ryan Aji Saputra', 'VIII', 'Jl.Kebokopi', 'L', 'Islam', 'Kebumen', '2004-11-29', 'Buruh'),
-('0041083029', 'Kevin Chandra Maesya', 'VIII', 'Jl.Pagarsih Gg Onong No.113/89', 'L', 'Islam', 'Bandung', '2004-09-29', ''),
-('0041083062', 'Ramadhan Al Fitri', 'VIII', 'Moch.Toha Km5,3 bbk.cisumirta', 'L', 'Islam', 'Bandung', '2004-01-29', ''),
-('0041087044', 'Muhamad Arif Qumaeni', 'VIII', 'Sukamulya', 'L', 'Islam', 'bandung', '2004-06-14', 'Karyawan Swasta'),
-('0041087056', 'Bayu Septian', 'VIII', 'babakan tarogong gg.anom', 'L', 'Islam', 'Bandung', '2004-09-03', 'Wiraswasta'),
-('0041088104', 'Aldi Gunawan', 'IX', 'Kampung Mengger Hilir', 'L', 'Islam', 'Bandung', '2004-03-08', 'Buruh'),
-('0041100316', 'Supriadi', 'VIII', 'Jl.Pagarsih Gg Pasantren No.105/88', 'L', 'Islam', 'Bandung', '2004-12-01', 'Wiraswasta'),
-('0041150292', 'Eko Santoso', 'VIII', 'Jl.Inhofftank gg Perikanan 2', 'L', 'Islam', 'Bandung', '2004-01-06', 'Wiraswasta'),
-('0041180050', 'Asep Eka Nugraha', 'VIII', 'Jl.Mengger Tengah No.65', 'L', 'Islam', 'Bandung', '2004-12-13', 'Buruh'),
-('0041281032', 'Aldi Rizki Fauzi', 'IX', 'Jl.Kopo Gg Lapang IV', 'L', 'Islam', 'Bandung', '2004-02-08', 'Wiraswasta'),
-('0041300813', 'Nadia Pratiwi', 'VIII', 'Peta Gg.Jamhari', 'P', 'Islam', 'Bandung', '2004-12-09', 'Karyawan Swasta'),
-('0041320090', 'Budi Rahmadi Saleh', 'VIII', 'Jl.Ters Pasir Koja Gg Sukapakir Tengah No.12', 'L', 'Islam', 'Bandung', '2004-12-10', 'Buruh'),
-('0041320436', 'Angga Trianandra Mulyawan', 'VIII', 'Pesona Kramat Jaya Blok C No.5', 'L', 'Islam', 'garut', '2004-12-13', 'Buruh'),
-('0041320662', 'Mochamad Rezki Sanusi', 'VIII', 'kopo gg.lapang', 'L', 'Islam', 'bandung', '2004-06-29', 'Karyawan Swasta'),
-('0041350681', 'Andri Aprianda', 'VIII', 'gg.makmur jl.moch.toha no.28', 'L', 'Islam', 'Karawang', '2004-04-14', 'Wiraswasta'),
-('0041420617', 'Mahes Mahendra Gustian', 'VIII', 'terusan pasirkoja gg.raden dewi I', 'L', 'Islam', 'Bandung', '2004-08-28', ''),
-('0041451024', 'Dery Dwangga Putra', 'IX', 'Jl.Kopo Sayati Gg Narsani', 'L', 'Islam', 'Bandung', '2004-06-09', 'Wiraswasta'),
-('0041460278', 'Willy Riivaldi', 'VIII', 'Jl.Kopo Gg Maramis II No.61', 'L', 'Islam', 'Bandung', '2004-11-16', 'Wiraswasta'),
-('0041460709', 'Pahrul Abdurrafi', 'VIII', 'Moh.Toha Gg.silih asih', 'L', 'Islam', 'bandung', '2004-08-21', 'Karyawan Swasta'),
-('0041480007', 'Asep Sobana', 'VIII', 'Jl.Citamiang Kaler', 'L', 'Islam', 'Bandung', '2004-11-06', 'Wiraswasta'),
-('0041510629', 'Risman Cahya Maulana', 'VIII', 'Gg.Rasdan no.62/94', 'L', 'Islam', 'Bandung', '2004-05-14', ''),
-('0041610236', 'Sandi Purnama', 'VIII', 'Jl.Cobolerang', 'L', 'Islam', 'Bandung', '2004-03-19', 'Wiraswasta'),
-('0041610288', 'Andre Dwi Riansyah', 'VIII', 'Jl.Pelindung Hewan / Aspol Tegalega No.9E', 'L', 'Islam', 'Bandung', '2004-10-28', 'PNS/TNI/Polri'),
-('0041611033', 'Heri Janudin', 'IX', 'Jl.Sayuran', 'L', 'Islam', 'Bandung', '2004-07-10', 'Karyawan Swasta'),
-('0041620248', 'Dida Rohmanda', 'VIII', 'Kp.Cilebak No.75', 'L', 'Islam', 'Gunung Kidul', '2004-01-13', 'Buruh'),
-('0041661059', 'Rizky Ilyas Achmad Nugraha', 'IX', 'Terusan Cibaduyut Jl.Terate V No.117', 'L', 'Islam', 'Garut', '2004-08-25', 'Wiraswasta'),
-('0041661312', 'Rizal Ramadhan', 'VII', 'Jalan Jurang Blk No 33', 'L', 'Islam', 'Bandung', '2004-01-16', ''),
-('0041680218', 'Deden Muhammad Rosadi', 'VII', 'Gg Bp Suhaya II No.72/97', 'L', 'Islam', 'Bandung', '2004-07-08', 'Wiraswasta'),
-('0041690269', 'Muhammad Fikry Setiawan', 'VIII', 'jl.Sri Reezeki No.25', 'L', 'Islam', 'Bandung', '2004-05-23', 'Karyawan Swasta'),
-('0041730002', 'Aldi Rizki Prasetya', 'VIII', 'Jl.Kopo Gg Narpan', 'L', 'Islam', 'Bandung', '2004-10-24', ''),
-('0041730372', 'Deni Abdurahman', 'VIII', 'Ds.lengkong bojongsoang', 'L', 'Islam', 'Bandung', '2004-11-11', 'Buruh'),
-('0041760799', 'Alya Rizka Dhianti', 'VIII', 'RE.Martadinata Blk 7C', 'P', 'Islam', 'Bandung', '2004-09-25', 'Wiraswasta'),
-('0041771058', 'Fauzi Puja Subagja', 'IX', 'JlRaya Dayeuhkolot Kp.Kaum', 'L', 'Islam', 'Bandung', '2004-05-05', 'Wiraswasta'),
-('0041850575', 'Juhana', 'VIII', 'inhofftank gg.bp.manta no.37', 'L', 'Islam', 'Bandung', '2004-12-25', ''),
-('0041910382', 'Muhamad Lutfi', 'VIII', 'kebon lega I No.17 a', 'L', 'Islam', 'Bandung', '2004-07-14', ''),
-('0041910649', 'Didin Rahmat', 'VIII', 'Kp.Cibedug hilir', 'L', 'Islam', 'bandung', '2004-09-06', 'Karyawan Swasta'),
-('0041930309', 'Ricko Rahmat Hidayat', 'VIII', 'Gg H Zakaria', 'L', 'Islam', 'Bandung', '2004-05-29', 'Buruh'),
-('0041950008', 'Bayu Sadita', 'VIII', 'Warna Cinta', 'L', 'Islam', 'Bandung', '2004-06-13', 'Buruh'),
-('0041950811', 'Murni Narulita Sari', 'VIII', 'Babakan Tarogong Gg.sindang asih I', 'P', 'Islam', 'Bandung', '2004-03-21', 'Wiraswasta'),
-('0041971028', 'Fajar Ramadhan', 'IX', 'Jl Peta Gg Tanjung 10', 'L', 'Islam', 'Bandung', '2004-01-13', 'Wiraswasta'),
-('0041990458', 'Rizal Fajri', 'VIII', 'Inhofftank', 'L', 'Islam', 'bandung', '2004-09-03', 'Karyawan Swasta'),
-('0042000577', 'Muhammad Saeful Anwar', 'VIII', 'madesa', 'L', 'Islam', 'Bandung', '2004-08-25', 'Wiraswasta'),
-('0042031060', 'Berliet Raja Raton Raga', 'IX', 'Kp Andir', 'L', 'Islam', 'Bandung', '2004-04-11', 'Wiraswasta'),
-('0042080696', 'Hilman Ahmad Fauzi', 'VIII', 'Halte Utara', 'L', 'Islam', 'Bandung', '2004-01-09', 'Wiraswasta'),
-('0042170174', 'Ilham Suryadi', 'VII', 'Jl.Cibolerang', 'L', 'Islam', 'Bandung', '2004-12-17', 'Buruh'),
-('0042180797', 'Agus Seyfudin', 'VIII', 'Jamika No.42', 'L', 'Islam', 'Bandung', '2004-08-18', 'Buruh'),
-('0042250416', 'Kristiawan Suryana', 'VIII', 'Empang Gg.mesjid II No.12', 'L', 'Islam', 'Bandung', '2004-10-08', 'Karyawan Swasta'),
-('0042331052', 'Deni Ridwanullah', 'IX', 'Jalan Babakan Irigasi Gang AMD No 581', 'L', 'Islam', 'Majalengka', '2004-03-08', 'Karyawan Swasta'),
-('0042340422', 'Rafi Maulana Habibi', 'VIII', 'Suryani Dalam IV No.25', 'L', 'Islam', 'Bandung', '2004-08-16', 'Wiraswasta'),
-('0042390183', 'Ramdani', 'VIII', 'Jl.Cirangrang Tomur', 'L', 'Islam', 'Bandung', '2004-11-23', 'Wiraswasta'),
-('0042430400', 'Akmal Naufal Naasik', 'VIII', 'Pelindung Hewan', 'L', 'Islam', 'Bandung', '2004-11-06', 'Buruh'),
-('0042530276', 'Sopian Yuda Hidayat', 'VII', 'Jl.Kopo Cirangrang Gg Bapa Aji', 'L', 'Islam', 'Garut', '2004-11-03', 'Buruh'),
-('0042530377', 'Geri Erdinsah', 'VIII', 'pelangi n0. 22 belakang', 'L', 'Islam', 'Bandung', '2004-08-01', ''),
-('0042530500', 'Rizki Firmansyah', 'VIII', 'Kp.Bojong Tanjung', 'L', 'Islam', 'Tasikmalaya', '2004-10-21', ''),
-('0042570580', 'Muhammad Daffa Hikmat', 'VIII', 'Komp.Nata Endah blok H-147 Jl.Kopo Bihbul', 'L', 'Islam', 'Bandung', '2004-12-28', ''),
-('0042610148', 'Rizki Rahmat Sodikin', 'VIII', 'Kp.Cibadak', 'L', 'Islam', 'Cianjur', '2004-11-14', 'Buruh'),
-('0042670642', 'Aria Galuh Pamungkas', 'VIII', 'cingkukurak gg.karyabakti', 'L', 'Islam', 'Bandung', '2004-12-02', ''),
-('0042690126', 'Edward Santoso Putra', 'VIII', 'Jl.Kebonlega No.39', 'L', 'Islam', 'Bandung', '2004-10-14', 'Wiraswasta'),
-('0042720467', 'Ari Mulyadi', 'VIII', 'Kp.Pasirkoja No.65', 'L', 'Islam', 'Bandung', '2004-05-25', 'Wiraswasta'),
-('0042730783', 'Neng Yulianti', 'VIII', 'Soekarno Hatta Gg.H.Hasan', 'P', 'Islam', 'Bandung', '2004-07-22', 'Wiraswasta'),
-('0042840173', 'Hendra Permana', 'VIII', 'Jl.Rasdan No.106/94', 'L', 'Islam', 'Bandung', '2004-10-17', 'Buruh'),
-('0042860054', 'Dede Taufik Hidayat', 'VIII', 'Jl.Ters Pasirkoja Gg Raden Dewi 2', 'L', 'Islam', 'Bandung', '2004-10-07', 'Lainnya'),
-('0042901007', 'Irfan Firmansyah', 'VII', 'Babakan Ciseureuh No 4', 'L', 'Islam', 'Bandung', '2004-12-11', 'Wiraswasta'),
-('0042901165', 'Muhammad Miraj Sidik', 'VII', 'Jl. Nyengseret Gg. Jember No.20', 'L', 'Islam', 'Bandung', '2004-10-09', ''),
-('0042940098', 'Ferdie Alfaridzi Faizal', 'VIII', 'jl.Kopo Km 7 No.65', 'L', 'Islam', 'Bandung', '2004-12-07', 'Karyawan Swasta'),
-('0042970704', 'Mochamad Reza Ramadhan', 'VIII', 'kebon manggu no.162/22C', 'L', 'Islam', 'bandung', '2004-01-05', 'Wiraswasta'),
-('0043010675', 'Tyas Tresna Yuniar', 'VIII', 'cigoendewah kaler', 'P', 'Islam', 'Ciamis', '2004-06-06', 'Karyawan Swasta'),
-('0043031020', 'Chandra Alpiansyah', 'IX', 'Gg Manunggal II', 'L', 'Islam', 'Bandung', '2004-07-04', 'Wiraswasta'),
-('0043190673', 'Sri Hartini Rosianti', 'VIII', 'raya cibeureum gg.warnasari no.56', 'P', 'Islam', 'bandung', '2004-06-22', 'Wiraswasta'),
-('0043211046', 'Indah Laraswati Arieyani', 'IX', 'Jalan Mochamad Yunus IV No 3', 'P', 'Islam', 'Bandung', '2004-09-04', 'Karyawan Swasta'),
-('0043221034', 'Refaldi Guchi', 'IX', 'Jl.Nitipraja Gg Ratna No.127', 'L', 'Islam', 'Bandung', '2004-07-27', 'Wiraswasta'),
-('0043260069', 'Nur Wachid Indarto', 'VIII', 'Komp Rancamas', 'L', 'Islam', 'Purwerejo', '2004-11-26', 'Buruh'),
-('0043410601', 'Aldi Santoso', 'VIII', 'subrata no.32', 'L', 'Islam', 'Bandung', '2004-06-09', 'Wiraswasta'),
-('0043500255', 'Galih Repor Nawangsit', 'VIII', 'Jl.Babakan Ciparay', 'L', 'Islam', 'Bandung', '2004-11-03', 'Wiraswasta'),
-('0043501054', 'Ilham Munijar', 'IX', 'Jalan Cigondewah Kaler', 'L', 'Islam', 'Bandung', '2004-02-22', ''),
-('0043511048', 'Ade Tabii Hidayat', 'IX', 'Jl.Peta Gg.Sukamulya II No.14', 'L', 'Islam', 'Bandung', '2004-01-31', 'Karyawan Swasta'),
-('0043540842', 'Yogie Agung Prima', 'IX', 'Jl. Kopo Gg. Pabrik Kulit Utara No 688', 'L', 'Islam', 'Bandung', '2004-08-02', 'Wiraswasta'),
-('0043551030', 'Luki', 'IX', 'Blok Ager Sari', 'L', 'Islam', 'Tanjung Damai', '2004-02-23', 'Wiraswasta'),
-('0043580189', 'Sandi Awal Nugraha', 'VII', 'Jl.Monhamad Toha Gg Pak Uca', 'L', 'Islam', 'Bandung', '2004-05-24', 'Buruh'),
-('0043581015', 'Agung Gumelar', 'IX', 'Jl.Karasak Selatan No.50', 'L', 'Islam', 'Bandung', '2004-04-12', 'Karyawan Swasta'),
-('0043610200', 'Adam Priadi Bangun', 'VIII', 'Gg Manunggal II C No.23', 'L', 'Islam', 'Bandung', '2004-04-05', 'Wiraswasta'),
-('0043671021', 'Ghani Ramadhan', 'IX', 'Kp.Kebon Kalapa Sampora', 'L', 'Islam', 'Bandung', '2004-01-12', 'Karyawan Swasta'),
-('0043690172', 'Gunadi Kusnaedi Efendi', 'VIII', 'Jl.Babakan Tarogong Gg Tanjung no.10', 'L', 'Islam', 'Bandung', '2004-08-17', 'Karyawan Swasta'),
-('0043691013', 'Rahmat Taufik Hidayat', 'IX', 'Ters Suryani', 'L', 'Islam', 'Bandung', '2004-11-29', 'Buruh'),
-('0043720385', 'Muhammad Piqri Syahrial', 'VIII', 'Babakan Tarogong Gg.Bojong Asih II No.7', 'L', 'Islam', 'Bandung', '2004-01-24', 'Karyawan Swasta'),
-('0043720725', 'Divia Septimiandra', 'VIII', 'Kp.Harikukun', 'P', 'Islam', 'Bandung', '2004-09-01', ''),
-('0043771062', 'Mochamad Solehudin Sudrajat', 'IX', 'Moh Toha', 'L', 'Islam', 'Bandung', '2004-04-30', 'Wiraswasta'),
-('0043811009', 'Muhammad Reza', 'IX', 'Jl.Kopo Citarip Barat No.76', 'L', 'Islam', 'Palembang', '2004-05-04', 'Buruh'),
-('0043880135', 'Ilham Maulana', 'VIII', 'Gg Sekeloa 4', 'L', 'Islam', 'Bandung', '2004-07-08', 'Buruh'),
-('0043921001', 'Elan Aprilianto', 'IX', 'Griya Jagabaya Blok A1 No.4', 'L', 'Islam', 'Bandung', '2004-04-16', 'Wiraswasta'),
-('0043980672', 'Ryan Fathur Rachman', 'VIII', 'inhofftank', 'L', 'Islam', 'bandung', '2004-07-29', 'Wiraswasta'),
-('0043990277', 'Taufik Hidayat', 'VIII', 'Jl.Kopo Gg Cirangrang No.24', 'L', 'Islam', 'Bandung', '2004-05-27', 'Karyawan Swasta'),
-('0044010387', 'Refsi Rai Purnama', 'VIII', 'Bojong Seureuh', 'L', 'Islam', 'Bandung', '2004-06-01', ''),
-('0044010498', 'Rizal Wahyudin', 'VIII', 'inhofftank', 'L', 'Islam', 'Garut', '2004-10-31', 'Wiraswasta'),
-('0044010742', 'Neng Via Permatasari', 'VIII', 'Sukamanah II', 'P', 'Islam', 'Bandung', '2004-10-26', ''),
-('0044130833', 'Wieke Widya Haspara A.L', 'VIII', 'inhoftank', 'P', 'Islam', 'Bandung', '2004-11-07', ''),
-('0044140356', 'Yehezkiel Valendtino Paays', 'VIII', 'Jl.Ters Pasirkoja No.142', 'L', 'Kristen', 'Ambon', '2004-08-28', 'Wiraswasta'),
-('0044151061', 'Erlangga Mochamad Yusuf Herlamba', 'IX', 'Jl.H.Samsudin Gg.H.Sayuti No.47', 'L', 'Islam', 'Bandung', '2004-07-28', 'Wiraswasta'),
-('0044170826', 'Salma Nur Fadhillah', 'VIII', 'Kp.Kebon Kelapa', 'P', 'Islam', 'Tasikmalaya', '2004-09-30', 'Wiraswasta'),
-('0044210365', 'Anthony Septiawan Illham', 'VIII', 'Sukabirus', 'L', 'Islam', 'Bandung', '2004-09-25', ''),
-('0044241059', 'Novan Erlangga', 'VII', 'Jl.Curug Candung Gg.Mekar 12', 'L', 'Islam', 'Bandung', '2004-11-20', 'Karyawan Swasta'),
-('0044270228', 'Mochamad Ilham Nur Mansyah', 'VIII', 'Komp Sumbersari Jl Sumbersari', 'L', 'Islam', 'Bandung', '2004-08-30', 'Wiraswasta'),
-('0044300566', 'Fachru Rozzy', 'VIII', 'Inhofftank Gg.Bp.Manta No.45', 'L', 'Islam', 'Bandung', '2004-12-06', ''),
-('0044330009', 'Deni Hamdani', 'VIII', 'Gg Sukajaya', 'L', 'Islam', 'Bandung', '2004-12-18', 'Karyawan Swasta'),
-('0044330843', 'Gerra Ruchi Karathanura', 'IX', 'Komp. Cluster Bali 2 A -1', 'L', 'Islam', 'Medan', '2004-02-03', 'Wiraswasta'),
-('0044360741', 'Neng Solihin', 'VIII', 'Situ gunting barat babakan ciparay', 'P', 'Islam', 'Bandung', '2004-03-23', 'PNS/TNI/Polri'),
-('0044420562', 'Budi Sugiyono', 'VIII', 'Blok Ager', 'L', 'Islam', 'Ngawi', '2004-08-18', ''),
-('0044450258', 'Indra Andrianto', 'VIII', 'Caringin', 'L', 'Islam', 'Bandung', '2004-05-27', 'Wiraswasta'),
-('0044501018', 'Agnes Suryagandhi Manurung', 'IX', 'Jl.Karasak Cibintinu', 'L', 'Kristen', 'Majalengka', '2004-01-01', 'Wiraswasta'),
-('0044550187', 'Robby Ramadhan', 'VII', 'Jl.Sasak Gantung V No.142/17D', 'L', 'Islam', 'Bandung', '2004-01-07', 'Karyawan Swasta'),
-('0044550289', 'Asep Kurnia', 'VIII', 'Jl.Pagarsih Gg Pasantren', 'L', 'Islam', 'Bandung', '2004-09-06', 'Buruh'),
-('0044620442', 'Fadilla Setya Permana', 'VIII', 'Komp.Ciparay Indah B.139', 'L', 'Islam', 'bandung', '2004-10-15', 'Karyawan Swasta'),
-('0044650234', 'Rifky Prasetya', 'VIII', 'Jl.Kopo Gg Sukaleuur XII No.337', 'L', 'Islam', 'Bandung', '2004-12-29', 'PNS/TNI/Polri'),
-('0044670428', 'Septian Pratama', 'VIII', 'Rancaekek Blok 9 JL.Sedap Malam Kencana 46 a', 'L', 'Islam', 'Purwakarta', '2004-06-14', 'Lainnya'),
-('0044730393', 'Taufik Hidayat', 'VIII', 'Kp.Bojong sereuh', 'L', 'Islam', 'Bandung', '2004-06-17', ''),
-('0044790006', 'Aris Munandar', 'VIII', 'Jl Inhofftank', 'L', 'Islam', 'Bandung', '2004-09-29', 'Buruh'),
-('0044870670', 'Rizaldi Nopriansyah', 'VIII', 'caringin no.178', 'L', 'Islam', 'bandung', '2004-11-30', 'Buruh'),
-('0044880749', 'Rosi Oktaviani', 'VIII', 'Terusan Pasir koja Gg.Sukaparkir', 'P', 'Islam', 'Bandung', '2004-10-27', 'Buruh'),
-('0044900802', 'Aulya Nur Alif', 'VIII', 'Kp.cilisung', 'P', 'Islam', 'Bandung', '2004-11-14', 'Wiraswasta'),
-('0044911064', 'Rifka Yoga Prasetia', 'IX', 'Bbk.Tarogong Gg.tanjung VIII', 'L', 'Islam', 'Bandung', '2004-11-19', 'Wiraswasta'),
-('0044990030', 'R Febi Hermawan', 'VIII', 'Jl.Babakan Tarogong No.122A', 'L', 'Islam', 'Bandung', '2004-02-21', 'Karyawan Swasta'),
-('0045000958', 'Dandhie Karina Mulyadi', 'VII', 'Jl. Terusan Cibaduyut Gg. Situtarate Rt. 07/01', 'L', 'Islam', 'Bandung', '2004-10-01', ''),
-('0045040528', 'Mochamad Arif Nurrohman', 'VIII', 'Batu Rahayu', 'L', 'Islam', 'Bandung', '2004-10-23', 'PNS/TNI/Polri'),
-('0045111014', 'Ade Fajar Gumilar', 'IX', 'Jl.Nyengseret Gg Amil No.294/94', 'L', 'Islam', 'Bandung', '2004-01-01', 'Karyawan Swasta'),
-('0045160698', 'Ilham Nugraha', 'VIII', 'Karasak selatan Kp.cibintinu', 'L', 'Islam', 'bandung', '2004-11-01', 'PNS/TNI/Polri'),
-('0045170685', 'Ari Gunawan', 'VIII', 'Karasak Selatan Kp.Cibintinu', 'L', 'Islam', 'bandung', '2004-11-01', 'PNS/TNI/Polri'),
-('0045210168', 'Deden Romadon', 'VIII', 'Jl.Soekarno Hatta', 'L', 'Islam', 'Jakarta', '2004-12-31', 'Buruh'),
-('0045290235', 'Romi Iskandar', 'VIII', 'Jl.Oto Iskandardinata No.578', 'L', 'Islam', 'Bandung', '2004-08-05', 'Wiraswasta'),
-('0045321039', 'Mochammad Andika Ramadhan', 'IX', 'Komp.Paledang  Regensi No.8', 'L', 'Islam', 'Bandung', '2004-12-26', 'Karyawan Swasta'),
-('0045330395', 'Tri Julianto', 'VIII', 'Moch.Toha Gg.Dungusema II No.5', 'L', 'Islam', 'Bandung', '2004-07-04', ''),
-('0045360296', 'Irfan', 'VIII', 'Jl.Babakan Ciparay Gg Madesa No.7', 'L', 'Islam', 'Bandung', '2004-08-04', ''),
-('0045380983', 'Wildan M Yasir', 'VII', 'Cibolerang Gg Taruna IV Rt 06/05', 'L', 'Islam', 'Cianjur', '2004-07-04', 'Wiraswasta'),
-('0045390838', 'Muhammad Budi Kusatiana S', 'IX', 'Bantar', 'L', 'Islam', 'Cirebon', '2004-07-16', 'Sudah Meninggal'),
-('0045420396', 'Wildany Hafidz', 'VIII', 'Kp.Cikondang', 'L', 'Islam', 'Bandung', '2004-11-11', ''),
-('0045441006', 'Tri Resdianto', 'IX', 'GBA D2 No.27', 'L', 'Islam', 'Bandung', '2004-07-25', 'PNS/TNI/Polri'),
-('0045480340', 'Muhamad Agil Prakoso', 'VIII', 'Sukabirus', 'L', 'Islam', 'Bandung', '2004-05-15', 'Lainnya'),
-('0045480568', 'Fikri Muhammad Perdana', 'VIII', 'Moch>toha Gg.dendi selatan V no.40', 'L', 'Islam', 'Bandung', '2004-12-01', ''),
-('0045580297', 'Iben Maulana', 'VIII', 'Kp.Mekarsari', 'L', 'Islam', 'Bandung', '2004-06-13', 'Karyawan Swasta'),
-('0045581040', 'Agung Sundapa Abi', 'IX', 'Jl.Kopo Cirangrang No.46', 'L', 'Islam', 'Bandung', '2004-12-16', 'Buruh'),
-('0045600039', 'Wildan Ayubi', 'VIII', 'Jl.Kopo Bihbul Gg H Idris Dalam', 'L', 'Islam', 'Bandung', '2004-12-08', 'Wiraswasta'),
-('0045650150', 'Salman Fariji', 'VIII', 'Jl.Caringin Gg Cikunkurak', 'L', 'Islam', 'Cilacap', '2004-02-20', 'Buruh'),
-('0045810506', 'Yuda Permana', 'VIII', 'Kp.Bojong sereuh', 'L', 'Islam', 'Bandung', '2004-08-15', ''),
-('0045830028', 'Muhammad Rohimat', 'VIII', 'Ciuyah', 'L', 'Islam', 'Bandung', '2004-07-13', 'Buruh'),
-('0045910585', 'Reza Fauzi', 'VIII', 'sasak gantung Gg.cakradireja no.123/28 b', 'L', 'Islam', 'Bandung', '2004-04-02', ''),
-('0045930363', 'Aip Maulana', 'VIII', 'negalasari II', 'L', 'Islam', 'Bandung', '2004-09-25', 'Buruh'),
-('0045970072', 'Renaldy Aditya', 'VIII', 'Jl.Babakan Tarogong Gg Laksana I No.39', 'L', 'Islam', 'Bandung', '2004-10-13', 'Wiraswasta'),
-('0046010185', 'Reynaldi Eddis Subakti', 'VII', 'Jl.Kopo Gg Syukur No.55', 'L', 'Islam', 'Bandung', '2004-12-24', 'Tidak bekerja'),
-('0046060631', 'Tisna Sutisna', 'VIII', 'Astanaanyar gg.entiti no.14', 'L', 'Islam', 'Garut', '2004-04-06', ''),
-('0046070722', 'Annisya Rachma Nisya', 'VIII', 'Kebon kawung Gg.bengkel No.13', 'P', 'Islam', 'bandung', '2004-02-28', 'Wiraswasta'),
-('0046140201', 'Agip Hamba Rajak', 'VII', 'Kp.Situtarate II', 'L', 'Islam', 'Bandung', '2004-05-30', 'Karyawan Swasta'),
-('0046160354', 'Wildan maulana', 'VIII', 'Jl.Pasirkoja Gg Hasan No.9/22', 'L', 'Islam', 'Bandung', '2004-07-22', 'PNS/TNI/Polri'),
-('0046200163', 'Andri Ahdiansyah', 'VIII', 'Cibuntu Barat', 'L', 'Islam', 'Bandung', '2004-09-07', 'Wiraswasta'),
-('0046350080', 'Zaenal Arifin', 'VIII', 'Jl.Caringin No.17 Gg Ekawarga II', 'L', 'Islam', 'Bandung', '2004-12-04', 'PNS/TNI/Polri'),
-('0046370415', 'Krisna Kurniawan', 'VIII', 'Babakan Irigasi', 'L', 'Islam', 'Bandung', '2004-09-27', 'Karyawan Swasta'),
-('0046430023', 'Mildan Fauzi', 'VIII', 'Jl.Inhofftank Gg Mesjid', 'L', 'Islam', 'Bandung', '2004-08-01', 'Buruh'),
-('0046520734', 'Kristin Dwi Wahyuni', 'VIII', 'Cijerah Gg.Al Hidayah No.41', 'P', 'Islam', 'Kuningan', '2004-08-27', 'Wiraswasta'),
-('0046550857', 'Ifkar Dziffani', 'VII', 'Kampung Cidemang', 'L', 'Islam', 'Bandung', '2004-05-11', 'Wiraswasta'),
-('0046580156', 'Abdul Kodir Zaelani', 'VIII', 'Jl.Ciparay Tengah', 'L', 'Islam', 'Bandung', '2004-01-27', ''),
-('0046640025', 'Muhammad Ridwan', 'VIII', 'Jl.Rawa Bentang No.355', 'L', 'Islam', 'Bandung', '2004-11-01', ''),
-('0046660057', 'Fredi Pratama', 'VIII', 'Jl.Cibaduyut Raya Gg Nawawi', 'L', 'Islam', 'Cilacap', '2004-12-07', 'Wiraswasta'),
-('0046680181', 'Mochamad Karta Sasmita', 'VIII', 'Suka Pakir Tengah', 'L', 'Islam', 'Bandung', '2004-07-26', 'Buruh'),
-('0046730125', 'Diki Ruspandi', 'VIII', 'Kp.Kiaracondong', 'L', 'Islam', 'Bandung', '2004-01-05', 'Wiraswasta'),
-('0046730295', 'Hedie Wijaya Putra', 'VIII', 'Kp.Barunagri', 'L', 'Kristen', 'Bandung', '2004-08-13', 'Wiraswasta'),
-('0046740591', 'Robi Ahmad Wahyudi', 'VIII', 'terusan pasirkoja', 'L', 'Islam', 'Bandung', '2004-11-09', ''),
-('0046750299', 'Mahesha Muhammad El Faruqy', 'VIII', 'Soreang Kp.Cipeer', 'L', 'Islam', 'Bandung', '2004-11-21', 'Wiraswasta'),
-('0046760511', 'Cecep Maulana', 'VIII', 'Palasari J.Cisirung No.7', 'L', 'Islam', 'Bandung', '2004-07-01', 'Karyawan Swasta'),
-('0046820046', 'Alipudin Mahmud', 'VIII', 'Jl.INhofftank Gg Perikanan II', 'L', 'Islam', 'Bandung', '2004-11-22', 'Tidak bekerja'),
-('0046880745', 'Purnamasari', 'VIII', 'Sukamanah', 'P', 'Islam', 'Bandung', '2004-11-02', ''),
-('0046911056', 'Ahmad Irwan Alfaridzi', 'IX', 'Jl.Babakan Ciparay Gg.H.Zakaria No.22', 'L', 'Islam', 'Bandung', '2004-07-03', 'Wiraswasta'),
-('0047031053', 'Muhamad Rizky', 'VII', 'Jl.Kopo Permai II Blok 20B No.10', 'L', 'Islam', 'Bandung', '2004-09-04', 'Wiraswasta'),
-('0047110411', 'Heri Setiawan', 'VIII', 'Batununggal Kp.bojong', 'L', 'Islam', 'Bandung', '2004-07-27', 'Buruh'),
-('0047110658', 'Jujun Rudiansyah', 'VIII', 'caringin gg.lumbung iv', 'L', 'Islam', 'Tasikmalaya', '2004-07-09', 'Buruh'),
-('0047190164', 'Aswin Nur Fatah', 'VIII', 'Jl.Babakan Tarogong Gg Tanjung IX No.253', 'L', 'Islam', 'Bandung', '2004-07-21', 'PNS/TNI/Polri'),
-('0047220107', 'Ramadhan Candra Hendrawan', 'VIII', 'Jl.Kiputih Dalam No.43', 'L', 'Islam', 'Bandung', '2004-12-02', 'Tidak bekerja'),
-('0047260605', 'Bayu Trisha', 'VIII', 'kopo gg.sukaleueur', 'L', 'Islam', 'Bandung', '2004-10-24', ''),
-('0047290115', 'Ahmad Taufiq Hidayat', 'VIII', 'Jl.Mohtoha Gg Empang Ciburuy', 'L', 'Islam', 'Bandung', '2004-09-13', 'Lainnya'),
-('0047300142', 'Nadi Mardiansyah', 'VIII', 'Kp.Sekekuda', 'L', 'Islam', 'Bandung', '2004-12-27', 'Buruh'),
-('0047301065', 'Rangga Pamungkas', 'IX', 'Jl.Boeing Raya No.37', 'L', 'Islam', 'Bandung', '2004-04-16', 'Karyawan Swasta'),
-('0047310321', 'Agus Permana', 'VIII', 'Bbk Muslimin 10A', 'L', 'Islam', 'Bandung', '2004-08-15', 'Buruh'),
-('0047320507', 'Yunisa Hardi', 'VIII', 'pagarsih Gg.Mastabir', 'L', 'Islam', 'Garut', '2004-08-03', 'Wiraswasta'),
-('0047330710', 'Rafida Irsay Muharam', 'VIII', 'Komplek Sampora Indah Jl.Mawar no.2', 'L', 'Islam', 'Bandung', '2004-04-27', 'Karyawan Swasta'),
-('0047410841', 'Anissa Mahardika Salsabila', 'IX', 'Jl. Babakan Irigasi Gg. Remaja 7 No.151', 'P', 'Islam', 'Bandung', '2004-06-10', 'Karyawan Swasta'),
-('0047450429', 'Saripudin Abdul Halim', 'VIII', 'Babakan Garut 156/120', 'L', 'Islam', 'Bandung', '2004-12-08', 'Karyawan Swasta'),
-('0047490343', 'Ravi Rahmat', 'VIII', 'Jl.Caringin Gg Lumbung IV No.47', 'L', 'Islam', 'Bandung', '2004-12-08', 'Wiraswasta'),
-('0047500325', 'Azka Anshory', 'VIII', 'Kp.Nusa No.72', 'L', 'Islam', 'Bandung', '2004-03-15', 'Buruh'),
-('0047580462', 'Seftian Indra Prahasta', 'VIII', 'Gg.Saluyu', 'L', 'Islam', 'Majalengka', '2004-09-09', 'Wiraswasta'),
-('0047600188', 'Saepuloh', 'VII', 'Jl.Alkateri No.276/13D', 'L', 'Islam', 'Bandung', '2004-10-24', 'Buruh'),
-('0047710333', 'Ghinan Fadhilah Putra', 'VIII', 'Kp.Burujul', 'L', 'Islam', 'Bandung', '2004-07-24', 'Karyawan Swasta'),
-('0047710457', 'Rendi Setiandi', 'VIII', 'Soekarno Hatta Gg.Elos Barat No.10', 'L', 'Islam', 'bandung', '2004-09-14', 'Wiraswasta'),
-('0047830084', 'Agus Ogiyana', 'VIII', 'Jl.Jamika Gg Bah Sukanta No.53', 'L', 'Islam', 'Bandung', '2004-11-26', 'Buruh'),
-('0047840384', 'Mochamad Fikri Wijaya', 'VIII', 'Rajawali Timur Gg.RA Barnas II', 'L', 'Islam', 'Bandung', '2004-06-15', ''),
-('0047880241', 'Aldi Reynaldi', 'VIII', 'Jl.Mengger Girang IV', 'L', 'Islam', 'Bandung', '2004-10-16', 'Lainnya'),
-('0047890062', 'Kurniawan', 'VIII', 'Jl.Babakan Irigasi Gg AMD XI', 'L', 'Islam', 'Bandung', '2004-11-30', 'Buruh'),
-('0047940094', 'Dwimas Andika Nurhadi', 'VIII', 'Jl.Sukamenak', 'L', 'Islam', 'Sukabumi', '2004-01-27', 'Wiraswasta'),
-('0047980678', 'Ahmad Wahyudin', 'VIII', 'Kp.situ aksan', 'L', 'Islam', 'bandung', '2004-10-30', 'Wiraswasta'),
-('0048010854', 'Gugum Gumilar', 'VII', 'Kampung Pojok', 'L', 'Islam', 'Bandung', '2004-10-11', 'Wiraswasta'),
-('0048021140', 'Yusuf Dewantara', 'VII', 'Jalan Kopo Gang H Topek No 362/198A', 'L', 'Islam', 'Bandung', '2004-07-24', ''),
-('0048150362', 'Agus Suryana', 'VIII', 'Kp.Sekeandur', 'L', 'Islam', 'Bandung', '2004-08-02', 'Buruh'),
-('0048160242', 'Andi Yudhana', 'VIII', 'Jl.Leuwipanjang Gg Sarpai I No.5', 'L', 'Islam', 'Bandung', '2004-05-18', 'Wiraswasta'),
-('0048170191', 'Surya Subagja', 'VII', 'Kp.Situ Aksan Gg Madrasah Dalam V No.24', 'L', 'Islam', 'Bandung', '2004-12-04', 'Wiraswasta'),
-('0048190043', 'Ahmad Sofian', 'VIII', 'Jl.Industri No.27/28A', 'L', 'Islam', 'Bandung', '2004-11-04', 'Buruh'),
-('0048231022', 'Muhamad Dennis Khasmir', 'IX', 'Jl.Cijerah II Gg Wijaya Kusumah III No.76', 'L', 'Islam', 'Bandung', '2004-02-26', 'Karyawan Swasta'),
-('0048231053', 'Garin Ilham Ramadhan', 'IX', 'Jalan Raya Cibaduyut Gang Pak Kasub No 51', 'L', 'Islam', 'Bandung', '2004-01-22', 'Karyawan Swasta'),
-('0048240390', 'Rizki Pratama Putra', 'VIII', 'Kp.Pasirjati', 'L', 'Islam', 'Bandung', '2004-09-21', ''),
-('0048270426', 'Reza Wijaya Kusuma', 'VIII', 'PI', 'L', 'Islam', 'Bandung', '2004-02-02', 'Wiraswasta'),
-('0048300563', 'Deyan Wahyudien', 'VIII', 'soekarno hatta blok desa I no.51', 'L', 'Islam', 'Bandung', '2004-09-25', 'Wiraswasta'),
-('0048301147', 'Andreas Wijaya', 'VII', 'Jl. Pagarsih No 64', 'L', 'Kristen', 'Bandung', '2004-02-04', 'Wiraswasta'),
-('0048360259', 'Kiki Lesmana S', 'VIII', 'Kp.Anggacarang', 'L', 'Islam', 'Bandung', '2004-04-05', 'Wiraswasta'),
-('0048420477', 'Hizkia Zamora Munarto Saleh', 'VIII', 'Moch.Toha Gg.Kurdi 2/V no.371/20 A', 'L', 'Kristen', 'Bandung', '2004-07-18', 'Wiraswasta'),
-('0048460807', 'Khana Intan Nurdianti', 'VIII', 'Gempol sari', 'P', 'Islam', 'Bandung', '2004-08-29', 'Wiraswasta'),
-('0048480657', 'Ipan Nugraha', 'VIII', 'cibadak blk no.70', 'L', 'Islam', 'Majalengka', '2004-11-16', 'Buruh'),
-('0048550353', 'Viki Pratama', 'VIII', 'Jl.Caringin Gg Lumbung II', 'L', 'Islam', 'Bandung', '2004-11-01', 'Lainnya'),
-('0048570352', 'Tanto Muhammad Gunawan', 'VII', 'Jl.Bojongsoang No.186', 'L', 'Islam', 'Bandung', '2004-11-01', 'Wiraswasta'),
-('0048601010', 'Achmad Baehaki', 'IX', 'Jl.Cibaduyut Raya Gg Nawawi Blok Lumbung', 'L', 'Islam', 'Bandung', '2004-02-08', 'Wiraswasta'),
-('0048650029', 'Noval Maulana', 'VIII', 'Jl.Soekarno Hatta No 78', 'L', 'Islam', 'Bandung', '2004-11-22', 'Wiraswasta'),
-('0048651057', 'Aji Lesmana', 'IX', 'Jl.Pagarsih Gg. H. Satibi', 'L', 'Islam', 'Bandung', '2004-06-07', 'Karyawan Swasta'),
-('0048690052', 'Dandy Amti Saskia', 'VIII', 'Bandung', 'L', 'Islam', 'Bandung', '2004-09-29', 'Wiraswasta'),
-('0048690285', 'Ajie Firdaus Saca Kusumah', 'VIII', 'Kp.Babakan Mekar', 'L', 'Islam', 'Bandung', '2004-11-25', 'Lainnya'),
-('0048800370', 'Dena Kostaman', 'VIII', 'Holis', 'L', 'Islam', 'Bandung', '2004-09-17', ''),
-('0048890493', 'Novan Irvansyah', 'VIII', 'babakan irigasi no.113', 'L', 'Islam', 'Bandung', '2004-11-12', ''),
-('0048910195', 'Willy Zidan Nugraha', 'VII', 'Komp Cibolerang Blok G No.88', 'L', 'Islam', 'Tasikmalaya', '2004-11-28', 'Karyawan Swasta'),
-('0048950359', 'Ade Muslim', 'VIII', 'lengkong bojongsoang', 'L', 'Islam', 'Bandung', '2004-07-05', 'Buruh'),
-('0048980485', 'Mochamad Dinie Firdaus', 'VIII', 'karasak lama cadas ngampar', 'L', 'Islam', 'Bandung', '2004-06-12', ''),
-('0048990792', 'Rosiana Putri', 'VIII', 'Lio genteng gg.bapak suhaya no.14', 'P', 'Islam', 'Tegal', '2004-11-23', 'Wiraswasta'),
-('0049000176', 'Indra Rahman Hanjaya', 'VIII', 'Jl.Astanaanyar No.9/21', 'L', 'Islam', 'Bandung', '2004-06-01', 'Wiraswasta'),
-('0049010879', 'Taufan Aditia', 'VII', 'Jalan Sriwijaya II Gang XII', 'L', 'Islam', 'Garut', '2004-11-11', 'Petani'),
-('0049021050', 'Mohamad Ridzki Solehudin', 'IX', 'Jl.Moch.Toha Gg.Ciseureuh No.37/202 B', 'L', 'Islam', 'Bandung', '2004-03-23', 'Wiraswasta'),
-('0049090263', 'Mochamad Rizal Fahmi Bangkit San', 'VIII', 'Jl.Kopo Citarip Barat', 'L', 'Islam', 'Bandung', '2004-05-20', 'Buruh'),
-('0049100659', 'Megia Putri Damayanti', 'VIII', 'moch.toha gg.babakan ciseureuh blk 362 no.8', 'P', 'Islam', 'bandung', '2004-05-10', 'Karyawan Swasta'),
-('0049150167', 'Dandi Hermawan', 'VIII', 'Jl.Ciparay Tengah', 'L', 'Islam', 'Bandung', '2004-12-30', 'Wiraswasta'),
-('0049210284', 'Agy Gustiana', 'VIII', 'Jl Babakan Tarogong', 'L', 'Islam', 'Bandung', '2004-08-23', 'Buruh'),
-('0049381023', 'Ari Mardani', 'IX', 'Jl.Kopo H.Saidin No.160', 'L', 'Islam', 'Bandung', '2004-03-10', 'Karyawan Swasta'),
-('0049450081', 'Axel', 'VIII', 'Jl.Pungkur No.78/15C', 'L', 'Islam', 'Bandung', '2004-04-29', 'Wiraswasta'),
-('0049500501', 'Rijki Sukma Aria', 'VIII', 'Situ gunting', 'L', 'Islam', 'Bandung', '2004-08-14', ''),
-('0049551261', 'INTAN RAHAYU', 'VII', 'gg. cibintinu rt 04 /03', 'P', 'Islam', 'Bandung', '2004-04-17', ''),
-('0049670229', 'Muhamad Sandi Maulana', 'VIII', 'Jl.Caringin Gg Karya Bakti', 'L', 'Islam', 'Tegal', '2004-10-26', 'Buruh'),
-('0049751008', 'Herdian Adhi Prasetyo', 'IX', 'Jl.Mohtoha Gg Ciburuy No.38', 'L', 'Islam', 'Bandung', '2004-04-06', 'Wiraswasta'),
-('0049880166', 'Dadan Zakaria', 'VIII', 'Kp.Sayuran', 'L', 'Islam', 'Bandung', '2004-03-15', 'Buruh'),
-('0049880516', 'Dendy Revayadi', 'VIII', 'Kopo Gg.Sukaleueur dalam No.16', 'L', 'Islam', 'Bandung', '2004-10-06', 'Wiraswasta'),
-('0049970619', 'Muhamad Taufik Dermawan', 'VIII', 'dengki selatan 2 no.101', 'L', 'Islam', 'Bandung', '2004-12-12', ''),
-('0049980124', 'Devi Indra Subahja', 'VIII', 'Jl.Aki Padma', 'L', 'Islam', 'Bandung', '2004-12-12', 'Wiraswasta'),
-('0051003106', 'Agustami Indriyana Sani', 'VII', 'Jl. Ciparay Tengah Rt. 05/06 Cibaduyut', 'P', 'Islam', 'Indramayu', '2005-08-14', 'Wiraswasta'),
-('0051003130', 'Kiki Hadi Ramadan', 'VII', 'Kampung Bojong Asih No 70', 'L', 'Islam', 'Bandung', '2005-12-19', ''),
-('0051004039', 'Teguh Priatna', 'VIII', 'Sukaati 6 no.4', 'L', 'Islam', 'Bandung', '2005-02-16', ''),
-('0051004130', 'Lutfi Muharam', 'VII', 'Lingkungan Parunglesang', 'L', 'Islam', 'Banjar', '2005-05-03', 'Sudah Meninggal'),
-('0051005062', 'Much.Fikri Artiansyah', 'VIII', 'sukamenak No.175', 'L', 'Islam', 'Bandung', '2005-05-18', ''),
-('0051006046', 'Asep Ridwan Hidayat', 'VIII', 'Ciparay Tengah', 'L', 'Islam', 'Bandung', '2005-03-12', 'Buruh'),
-('0051008032', 'Dedi Rialdi Sopiyan', 'VIII', 'Jl.Oasirkoja Gg Raden Dewi 4', 'L', 'Islam', 'Bandung', '2005-09-15', 'Lainnya'),
-('0051009047', 'Desta Tio Familia', 'VIII', 'Rajawali Timur No.219', 'L', 'Islam', 'Bandung', '2005-07-03', ''),
-('0051010257', 'Iman Firmansyah', 'VIII', 'Komp Sanggar Mas Lestari K-94', 'L', 'Islam', 'Bandung', '2005-10-11', 'PNS/TNI/Polri'),
-('0051012076', 'Anggi Putri Widiarti', 'VIII', 'Terusan Pasirkoja Gg.raden dewi III', 'P', 'Islam', 'Bandung', '2005-09-15', 'Buruh'),
-('0051014065', 'Faisal Riyanto', 'VIII', 'pelindung hewan', 'L', 'Islam', 'bandung', '2005-03-10', 'Wiraswasta'),
-('0051014104', 'Heri Hidayat', 'VII', 'Kp.Leuwipicung', 'L', 'Islam', 'Tasikmalaya', '2005-11-07', 'Petani'),
-('0051015034', 'Nicko Setiawan', 'VIII', 'Jl.Rajawali Gg Kasuari I No.3A', 'L', 'Islam', 'Cilacap', '2005-03-07', 'Tidak bekerja'),
-('0051015078', 'Nurul Afifah', 'VIII', 'Gg.liogenteng no.68/94', 'P', 'Islam', 'Bandung', '2005-07-22', 'Buruh'),
-('0051016030', 'Muchamad Hasan Sholeh', 'VIII', 'Jl.Mohtoha GG Murdasan', 'L', 'Islam', 'Bandung', '2005-06-27', 'Wiraswasta'),
-('0051018078', 'Nadia Elmia Hidayat', 'VIII', 'Antapani Gg.Ibu Iwih No.19', 'P', 'Islam', 'Bandung', '2005-03-12', 'Lainnya'),
-('0051020088', 'Andreas Witjaksono', 'VIII', 'Kp.Bojong Asih No.84', 'L', 'Islam', 'Bandung', '2005-10-26', 'PNS/TNI/Polri'),
-('0051024001', 'Ilham Rama Dani', 'VIII', 'Jl.Mohtoha Gg Rahayu V', 'L', 'Islam', 'Bandung', '2005-03-15', 'Karyawan Swasta'),
-('0051024120', 'Pramadya Ramdhana', 'VII', 'Jalan Raden Patah 41A', 'L', 'Islam', 'Bandung', '2005-11-19', ''),
-('0051032054', 'Raden Ilham Suryadi', 'VIII', 'Kopo Gg.Sukaleur', 'L', 'Islam', 'Bandung', '2005-03-20', 'Wiraswasta'),
-('0051035024', 'Delih Elang Wahyudi', 'VIII', 'Jl.Rajawali Barat Blk No.37', 'L', 'Islam', 'Bandung', '2005-05-07', 'Karyawan Swasta'),
-('0051036013', 'Gilang Yordian', 'VIII', 'Jl.Babakan Tarogong Gg Tanjung 8 No.80', 'L', 'Islam', 'Bandung', '2005-01-15', 'Buruh'),
-('0051036017', 'Mochammad AlFarhan Qalbi Nurad', 'VIII', 'Jl.Ters Buahbatu No.87', 'L', 'Islam', 'Sumedang', '2005-05-03', 'Wiraswasta'),
-('0051037052', 'Ferdi Ferdiansyah', 'VIII', 'pasirluyu', 'L', 'Islam', 'Bandung', '2005-04-20', ''),
-('0051039053', 'Muhammad Gilang Fauzi', 'VIII', 'pelindung hewan gg.bpk atam iskandar', 'L', 'Islam', 'Bandung', '2005-04-07', 'Wiraswasta'),
-('0051039092', 'Asep Imam Saepul Rahmat', 'VII', 'Jl. Sukamenak Gg. Sudirja rt 05/02', 'L', 'Islam', 'Bandung', '2005-07-01', 'Wiraswasta'),
-('0051040009', 'Dik Dik Muslihat', 'VIII', 'Kp.Sekeawi No.50', 'L', 'Islam', 'Bandung', '2005-09-05', 'Wiraswasta'),
-('0051041065', 'Hadi Prayoga Pribadi Putra', 'VIII', 'Tamim Gg.H.Pahrurozi no.59/13 d', 'L', 'Islam', 'bandung', '2005-01-29', 'Buruh'),
-('0051046001', 'Donny Hamdani', 'VIII', 'Jl.Kopo Gg Pabrik Kulit Utara', 'L', 'Islam', 'Bandung', '2005-09-24', 'Tidak bekerja'),
-('0051046036', 'Dandy Setia', 'VIII', 'Kp.Sekeandir', 'L', 'Islam', 'Bandung', '2005-08-12', 'Karyawan Swasta'),
-('0051046130', 'Junaedi', 'VII', 'Kampung Cipeer', 'L', 'Islam', 'Bandung', '2005-06-02', ''),
-('0051047014', 'Rendi Kurniawan', 'VIII', 'Jl.Bbk Tarogong Gg Anom', 'L', 'Islam', 'Bandung', '2005-05-14', 'Buruh'),
-('0051049010', 'Ridsky Deskideria Nur Fitranni', 'VIII', 'jl.Karasak Lama Gg Aki Endun No.56', 'L', 'Islam', 'Bandung', '2005-12-15', 'Wiraswasta'),
-('0051050122', 'Cahyani', 'VII', 'Blok Pahreman Mekarwangi No. 77', 'P', 'Islam', 'Bandung', '2005-11-16', ''),
-('0051050688', 'Davi Aldriansyah', 'VIII', 'Cibaduyut blok situ', 'L', 'Islam', 'bandung', '2005-02-17', 'Wiraswasta'),
-('0051053003', 'Syahrul Gunawan', 'VIII', 'Jl.Cibaduyut Gg Nawawi', 'L', 'Islam', 'Bandung', '2005-01-16', 'Lainnya'),
-('0051054128', 'Asep Tantan', 'VII', 'Baleendah Permai Padi Endah 1 No 49', 'L', 'Islam', 'Bandung', '2005-12-18', 'Wiraswasta'),
-('0051055079', 'Reza Nur  Miskat', 'VIII', 'Babakan ciparay gg.air mancur IV/55', 'L', 'Islam', 'Bandung', '2005-08-06', 'Wiraswasta'),
-('0051058108', 'Ilham Syaifulloh', 'VII', 'Jl. Pungkur 193/172', 'L', 'Islam', 'Banyumas', '2005-12-02', 'Wiraswasta'),
-('0051065076', 'Ani Sutiani', 'VIII', 'Caringin cingkurak Blok Beas', 'P', 'Islam', 'Bandung', '2005-07-28', 'Karyawan Swasta'),
-('0051066093', 'Kevin Muhammad', 'VII', 'Taman Sari No. 35 B Rt. 06/04', 'L', 'Islam', 'Bandung', '2005-07-01', ''),
-('0051067054', 'Rafly Putra Pratama', 'VIII', 'Astanaanyar No.158/22 D', 'L', 'Islam', 'Bandung', '2005-08-11', 'Buruh'),
-('0051068099', 'Dandan Daniansyah', 'VII', 'Jalan Mochamad Toha Gang Babakan Ciseureuh Timur', 'L', 'Islam', 'Bandung', '2005-12-02', 'Wiraswasta'),
-('0051070313', 'Sansan Kurnia', 'VIII', 'Jl.Pagarsih No.44/99', 'L', 'Islam', 'Bandung', '2005-04-26', 'Buruh'),
-('0051070789', 'Resa Silfina', 'VIII', 'sumber mulya', 'P', 'Islam', 'Bandung', '2005-04-03', ''),
-('0051072047', 'Irsya Nidah', 'VIII', 'Situ Gunting Timur', 'P', 'Islam', 'Bandung', '2005-05-06', ''),
-('0051073007', 'Ricky Firmansyah', 'VIII', 'Jl.Cibadak No.22/9B', 'L', 'Islam', 'Serang', '2005-05-01', 'Buruh'),
-('0051080060', 'An\'nisa Nurjanah', 'VIII', 'Komp.Bumi Baleendah Asri Blok E 4 no.7', 'P', 'Islam', 'Bandung', '2005-04-21', ''),
-('0051080237', 'Sendi Pangestu', 'VII', 'Kp.Parung Halang', 'L', 'Islam', 'Indramayu', '2005-05-24', 'Wiraswasta'),
-('0051086000', 'Abdoel Kholid Khafinudin', 'VIII', 'Kp Talun', 'L', 'Islam', 'Bandung', '2005-03-13', ''),
-('0051088082', 'Saskia', 'VIII', 'Gg.sauyunan No.59', 'P', 'Islam', 'Bandung', '2005-12-21', 'Buruh'),
-('0051088116', 'Nanditya Muhammad Adi Surya', 'VII', 'Jl. Babakan Tarogong No No. 435/196 B', 'L', 'Islam', 'Bandung', '2005-09-26', 'Karyawan Swasta'),
-('0051110522', 'Fiqih Faqrurazi', 'VIII', 'Pasundan Gg.H.Rais No.150', 'L', 'Islam', 'Bandung', '2005-11-18', 'Wiraswasta'),
-('0051110700', 'Ilham Sofyansah', 'VIII', 'Kp.sayuran', 'L', 'Islam', 'bandung', '2005-06-03', 'Karyawan Swasta'),
-('0051190139', 'Maulana Akbar Adityo', 'VIII', 'Kp.Cupu', 'L', 'Islam', 'Bandung', '2005-01-26', 'Karyawan Swasta'),
-('0051210351', 'Tantan Setiawan', 'VIII', 'Jl.Leuwianyar', 'L', 'Islam', 'Bandung', '2005-03-31', 'Wiraswasta'),
-('0051210795', 'Syiffa Unaza Supradiana', 'VIII', 'Andir No.116/79', 'P', 'Islam', 'Bandung', '2005-03-09', 'Wiraswasta'),
-('0051220194', 'Vidi Cipta Darmawan', 'VII', 'Jl.Cibuntu Barat Gg Sanusi', 'L', 'Islam', 'Bandung', '2005-08-09', 'Tidak bekerja'),
-('0051230205', 'Agus Tia Nursobah', 'VIII', 'Kp.Kaum', 'L', 'Islam', 'Bandung', '2005-08-11', 'Wiraswasta'),
-('0051230589', 'Risman Ramdani', 'VIII', 'inhofftank gg.bp.manta 47/201 A', 'L', 'Islam', 'Bandung', '2005-01-09', ''),
-('0051260357', 'Yuda Abdullah Padmawinata', 'VIII', 'Jl.Inhofftank Gg Perikanan II', 'L', 'Islam', 'Bandung', '2005-04-06', 'Wiraswasta'),
-('0051260526', 'Moch. Alfi Ilham Nurhayadi', 'VIII', 'Kp.Manngga dua Gg.Sukaresik', 'L', 'Islam', 'Bandung', '2005-03-08', 'Buruh'),
-('0051271224', 'Devi Chyintia', 'VII', 'Jl.Nata Endah Blok D No.31 Kel Margahayu Kec Babak', 'P', 'Kristen', 'Bandung', '2005-07-01', ''),
-('0051280635', 'Yudhoyono Wisnh Gunarto', 'VIII', 'liogenteng III No.78/94 A', 'L', 'Islam', 'Bandung', '2005-08-04', ''),
-('0051281263', 'Lia Aldila Meliani', 'VII', 'Jalan Pasundan Gang H Rais 147 / 18 RT 04 RW 05', 'P', 'Islam', 'Bandung', '2005-12-31', ''),
-('0051290460', 'Rizwan Wahyudin', 'VIII', 'terusan holis', 'L', 'Islam', 'bandung', '2005-03-17', 'Buruh'),
-('0051311320', 'Yoga Permana', 'VII', 'Jalan Ciheuleut', 'L', 'Islam', 'Ciamis', '2005-07-20', ''),
-('0051320175', 'Indra Hidajattulloh', 'VII', 'Gg Manunggal II C', 'L', 'Islam', 'Bandung', '2005-02-27', 'Wiraswasta'),
-('0051340423', 'Ramadita Gerald Pamela', 'VIII', 'Cangkuang Sekeawi Gg.Alfamart No.31', 'L', 'Islam', 'Bandung', '2005-06-07', 'PNS/TNI/Polri'),
-('0051351097', 'Rifqi Darmawan', 'VII', 'Jl. Leuwi Panjang', 'L', 'Islam', 'Bandung', '2005-10-14', 'Buruh'),
-('0051360130', 'Gilang Agustin', 'VIII', 'Lembang dua', 'L', 'Islam', 'Bandung', '2005-08-08', 'Buruh'),
-('0051360877', 'Rizqi Mulia', 'VII', 'Mengger Tengah', 'L', 'Islam', 'Tegal', '2005-10-30', 'Wiraswasta'),
-('0051370446', 'Iqbal Cahyana', 'VIII', 'Sukaati', 'L', 'Islam', 'bandung', '2005-05-18', 'Wiraswasta'),
-('0051380361', 'Afif Faturahman', 'VIII', 'Blok desa', 'L', 'Islam', 'Kebumen', '2005-03-07', ''),
-('0051430731', 'Gina Meigina', 'VIII', 'Cibolerang Pangkalan No.112', 'P', 'Islam', 'Bandung', '2005-05-16', ''),
-('0051440159', 'Aditya Muhamad Joswara', 'VIII', 'Jl.Mohtoha Gg Empang No.6', 'L', 'Islam', 'Bandung', '2005-09-07', 'Karyawan Swasta'),
-('0051440311', 'Rivaldi Juliana Hermawan', 'VIII', 'Gg H Hamim', 'L', 'Islam', 'Garut', '2005-06-21', 'Petani'),
-('0051440883', 'Anggi Anggara', 'VII', 'Ciparay Tengah', 'L', 'Islam', 'Majalengka', '2005-07-05', 'Wiraswasta'),
-('0051480161', 'Andi Stiawan', 'VIII', 'Jl.Caringin Gg Cikungkurak', 'L', 'Islam', 'Garut', '2005-01-13', 'Wiraswasta'),
-('0051480646', 'Billy Marselino', 'VIII', 'Blok sakola', 'L', 'Islam', 'bandung', '2005-03-21', 'Karyawan Swasta'),
-('0051491170', 'Pulus Andri', 'VII', 'Jl. Kebon Jati Gg. Sasmitapura No. 138/8B', 'L', 'Islam', 'Bandung', '2005-11-08', 'Wiraswasta'),
-('0051520627', 'Rendi Triadi', 'VIII', 'Samisari dalam I', 'L', 'Islam', 'Bandung', '2005-04-13', ''),
-('0051521278', 'Adika Panca', 'VII', 'Jalan Denki Utara Blk No 29', 'L', 'Islam', 'Bandung', '2005-06-17', 'Karyawan Swasta'),
-('0051570171', 'Pirman Pirdaus Muslim', 'VIII', 'Jl.Babatan No.2', 'L', 'Islam', 'Garut', '2005-05-28', 'Buruh'),
-('0051610712', 'Rian Ramdhani', 'VIII', 'Kopo Gg.Parasdi dalam II No.5', 'L', 'Islam', 'bandung', '2005-01-10', 'Wiraswasta'),
-('0051640544', 'Riyan Septiana', 'VIII', 'Moch.Toha Gg.Curug Candung No.55', 'L', 'Islam', 'Bandung', '2005-09-17', 'Buruh'),
-('0051650729', 'Felly Yenny Megaria', 'VIII', 'Kp.leuwi melang', 'P', 'Islam', 'Bandung', '2005-06-07', 'Wiraswasta'),
-('0051650828', 'Siti Hapsah', 'VIII', 'Mengger tengah no.24', 'P', 'Islam', 'Bandung', '2005-02-01', 'Karyawan Swasta'),
-('0051660412', 'Ihza Zulkarnaen', 'VIII', 'H.Kurdi 1 Gg. Sacayuda 1 No.4', 'L', 'Islam', 'Bandung', '2005-06-13', 'Buruh'),
-('0051670100', 'Imadul Bilad', 'VIII', 'Kp.Patrol', 'L', 'Islam', 'Bandung', '2005-05-26', 'Buruh'),
-('0051730463', 'Septia Hermawan', 'VIII', 'Dewi Sartika Gg.Rusdi', 'L', 'Islam', 'bandung', '2005-09-14', 'Wiraswasta'),
-('0051730679', 'Aldi Wiguna', 'VIII', 'kopo gg.bp merta no.36', 'L', 'Islam', 'bandung', '2005-06-12', 'Wiraswasta'),
-('0051741025', 'Titan Rizaldi', 'VII', 'Kampung Ciguriang Girang', 'L', 'Islam', 'Bandung', '2005-09-14', ''),
-('0051751313', 'Saepul Nuriman', 'VII', 'Jalan Kopo Gang Lapang', 'L', 'Islam', 'Bandung', '2005-09-18', 'Pedagang Kecil'),
-('0051770129', 'Fikri Mochamad Alfian', 'VIII', 'Jl.Babakan Irigasi Gg Amid 8 No.623', 'L', 'Islam', 'Bandung', '2005-04-18', 'Wiraswasta'),
-('0051820735', 'Lina Alista', 'VIII', 'Blok Ager sari', 'P', 'Islam', 'Bandung', '2005-07-13', 'Buruh'),
-('0051890784', 'Nindytha Andriyana Rachman', 'VIII', 'Kp.cilisung no.55', 'P', 'Islam', 'Bandung', '2005-09-21', ''),
-('0051920652', 'Fachrizal Riyanto', 'VIII', 'asbes no.14 perum bojong raya', 'L', 'Islam', 'bandung', '2005-03-10', 'Buruh'),
-('0051951208', 'Naufal Azizan Fikri', 'VII', 'Jalan Terusan Cibaduyut Gang Situ Tarate II', 'L', 'Islam', 'Bandung', '2005-11-26', ''),
-('0051970641', 'Andi Rahmawan', 'VIII', 'gg.banceuy no.9A', 'L', 'Islam', 'Kebumen', '2005-02-15', '');
-INSERT INTO `siswa` (`NISN`, `Nama`, `Kelas`, `alamat`, `jk`, `agama`, `tmp_lahir`, `tgl_lahir`, `pek_ortu`) VALUES
-('0052020113', 'Zeni Darajat', 'VIII', 'Jl Babakan Ciparay No.314', 'L', 'Islam', 'Bandung', '2005-06-04', 'Wiraswasta'),
-('0052020494', 'Panji Saepul Bagja', 'VIII', 'pagarsih Gg.onong 47', 'L', 'Islam', 'Bandung', '2005-07-21', 'Karyawan Swasta'),
-('0052050075', 'Rizki Fauzi', 'VIII', 'Jl.Cibaduyut Gg Babakan TVRI', 'L', 'Islam', 'Bandung', '2005-10-11', 'Wiraswasta'),
-('0052051002', 'Esa Maulana Yusuf', 'VII', 'Kampung Baru', 'L', 'Islam', 'Bandung', '2005-06-26', 'Pensiunan'),
-('0052060582', 'Mohamad Fikri Setiawan', 'VIII', 'Astanaanyar Gg.liogenteng', 'L', 'Islam', 'Bandung', '2005-11-28', ''),
-('0052080769', 'Firda Milati Istiqomah', 'VIII', 'Kebon Kopi', 'P', 'Islam', 'Bandung', '2005-04-06', 'Wiraswasta'),
-('0052090607', 'Deny Irga Wijaya', 'VIII', 'babakan irigasi gg,remaja 8 no.4', 'L', 'Islam', 'Bandung', '2005-07-07', ''),
-('0052090764', 'Deby Setiani Saputri', 'VIII', 'Pelindung hewan', 'P', 'Islam', 'Bandung', '2005-03-13', 'Wiraswasta'),
-('0052100537', 'Nandi Permana', 'VIII', 'inhofftank', 'L', 'Islam', 'Bandung', '2005-08-24', 'Buruh'),
-('0052120044', 'Aldi Ramadani', 'VIII', 'Jl.Cibolerang Gg Bagja', 'L', 'Islam', 'Garut', '2005-01-18', 'Wiraswasta'),
-('0052121114', 'Hilman Rachman Nur', 'VII', 'Pasigaran Rt.03/09', 'L', 'Islam', 'Bandung', '2005-11-28', 'Wiraswasta'),
-('0052121174', 'Rizki Firdaus Ramadan', 'VII', 'Kp. Palasari', 'L', 'Islam', 'Bandung', '2005-12-21', 'Buruh'),
-('0052150581', 'Muhamad Rizal Fauzi', 'VIII', 'Bbk.Ciparay Gg.H.Abdul Rojak 265', 'L', 'Islam', 'Bandung', '2005-05-03', ''),
-('0052170128', 'Eko Kukuh Triono', 'VIII', 'Komp Griya Permata Indah Blok C 3 No.20', 'L', 'Islam', 'Kebumen', '2005-03-09', 'Wiraswasta'),
-('0052171044', 'Ilham Mustari', 'VII', 'Kp.Ciguriang girang', 'L', 'Islam', 'Bandung', '2005-03-25', 'Wiraswasta'),
-('0052200624', 'Muhamad Rafly Naufal', 'VIII', 'Komp.Griya Permata Asri Blok B 2 no.15', 'L', 'Islam', 'Bandung', '2005-11-17', ''),
-('0052210496', 'Rinaldi Nur Fajar', 'VIII', 'cibuntu tengah jl.holis', 'L', 'Islam', 'Bandung', '2005-02-24', 'Wiraswasta'),
-('0052211091', 'Muhammad Dikdik', 'VII', 'Baleendah Kp. Mekarsari', 'L', 'Islam', 'Garut', '2005-06-21', 'Wiraswasta'),
-('0052240483', 'Mela Aryanasari', 'VIII', 'Babakan Ciparay Situ Gunting', 'P', 'Islam', 'Bandung', '2005-03-27', ''),
-('0052260222', 'Fahmi Fajria', 'VII', 'Jl.Ters Pasirkoja Gg Babakan Irigasi Gg.AMD 8', 'L', 'Islam', 'Bandung', '2005-06-20', 'Buruh'),
-('0052290366', 'Ary Rahmat Pratama', 'VIII', 'Kp.Kebon Kopi Gg.Ibu Umi No.75', 'L', 'Islam', 'Ciamis', '2005-03-22', ''),
-('0052300099', 'Giovanni Dennas Purwoto', 'VIII', 'Komp.Mekarwangi Kp.Anggacariang No.2', 'L', 'Islam', 'Bandung', '2005-07-06', 'Karyawan Swasta'),
-('0052300740', 'Neng Rini', 'VIII', 'Babakan Ciparay Situ Gunting Barat No.6', 'P', 'Islam', 'Bandung', '2005-03-31', 'Buruh'),
-('0052310261', 'Lukman Al Ghifari', 'VIII', 'Pelindung Hewan Gg Bp Atam Iskandar No.14', 'L', 'Islam', 'Bandung', '2005-05-13', 'Wiraswasta'),
-('0052331015', 'Mochammad Ferdy B', 'VII', 'Jalan Holis Gang Ajengan Hasan Marwi', 'L', 'Islam', 'Bandung', '2005-10-02', 'Wiraswasta'),
-('0052370889', 'Dimas Mardianto', 'VII', 'Jalan Babakan Targogong Gang Sindang Asih 7 RT 09 ', 'L', 'Islam', 'Bandung', '2005-11-26', 'Wiraswasta'),
-('0052410932', 'Lukman Hakim Gumelar', 'VII', 'Jl. Terusan pasir Koja Rt. 05 Rw. 05', 'L', 'Islam', 'Bandung', '2005-10-01', ''),
-('0052430602', 'Ali Firmansyah', 'VIII', 'peta no.311', 'L', 'Islam', 'Bandung', '2005-08-30', ''),
-('0052450013', 'Gun Gun Burhanudin', 'VIII', 'Kp.Babakan Leuwi Bandung', 'L', 'Islam', 'Bandung', '2005-02-06', ''),
-('0052460430', 'Toni Muharam', 'VIII', 'Kancra II No.15', 'L', 'Islam', 'Bandung', '2005-05-05', 'Wiraswasta'),
-('0052510677', 'Yuni Wasika Maulani', 'VIII', 'Kp.babakan', 'P', 'Islam', 'bandung', '2005-06-23', 'Buruh'),
-('0052520936', 'Muhamad Rezky Nur', 'VII', 'PerumPermata Kopo Blok EA No.289 Rt 04/15 Kel Saya', 'L', 'Islam', 'Bandung', '2005-08-12', 'Wiraswasta'),
-('0052530770', 'Fitriana', 'VIII', 'kebon kopi no.114 gg.saluyu dalam', 'P', 'Islam', 'Bandung', '2005-01-28', 'Wiraswasta'),
-('0052540091', 'Cep Riyan Fauzia', 'VIII', 'Jl.Cijeruk Ds Bojongsari', 'L', 'Islam', 'Bandung', '2005-05-10', 'Karyawan Swasta'),
-('0052551156', 'Hendra Kartika', 'VII', 'Jl. Cibaduyut Gg. H. Wawi Blokumbung No 33', 'L', 'Islam', 'Bandung', '2005-09-24', ''),
-('0052560650', 'Diki Kurniawan Mulyana', 'VIII', 'peta gg.sukamulya', 'L', 'Islam', 'Cianjur', '2005-02-12', 'Wiraswasta'),
-('0052570208', 'Ajie Gustika Wiganda', 'VIII', 'Jl.H Kurdi I Gg 13', 'L', 'Islam', 'Bandung', '2005-02-06', 'Karyawan Swasta'),
-('0052571151', 'Dimas Azhar Fadlani', 'VII', 'Jalan Mochamad Toha Gang Silih Asih IV No 121 RT 0', 'L', 'Islam', 'Bandung', '2005-10-31', ''),
-('0052600264', 'Muhammad Sigit Nurjaman', 'VIII', 'Jl.Cidurian Utara Gg Al-Ikhlas No.102', 'L', 'Islam', 'Bandung', '2005-04-21', 'Karyawan Swasta'),
-('0052630219', 'Dicky Indrawan', 'VIII', 'Mengger Tengah', 'L', 'Islam', 'Bandung', '2005-02-11', 'Karyawan Swasta'),
-('0052670108', 'Renaldi Nurrohman', 'VIII', 'Jl.Parakan Saat II', 'L', 'Islam', 'Sudorogo', '2005-03-05', 'Wiraswasta'),
-('0052680077', 'Toni Irawan', 'VIII', 'Jl.Soekarno Hatta Gg Elos Barat', 'L', 'Islam', 'Bandung', '2005-06-19', 'Karyawan Swasta'),
-('0052700016', 'Herpin Elfansyah', 'VIII', 'Cikalong', 'L', 'Islam', 'Bandung', '2005-02-21', 'Wiraswasta'),
-('0052710776', 'Linda Adhania', 'VIII', 'Kp.cigebar', 'P', 'Islam', 'Bandung', '2005-03-28', 'Buruh'),
-('0052720041', 'AditiyanFebriansyah Ramadhan', 'VIII', 'Jl.Ranca Bentang No.139', 'L', 'Islam', 'Bandung', '2005-01-12', 'Karyawan Swasta'),
-('0052720048', 'Andi Muhamad Ramdhan', 'VIII', 'Kp.Cilisung Kulon 12', 'L', 'Islam', 'Bandung', '2005-10-09', 'Wiraswasta'),
-('0052720927', 'Fahmi Febrian', 'VII', 'Jalan Terusan Pasir Koja, Babakan Irigasi RT 02 RW', 'L', 'Islam', 'Bandung', '2005-02-01', 'Buruh'),
-('0052721105', 'Bayu Taufik M', 'VII', 'Kampung Leuweung Kaleng', 'L', 'Islam', 'Bandung', '2005-03-02', ''),
-('0052730597', 'Adit Anggriawan', 'VIII', 'babakan tarogong', 'L', 'Islam', 'Bandung', '2005-03-04', ''),
-('0052740358', 'Yunus Efendi', 'VIII', 'Kebonlega II', 'L', 'Islam', 'Purbalingga', '2005-10-10', 'Karyawan Swasta'),
-('0052740480', 'Ismail Khaerudin', 'VIII', 'Gg.Aki Aksan Karasak lama Cibintinu', 'L', 'Islam', 'Bandung', '2005-03-08', ''),
-('0052810270', 'M Luthfy Raenaldi Oktavian', 'VIII', 'Jl.Cibadak', 'L', 'Islam', 'Bandung', '2005-09-10', 'Tidak bekerja'),
-('0052821286', 'Antasena', 'VII', 'Jalan Cibaduyut Gang Siti Mardiah No 7B', 'L', 'Islam', 'Bandung', '2005-09-29', ''),
-('0052830096', 'Erick Wahyudie', 'VIII', 'Jl.Cibaduyut Gg Sauyunan', 'L', 'Islam', 'Jakarta', '2005-06-13', 'Wiraswasta'),
-('0052830953', 'Andi', 'VII', 'Jl.sadang Margahayu Tengah Rt 05/03 Cigondewah', 'L', 'Islam', 'Bandung', '2005-10-02', 'Wiraswasta'),
-('0052840583', 'Muhammad Saleh Noviandi', 'VIII', 'Komp.Kopo Permai II B 2 No.6', 'L', 'Islam', 'Bandung', '2005-11-09', ''),
-('0052880015', 'Hanipan', 'VIII', 'Kp.Bojong Suren Girang', 'L', 'Islam', 'Bandung', '2005-03-28', 'Wiraswasta'),
-('0052900534', 'Muhammad Ilham Nurrohman', 'VIII', 'pelindung hewan no.13/96', 'L', 'Islam', 'Bandung', '2005-03-03', 'Buruh'),
-('0052901146', 'Andreas Stepanus Lumban Tobing', 'VII', 'Jl. Terusan Cibaduyut Gg. Teratai III No 166', 'L', 'Islam', 'Bandung', '2005-10-23', 'Wiraswasta'),
-('0052940414', 'Ithma Hidayat', 'VIII', 'Rancabentang No.226', 'L', 'Islam', 'Bandung', '2005-03-15', 'PNS/TNI/Polri'),
-('0052951241', 'Risma Fitria Rahayu', 'VII', 'Jl. Kopo Citarip Timur II No. 291 Rt 03/05', 'P', 'Islam', 'Bandung', '2005-11-26', ''),
-('0052980251', 'Evan Aris Wibowo', 'VIII', 'Gg Sukapakir', 'L', 'Islam', 'Bandung', '2005-09-29', 'Karyawan Swasta'),
-('0053020488', 'Muhamad Taufik Hidayat', 'VIII', 'Peta Gg.Sukamulya II', 'L', 'Islam', 'Bandung', '2005-03-04', ''),
-('0053040618', 'Mochamad Angga Haddad Ibrahim', 'VIII', 'Cibaduyut blok lumbung', 'L', 'Islam', 'Bandung', '2005-08-24', 'Wiraswasta'),
-('0053060021', 'Krisna Ramdani', 'VIII', 'Jl.Ters Suryani', 'L', 'Islam', 'Bandung', '2005-01-09', 'Wiraswasta'),
-('0053090524', 'Guntur Daffa Atthariq', 'VIII', 'Peta Gg.Jamhari', 'L', 'Islam', 'Bandung', '2005-07-26', 'Karyawan Swasta'),
-('0053090615', 'Irfan Fakhrurozi', 'VIII', 'cibaduyut raya gg.blok tvri I n0.16', 'L', 'Islam', 'Bandung', '2005-10-23', ''),
-('0053120421', 'Oki Ariyanto', 'VIII', 'Cikungkurak Caringin', 'L', 'Islam', 'Bandung', '2005-10-07', 'Wiraswasta'),
-('0053220893', 'Hamdan Junaedi', 'VII', 'Jl.Sadang Cibolerang Rt.01 Rw.01', 'L', 'Islam', 'Bandung', '2005-11-26', 'Wiraswasta'),
-('0053250153', 'Wawan Rosidin', 'VIII', 'Jl.babakan Ciparay Gg Hasan Ali', 'L', 'Islam', 'bandung', '2005-06-26', 'Wiraswasta'),
-('0053260851', 'Fachrizan Fajar Muharram', 'VII', 'Jalan SUkamulya', 'L', 'Islam', 'Bandung', '2005-05-01', 'Karyawan Swasta'),
-('0053270867', 'Muhamad Rafli Azhari', 'VII', 'Jalan Ratna Sari No 5', 'L', 'Islam', 'Surabaya', '2005-11-08', 'Karyawan Swasta'),
-('0053290454', 'Putra Dwi Cahya Mulyana', 'VIII', 'Moh.Toha Gg.Silih Asih IV No.115/97', 'L', 'Islam', 'bandung', '2005-04-14', 'Buruh'),
-('0053300756', 'Yanti Novianti', 'VIII', 'Cibuntu Tengah', 'P', 'Islam', 'Bandung', '2005-09-09', 'Wiraswasta'),
-('0053320924', 'Deby Septian Nur Candra', 'VII', 'Jl. Astanaanyar No. 75/22D Rt 06', 'L', 'Islam', 'Bandung', '2005-09-11', 'Wiraswasta'),
-('0053330733', 'Indah Mega Lestari', 'VIII', 'Juardi No.203/10 B', 'P', 'Islam', 'Bandung', '2005-08-15', 'Karyawan Swasta'),
-('0053340796', 'Yuli Susanti', 'VIII', 'Kp.citamiang kaler', 'P', 'Islam', 'Bandung', '2005-07-07', 'Wiraswasta'),
-('0053351055', 'Muhamad Idris', 'VII', 'Jl.Cibaduyut Dalam I', 'L', 'Islam', 'Bandung', '2005-10-06', 'Wiraswasta'),
-('0053370318', 'Yopie Liman', 'VII', 'Kp.Mangga Dua', 'L', 'Islam', 'Bandung', '2005-06-12', 'Wiraswasta'),
-('0053370644', 'Arif Rahman Marsah', 'VIII', 'pagarsih gg.satria', 'L', 'Islam', 'bandung', '2005-06-05', 'Wiraswasta'),
-('0053381038', 'Fitran Fauzi Ramadhan', 'IX', 'Kp.Kiara Sinar Wangi', 'L', 'Islam', 'Bandung', '2005-01-01', 'Karyawan Swasta'),
-('0053390660', 'Mohamad Akbar Fathurahman', 'VIII', 'Moch.Toha blk No.176', 'L', 'Islam', 'bandung', '2005-01-18', 'Buruh'),
-('0053400520', 'Febry Alif Walliadi', 'VIII', 'soekarno hatta Gg.Pusri No.19', 'L', 'Islam', 'Bandung', '2005-01-28', 'Karyawan Swasta'),
-('0053440478', 'Intan Permatasari Putri Chaniago', 'VIII', 'Moh. Toha (PERBAS) Kp.Saluyu', 'P', 'Islam', 'Bandung', '2005-01-03', 'Wiraswasta'),
-('0053440559', 'Aryo Muhamad Fitsyal', 'VIII', 'Kp.Sadang sari', 'L', 'Islam', 'Bandung', '2005-01-29', ''),
-('0053471269', 'Riska Puspita', 'VII', 'Jalan Sukarno Hatta Blok ageur sari RT/RW 06/11', 'P', 'Islam', 'Bandung', '2005-04-14', ''),
-('0053480680', 'Andhika Megapradana', 'VIII', 'Dulatip no.46/13A', 'L', 'Islam', 'bandung', '2005-03-24', 'Karyawan Swasta'),
-('0053490033', 'Saeful Hidayat', 'VIII', 'Kp Talun', 'L', 'Islam', 'Bandung', '2005-12-03', 'Buruh'),
-('0053490240', 'Adriansyah', 'VII', 'Jl.Pelindung Hewan Gg Darussalam', 'L', 'Islam', 'Garut', '2005-03-13', 'Wiraswasta'),
-('0053510304', 'Muhammad Fajar', 'VIII', 'Jl.Makam Caringin Gg Adinata No.101', 'L', 'Islam', 'Bandung', '2005-10-09', 'Lainnya'),
-('0053520699', 'Ilham Nur ismail', 'VIII', 'Holis', 'L', 'Islam', 'bandung', '2005-03-17', 'Wiraswasta'),
-('0053531037', 'Alfin Yanuar Ramdhan', 'IX', 'Jl.Naradireja No.59', 'L', 'Islam', 'Bandung', '2005-01-11', 'Wiraswasta'),
-('0053540861', 'Muhammad Reza', 'VII', 'Kampung Bojong Reungas No 23', 'L', 'Islam', 'Bandung', '2005-08-12', 'Wiraswasta'),
-('0053560925', 'Dio Rezki Fauzan', 'VII', 'Jalan Karasak No 40', 'L', 'Islam', 'Bandung', '2005-10-04', ''),
-('0053570227', 'Mahesa Pranajaya', 'VII', 'Jl.Pungkur No.155/18C', 'L', 'Islam', 'Garut', '2005-04-03', 'Buruh'),
-('0053580633', 'Wahyu Januri Ramdani', 'VIII', 'leuwi panjang gg.bakti I  no.3', 'L', 'Islam', 'Bandung', '2005-01-17', ''),
-('0053591048', 'Moch. Muqiit Faturahman', 'VII', 'Jalan Sukarajin Lemahnendeut II RT/RW 007/008', 'L', 'Islam', 'Bandung', '2005-10-31', ''),
-('0053640032', 'Roni Sofian', 'VIII', 'Jl.Mohtoha', 'L', 'Islam', 'Bandung', '2005-07-24', 'Buruh'),
-('0053740067', 'Naufal Ramdhan', 'VIII', 'Kp.Cisirung', 'L', 'Islam', 'Bandung', '2005-12-23', 'PNS/TNI/Polri'),
-('0053770892', 'Fedryansah', 'VII', 'Gempol Sari no. 106 rt04/01', 'L', 'Islam', 'Bandung', '2005-05-25', 'Wiraswasta'),
-('0053770894', 'Ilham Pahrizal', 'VII', 'Jl. Bojongloa Gg. Salam No.03', 'L', 'Islam', 'Tasikmalaya', '2005-06-08', 'Wiraswasta'),
-('0053780832', 'Widayanti', 'VIII', 'Blok Hegar manah', 'P', 'Islam', 'Bandung', '2005-02-27', ''),
-('0053800079', 'Wiki Gustiar', 'VIII', 'Jl.Inhofftang Gg Perikanan II No.208', 'L', 'Islam', 'Bandung', '2005-08-27', 'Wiraswasta'),
-('0053820753', 'Rica Sania', 'VIII', 'Moch.Toha Gg.Murdasan', 'P', 'Islam', 'Bandung', '2005-04-08', 'Wiraswasta'),
-('0053850005', 'Aris Munandar', 'VIII', 'Kp.Margahurip', 'L', 'Islam', 'Bandung', '2005-08-01', 'Wiraswasta'),
-('0053850110', 'Rizky Agusrian Syach', 'VIII', 'Jl.Leuwianyar I', 'L', 'Islam', 'Bandung', '2005-08-18', 'Wiraswasta'),
-('0053860794', 'Sukma Nur Alivia', 'VIII', 'Ters.Pasir koja Gg.pesantren dalam', 'P', 'Islam', 'Bandung', '2005-09-06', 'Buruh'),
-('0053870018', 'Heru Hermawan', 'VIII', 'Jl.Situ Aksan Gg Madrasah Dlm II', 'L', 'Islam', 'Bandung', '2005-02-21', 'Buruh'),
-('0053870266', 'Muhamad Fajar Sidik', 'VIII', 'Jl.Leuwianyar Utara gg Narpan', 'L', 'Islam', 'Bandung', '2005-01-01', 'Buruh'),
-('0053900346', 'Roby Agus Saiman', 'VIII', 'Jl.Cibolerang Blok Aci', 'L', 'Islam', 'Bandung', '2005-08-18', 'Buruh'),
-('0053910701', 'Indan Suandani', 'VIII', 'inhoptank', 'L', 'Islam', 'bandung', '2005-02-12', 'Buruh'),
-('0053930554', 'Adhitya Dwi Putra', 'VIII', 'pagarsih gg.warga asih no.126/90', 'L', 'Islam', 'Bandung', '2005-06-18', 'Lainnya'),
-('0053950076', 'Tubagus Faizal Achmad Fauzian', 'VIII', 'Citarip Ujung', 'L', 'Islam', 'Bandung', '2005-05-10', 'Wiraswasta'),
-('0053950338', 'Mochamad Ikhsan Nugraha', 'VIII', 'Kp Lengkong', 'L', 'Islam', 'Bandung', '2005-07-26', 'Buruh'),
-('0053960667', 'Ni\'mal Maulana', 'VIII', 'babakan tarogong', 'L', 'Islam', 'bandung', '2005-07-27', 'Wiraswasta'),
-('0053970880', 'Ahmad Yusuf', 'VII', 'Cibolerang Rt.04/08margahayu Utara', 'L', 'Islam', 'Bandung', '2005-09-09', 'Wiraswasta'),
-('0053980190', 'Sandi Purnama', 'VII', 'Jl.Situgunting', 'L', 'Islam', 'Bandung', '2005-04-02', 'Buruh'),
-('0053990703', 'Kurnia Vadzar', 'VIII', 'Kp.cilebak No.38', 'L', 'Islam', 'Garut', '2005-05-19', 'Wiraswasta'),
-('0054020402', 'Arya Lutfiara', 'VIII', 'Babakan tarogong gg.bojong asih V', 'L', 'Islam', 'Bandung', '2005-12-01', 'Wiraswasta'),
-('0054020922', 'Danang Fradita Ivnuaji', 'VII', 'Cirangrang Timur TR. 06 RW. 03', 'L', 'Islam', 'Bandung', '2005-02-15', ''),
-('0054040063', 'Muhammad Rafli Pamungkas Antasar', 'VIII', 'Jl.Kopo Gg Wiradisastra No.13/199C', 'L', 'Islam', '', '2005-08-08', 'Lainnya'),
-('0054040179', 'Muhamad Al Farizi', 'VII', 'Jl.Mohtoha Gg Curug Candung', 'L', 'Islam', 'Bandung', '2005-03-21', 'Buruh'),
-('0054090592', 'Sandika', 'VIII', 'Situgunting barat no.99', 'L', 'Islam', 'Bandung', '2005-04-23', ''),
-('0054160026', 'Muhamad Salman', 'VIII', 'Jl.Gemposari', 'L', 'Islam', 'Bandung', '2005-07-24', 'Buruh'),
-('0054190226', 'Isman Hadi', 'VIII', 'Jl.Ciparay Hilir', 'L', 'Islam', 'Bandung', '2005-10-19', 'Karyawan Swasta'),
-('0054210279', 'Yusuf Arosyid', 'VIII', 'Graha Rancamanyar II No 1', 'L', 'Islam', 'Cimahi', '2005-07-28', 'Karyawan Swasta'),
-('0054210305', 'Muhamad Iqbal Malik Fajar', 'VIII', 'Jl.Singosari Ujung No.14', 'L', 'Islam', 'Bandung', '2005-05-02', 'Karyawan Swasta'),
-('0054220066', 'Nanda', 'VIII', 'Kp.Cilebak', 'L', 'Islam', 'Bandung', '2005-04-14', 'PNS/TNI/Polri'),
-('0054220106', 'Muhamad Riyanto', 'VIII', 'Jl.Kebon Kopi Blok Citopeng Sari II No.206', 'L', 'Islam', 'Bandung', '2005-04-25', 'Wiraswasta'),
-('0054251194', 'Hengki Hardiansyah', 'VII', 'Jalan Babakan Tarogong Bojong Asih', 'L', 'Islam', 'Bandung', '2005-10-01', ''),
-('0054260231', 'Nandar Muhammad Isra', 'VIII', 'Jl.Astanaanyar No.164', 'L', 'Islam', 'Bandung', '2005-06-10', 'Karyawan Swasta'),
-('0054290721', 'Ami Amelia Hasanah', 'VIII', 'Pelindung Hewan Gg.Panda', 'P', 'Islam', 'Bandung', '2005-04-26', 'Buruh'),
-('0054300105', 'Muhammad Yunus Akbar', 'VIII', 'Bougenvile II No.22', 'L', 'Islam', 'Bandung', '2005-06-26', 'Tidak bekerja'),
-('0054300162', 'Andika Rahmadan', 'VIII', 'Jl.Singgasana', 'L', 'Islam', 'Bandung', '2005-02-16', 'Wiraswasta'),
-('0054310616', 'Levandri Ahmad Fauzan Ajmal', 'VIII', 'babakan tarogong no.435/196 B', 'L', 'Islam', 'Bandung', '2005-10-01', ''),
-('0054320307', 'Rafli Juwandi', 'VIII', 'Komp GBA III Blok A 2 No.5', 'L', 'Islam', 'Lampung Tengah', '2005-06-02', 'PNS/TNI/Polri'),
-('0054370380', 'Hose Rahman Bahari', 'VIII', 'Maragluyu No.7', 'L', 'Kristen', 'Bandung', '2005-10-18', 'Wiraswasta'),
-('0054370410', 'Helmi Abdan Bayhaqi', 'VIII', 'Komp.Putraco Griya Jagabaya Blok A3 No.9', 'L', 'Islam', 'Bandung', '2005-02-28', 'Buruh'),
-('0054410654', 'Farhan Naufal Amar', 'VIII', 'karasak', 'L', 'Islam', 'bandung', '2005-04-09', 'Buruh'),
-('0054470842', 'Aldi Gilang Ramadhan', 'VII', 'Kampung Kaum', 'L', 'Islam', 'Bandung', '2005-12-14', 'Karyawan Swasta'),
-('0054480676', 'Verrell Erisha', 'VIII', 'Anggadireja no.75', 'L', 'Islam', 'bandung', '2005-07-30', 'Buruh'),
-('0054550600', 'Aldi Juliantoro', 'VIII', 'Srimahi baru no.27', 'L', 'Islam', 'Blora', '2005-07-29', ''),
-('0054560140', 'Mochamad Raffi', 'VIII', 'Jl.Mengger Girang III No.25', 'L', 'Islam', 'Bandung', '2005-10-11', 'Karyawan Swasta'),
-('0054590830', 'Syah Dwianti Putri', 'VIII', 'DanuSaepudin No.36/8C', 'P', 'Islam', 'Bandung', '2005-03-09', 'Wiraswasta'),
-('0054661264', 'Melati Puspitasari', 'VII', 'Jl.Aki Padma Gg.anah Rt.02/06 No.4 bandung', 'P', 'Islam', 'Bandung', '2005-08-01', 'Wiraswasta'),
-('0054710186', 'Riki Setiawan', 'VIII', 'Gg Maksudi II', 'L', 'Islam', 'Bandung', '2005-03-20', 'Wiraswasta'),
-('0054720465', 'Zidan Septiansyah', 'VIII', 'Kopo Citarip Barat No.103', 'L', 'Islam', 'bandung', '2005-09-19', 'Karyawan Swasta'),
-('0054780003', 'Andi Kardina', 'VIII', 'Jl.Bbk Ciparay Gg Air Mancur', 'L', 'Islam', 'Bandung', '2005-10-02', 'Buruh'),
-('0054800720', 'Amelia Nurilahi', 'VIII', 'Jl.Cibolerang Gg.MH. Abdul Rahman', 'P', 'Islam', 'Bandung', '2005-05-25', 'Buruh'),
-('0054810184', 'Rasi Tri Pertiwi', 'VII', 'Bojong Suren', 'L', 'Islam', 'Bandung', '2005-11-04', 'Wiraswasta'),
-('0054830545', 'Rudi Lesmana', 'VIII', 'curug candung', 'L', 'Islam', 'Bandung', '2005-03-01', 'Wiraswasta'),
-('0054840268', 'Muhamad Arki Permana', 'VIII', 'Kp.Sayuran', 'L', 'Islam', 'Bandung', '2005-08-13', 'Wiraswasta'),
-('0054840713', 'Sahrul Andriansyah', 'VIII', 'Caringin Cikungkurak Kaler', 'L', 'Islam', 'bandung', '2005-05-29', 'Wiraswasta'),
-('0054890010', 'Dhika Rizki Juliandi', 'VIII', 'Jl.Ters Pasirkoja Gg Satata Sariksa', 'L', 'Islam', 'Bandung', '2005-07-22', 'Buruh'),
-('0054890217', 'Bambang Adi Wijaya', 'VIII', 'Dusun Sewo Harjo', 'L', 'Islam', 'Subang', '2005-03-20', 'Tidak bekerja'),
-('0054890383', 'Mochamad Yopan', 'VIII', 'Jendral Sudirman Gg.Dunguscariang no.56/79', 'L', 'Islam', 'Bandung', '2005-09-07', ''),
-('0054890779', 'Mega Febrianti', 'VIII', 'cibuntu timur', 'P', 'Islam', 'Bandung', '2005-02-21', 'Buruh'),
-('0054911300', 'Iwan Setiawan', 'VII', 'Jalan Cibolerang', 'L', 'Islam', 'Bandung', '2005-06-23', ''),
-('0054920286', 'Alam Aslama Ma\'ruf', 'VIII', 'Jl.Kembar Timur No.26', 'L', 'Islam', 'Bandung', '2005-03-09', 'Wiraswasta'),
-('0054920755', 'Widya Anggita Pratiwi', 'VIII', 'kebon jeruk no.188/10 b', 'P', 'Islam', 'Bandung', '2005-03-19', 'Wiraswasta'),
-('0055000376', 'Erlangga Muhammad Chalik', 'VIII', 'baladewa no.33', 'L', 'Islam', 'Bandung', '2005-08-13', ''),
-('0055000514', 'Deden Setiawan', 'VIII', 'Moch.Toha Gg.riang', 'L', 'Islam', 'Bandung', '2005-10-11', 'Karyawan Swasta'),
-('0055040598', 'Agil Sapdian Pratama', 'VIII', 'inhofftank', 'L', 'Islam', 'Bandung', '2005-08-21', 'Wiraswasta'),
-('0055070068', 'Nia Kurniawan', 'VIII', 'Jl.Kopo Gg Maksudi II No.20', 'L', 'Islam', 'Bandung', '2005-05-27', 'Wiraswasta'),
-('0055070074', 'Rifki Juniawan Permana', 'VIII', 'Jl.Babakan Ciparay Gg Abid', 'L', 'Islam', 'Garut', '2005-07-28', 'Wiraswasta'),
-('0055081270', 'Riska Wahyuni', 'VII', 'Jl.Soekarno Hatta Blok Ager Sari Rt 09/10', 'P', 'Islam', 'Bandung', '2005-10-04', 'Wiraswasta'),
-('0055170059', 'Haris Ahmadi', 'VIII', 'Jl.Babakan Ciparay Gg Ibu Asih', 'L', 'Islam', 'Lamongan', '2005-09-04', 'Wiraswasta'),
-('0055180519', 'Fajar Maulana Yusuf', 'VIII', 'cikawao dalam 2 blk no.7', 'L', 'Islam', 'Bandung', '2005-07-17', ''),
-('0055180717', 'Wahyu Hidayat', 'VIII', 'Kp.Pasir Pogor No.193', 'L', 'Islam', 'bandung', '2005-04-06', 'Lainnya'),
-('0055250845', 'Andre Prasetyo', 'VII', 'Jalan KH Usman Dhomiri No 115', 'L', 'Islam', 'Cimahi', '2005-11-08', 'Karyawan Swasta'),
-('0055260456', 'Renal Dani Saputra', 'VIII', 'Karasak Lama Kp.Cibintinu', 'L', 'Islam', 'Kebumen', '2005-01-10', 'Karyawan Swasta'),
-('0055270086', 'Alif Aslyana Nurulloh', 'VIII', 'Jl.Ahmad  Yani', 'L', 'Islam', 'Sumedang', '2005-03-13', 'Wiraswasta'),
-('0055320702', 'Irawan Aliya Sandra', 'VIII', 'babakan ciparay/kopo jaya 1 no.17', 'L', 'Islam', 'Ciamis', '2005-02-08', 'Wiraswasta'),
-('0055330193', 'Teguh Ismail', 'VIII', 'Jl.Pagarsih Gg Holili Dalam 2', 'L', 'Islam', 'Wonogiri', '2005-10-11', 'Karyawan Swasta'),
-('0055360639', 'Aldo Muhammad Fernando', 'VIII', 'Cikungkurak belakang blok C no.49', 'L', 'Islam', 'bandung', '2005-06-30', 'Buruh'),
-('0055361141', 'Zuli Alrizky', 'VII', 'Jalan Kopo Gang Lapang No 50', 'L', 'Islam', 'Bandung', '2005-10-15', ''),
-('0055370323', 'Algi Afdal Mardiansyah', 'VIII', 'Warung Nangka', 'L', 'Islam', 'Bandung', '2005-03-04', 'Buruh'),
-('0055370612', 'Hani Ristian', 'VIII', 'Kopo Gg.parasdi dalam III no.19', 'P', 'Islam', 'Majalengka', '2005-02-23', ''),
-('0055370628', 'Rifki Adriansyah', 'VIII', 'babakan mekarsari', 'L', 'Islam', 'Bandung', '2005-11-04', ''),
-('0055400452', 'Eneng Komala Dewi', 'VIII', 'Kp.Pandereusan', 'P', 'Islam', 'bandung', '2005-09-05', 'Wiraswasta'),
-('0055410771', 'Puji Gita Nursyeha', 'VIII', 'pasirkoja gg.pesantren', 'P', 'Islam', 'Bandung', '2005-01-06', 'Wiraswasta'),
-('0055430490', 'Muhamad Hilman', 'VIII', 'cibolerang terusan holis', 'L', 'Islam', 'Bandung', '2005-08-24', ''),
-('0055430730', 'Fuzi Nurhandayani', 'VIII', 'Moch.Toha Gg.Empang I', 'P', 'Islam', 'Bandung', '2005-05-12', 'Buruh'),
-('0055450065', 'Muhamad Amar Farhan', 'VIII', 'Perum Griya Sukarame Astri Blok B.No.5', 'L', 'Islam', 'Bandung', '2005-07-19', 'Karyawan Swasta'),
-('0055470665', 'Nanda Faturahman', 'VIII', 'Nyengseret utara 269/198 B', 'L', 'Islam', 'bandung', '2005-10-01', 'Tidak bekerja'),
-('0055490118', 'Bilal Wiliandri', 'VIII', 'Jl.Inhofftank', 'L', 'Islam', 'Bilal Wiliandri', '2005-08-22', 'Lainnya'),
-('0055530281', 'Agam Setyawan', 'VIII', 'Jl.Pasirkoha Gg Abadi Utama No.212', 'L', 'Islam', 'Bandung', '2005-08-12', 'Wiraswasta'),
-('0055540034', 'Sandy Suryana', 'VIII', 'Jl.Babakan Sawah', 'L', 'Islam', 'Bandung', '2005-04-19', 'Buruh'),
-('0055570405', 'Denden Hermawan', 'VIII', 'Ters.pasirkoja gg.h.umar', 'L', 'Islam', 'Bandung', '2005-05-07', 'Wiraswasta'),
-('0055581299', 'Ilham Ramadan', 'VII', 'Jalan Pagarsih Gang Sastra', 'L', 'Islam', 'Bandung', '2005-12-27', ''),
-('0055600310', 'Rijal Jaelani', 'VIII', 'Jl.Lanyar GG LA', 'L', 'Islam', 'Bandung', '2005-02-23', 'Karyawan Swasta'),
-('0055610459', 'Rizky Iman Hidayahtulloh', 'VIII', 'Cigondewah No.60', 'L', 'Islam', 'bandung', '2005-07-03', 'Wiraswasta'),
-('0055610513', 'Daud Anugerah Utama', 'VIII', 'Gg.PGA No.76', 'L', 'Islam', 'Bandung', '2005-05-14', 'Buruh'),
-('0055620738', 'Eneng Dewi Anjani', 'VIII', 'Blok TVRI', 'P', 'Islam', 'Bandung', '2005-06-23', 'Buruh'),
-('0055621260', 'Indra Permana Ramdani', 'VII', 'Jalan Cibaduyut Raya Kampung Ciparay Tengah Rt 02 ', 'L', 'Islam', 'Bandung', '2005-04-28', ''),
-('0055630746', 'Renita Yulianti', 'VIII', 'Caringan cikungkurak gg.karya bakti', 'P', 'Islam', 'Pati', '2005-04-17', 'Buruh'),
-('0055660152', 'Syahrul Mubarok', 'VII', 'jl.Denki Selatan IV', 'L', 'Islam', 'Bandung', '2005-09-25', 'Buruh'),
-('0055660232', 'Rezal Maulana', 'VII', 'Kp.Sekeawi', 'L', 'Islam', 'Ngawi', '2005-02-13', ''),
-('0055660322', 'Aldo Dwi Putra Suherman', 'VIII', 'Jl.Ters Buahbatu', 'L', 'Islam', 'Sukabumi', '2005-12-01', 'Karyawan Swasta'),
-('0055660887', 'Cep Angga Suryana', 'VII', 'Komplek Pasirkoja', 'L', 'Islam', 'Bandung', '2005-05-06', 'Wiraswasta'),
-('0055690472', 'Elan Mahpudin', 'VIII', 'Blok TVRI 2', 'L', 'Islam', 'Bandung', '2005-06-05', 'Buruh'),
-('0055720249', 'Dodi Daliaki', 'VIII', 'Kp.Mengger', 'L', 'Islam', 'Bandung', '2005-05-21', 'PNS/TNI/Polri'),
-('0055720435', 'Alief Maulana', 'VIII', 'H.Sayuti 62 A', 'L', 'Islam', 'bandung', '2005-06-19', 'Wiraswasta'),
-('0055720819', 'Ranti Julyana', 'VIII', 'Cibaduyut Gg. Ma Maja', 'P', 'Islam', 'Bandung', '2005-07-28', 'Wiraswasta'),
-('0055721009', 'Lucky Winardi', 'VII', 'Kampung Cikondang', 'L', 'Islam', 'Bandung', '2005-02-06', 'Wiraswasta'),
-('0055740056', 'Faisal Solihin', 'VIII', 'Jl.Rasdan No.6', 'L', 'Islam', 'Bandung', '2005-02-22', 'Wiraswasta'),
-('0055740213', 'Ardi Mardiyanto', 'VIII', 'Jl.Holis', 'L', 'Islam', 'Bandung', '2005-03-09', 'Tidak bekerja'),
-('0055740413', 'Ilham Septa Komara', 'VIII', 'PI', 'L', 'Islam', 'Bandung', '2005-07-30', 'PNS/TNI/Polri'),
-('0055810280', 'Zamaluludin Sumirat', 'VIII', 'Jl.Pasundan No.83/18A', 'L', 'Islam', 'Bandung', '2005-06-25', 'Buruh'),
-('0055810843', 'Aldi Hermansyah', 'VII', 'Kampung Warna Cinta', 'L', 'Islam', 'Bandung', '2005-09-19', 'Buruh'),
-('0055840360', 'Afendi Darmawan', 'VIII', 'kp.pandeureusan', 'L', 'Islam', 'Bandung', '2005-10-10', ''),
-('0055850204', 'Agung Setiawan', 'VIII', 'Jl.Pagarsih Gg Pa Oyon', 'L', 'Islam', '', '2005-08-12', 'Wiraswasta'),
-('0055850567', 'Febi Mochammad Fikri', 'VIII', 'babakan ciparay gg.pasarmadi', 'L', 'Islam', 'Bandung', '2005-01-10', 'Wiraswasta'),
-('0055850944', 'Sandi', 'VII', 'Gg. Mesjid Darussalam Rt 05/08', 'L', 'Islam', 'Garut', '2005-04-21', 'Wiraswasta'),
-('0055890774', 'Jamilatunnisa', 'VIII', 'Ters.Cibaduyut Gg.tarate ii', 'P', 'Islam', 'Bandung', '2005-06-28', 'Wiraswasta'),
-('0055920244', 'Aris Kurniawab', 'VIII', 'Jl.Caringin No.111', 'L', 'Islam', 'Bandung', '2005-12-27', 'Buruh'),
-('0055920527', 'Mochamad Fachmi Fadillah Al-Fiqr', 'VIII', 'Kopo Gg.H.Taupek I No.51', 'L', 'Islam', 'Bandung', '2005-03-04', 'Wiraswasta'),
-('0055950085', 'Alfi Nur Syarif', 'VIII', 'Kp.Mulyasari', 'L', 'Islam', 'Purwerejo', '2005-04-26', 'Lainnya'),
-('0055960744', 'Nuri Puspitasari', 'VIII', 'Cibuntu barat', 'P', 'Islam', 'Cibuntu', '2005-06-16', 'Buruh'),
-('0055970404', 'Dadan Apriansyah', 'VIII', 'Margaluyu barat no.108', 'L', 'Islam', 'Bandung', '2005-04-27', 'Wiraswasta'),
-('0055980572', 'Ilham Surya Saputra', 'VIII', 'Kp.cisirung Gg.pak adin no.58', 'L', 'Islam', 'Bandung', '2005-09-22', ''),
-('0056000344', 'Rifqi Zulfikar', 'VIII', 'Jl.Kopo Gg Pa Sahdi No.219A', 'L', 'Islam', 'Bandung', '2005-04-06', 'Karyawan Swasta'),
-('0056020049', 'Anggara', 'VIII', 'Kp.Cibeudug Girang', 'L', 'Islam', 'Bandung', '2005-05-31', 'Buruh'),
-('0056020858', 'Ihza Hanif Sukmayana', 'VII', 'Jalan Kopo Gang Lapang', 'L', 'Islam', 'Cianjur', '2005-10-27', 'PNS/TNI/Polri'),
-('0056021228', 'Joana Friska Angelina', 'VII', 'Jl. Sadang Blok No.126', 'P', 'Islam', 'Bandung', '2005-04-08', 'Buruh'),
-('0056060829', 'Sopwatul Milah', 'VIII', 'Cibaduyut blok pasantren', 'P', 'Islam', 'Bandung', '2005-11-02', 'Buruh'),
-('0056080651', 'Diki Permana', 'VIII', 'Ciroyom gg.ciroyom 4 no.235', 'L', 'Islam', 'bandung', '2005-02-19', 'Wiraswasta'),
-('0056090145', 'Riki Adi Prasetyo', 'VIII', 'Jl.Pasirkoja Gg Pasantren Dlm', 'L', 'Islam', 'Bandung', '2005-10-25', 'Buruh'),
-('0056090448', 'Jeki Nambagini', 'VIII', 'Inhoftank no.65', 'L', 'Islam', 'Timika', '2005-06-24', 'Karyawan Swasta'),
-('0056100975', 'Renaldi Setiadi', 'VII', 'Kp.Cilebak Rancamanyar Rt 01/03No.18', 'L', 'Islam', 'Bandung', '2005-12-02', 'Wiraswasta'),
-('0056120327', 'Bobby Renaldi', 'VIII', 'Kp.Bojong Koneng', 'L', 'Islam', 'Bandung', '2005-05-04', 'Wiraswasta'),
-('0056130574', 'Jerry Saftary', 'VIII', 'soekarno hatta blok desa', 'L', 'Islam', 'Bandung', '2005-01-09', ''),
-('0056150604', 'Arief Hidayat', 'VIII', 'Kopo Bihbul nata endah 3A', 'L', 'Islam', 'Bandar Lampung', '2005-08-24', ''),
-('0056160556', 'Andi Efendi', 'VIII', 'Karasak lama cibintinu gg.aki aksan', 'L', 'Islam', 'Bandung', '2005-11-16', ''),
-('0056170103', 'Mahar Dhani Alfajari Rusli', 'VIII', 'Jl.Mochtoha Gg Curugcandung', 'L', 'Islam', 'Bandung', '2005-01-06', 'Wiraswasta'),
-('0056211041', 'Grace Clarissa', 'VII', 'Jl. Taman Holis Indah I5 No.47', 'P', 'Kristen', 'Bandung', '2005-08-10', ''),
-('0056240590', 'Rizki Fajar', 'VIII', 'pagarsih gg.pelita no.137', 'L', 'Islam', 'Bandung', '2005-03-05', ''),
-('0056240719', 'Yorke Muhamad Aji Wardana', 'VIII', 'kebon kopi no.192', 'L', 'Islam', 'semarang', '2005-08-21', 'Karyawan Swasta'),
-('0056250666', 'Nanda Septia Kusuma Nugraha', 'VIII', 'Karyabakti', 'L', 'Islam', 'bandung', '2005-09-07', 'Wiraswasta'),
-('0056251292', 'Dea Setiawan', 'VII', 'Jalan Kopo Gang H Topek No 406/198A', 'L', 'Islam', 'Bandung', '2005-11-28', ''),
-('0056260847', 'Khosyi Fauzan', 'VIII', 'Komp.Cetarip Barat Jl.Citarip Kulon IV no.193/6', 'L', 'Islam', 'Bandung', '2005-03-02', ''),
-('0056320035', 'Setiadi Firmansyah', 'VIII', 'Jl.Jend Sudirman Gg Adil No.32', 'L', 'Islam', 'Bandung', '2005-05-18', 'Wiraswasta'),
-('0056320623', 'Muhammad David Sepriyadi Hartono', 'VIII', 'Nyengseret gg.amil 135', 'L', 'Islam', 'Bandung', '2005-09-24', ''),
-('0056350337', 'Mohamad Gian Rivaldi', 'VIII', 'Komp Griya Bandung Asri I Blok D 209', 'L', 'Islam', 'Bandung', '2005-01-21', 'Karyawan Swasta'),
-('0056410560', 'Ayu Purnama Sidik', 'VIII', 'kebon kelapa no.25', 'P', 'Islam', 'Bandung', '2005-01-13', ''),
-('0056420529', 'Muhamad Fajar', 'VIII', 'babakan ciamis', 'L', 'Islam', 'Bandung', '2005-07-10', 'Buruh'),
-('0056430643', 'Arick Setiabudi', 'VIII', 'cibaduyut raya gg.ibu ipong no.90', 'L', 'Islam', 'bandung', '2005-04-21', 'Wiraswasta'),
-('0056440314', 'Septian Nurdiansyah', 'VIII', 'Gg Kenon Jukut II No.125/26', 'L', 'Islam', 'Bandung', '2005-09-22', 'Wiraswasta'),
-('0056440915', 'Adi Ahmad', 'VII', 'Jl.Moch Toha Gg.Karasak Lama Cibintinu Rt.03 Rw.05', 'L', 'Islam', 'Bandung', '2005-06-23', 'Wiraswasta'),
-('0056460256', 'Ilham Amrulloh', 'VIII', 'Komp Bukit Indah Cikahuripan Blok B No.34', 'L', 'Islam', 'Bandung', '2005-03-11', 'Wiraswasta'),
-('0056480645', 'Ary Ardiansyah', 'VIII', 'sukaleeur VIIII no.445/198 A', 'L', 'Islam', 'bandung', '2005-05-29', 'Wiraswasta'),
-('0056490165', 'Bagus Solehudin', 'VIII', 'Jl.Caringin Gg Cikungkurak', 'L', 'Islam', 'Bandung', '2005-08-03', 'Wiraswasta'),
-('0056490445', 'Hendra', 'VIII', 'Kp.Ciherang Cigondewah Rahayu', 'L', 'Islam', 'Ciamis', '2005-08-12', 'Buruh'),
-('0056520824', 'Rizna Ananda Putri', 'VIII', 'Haji Achsan Blk 119', 'P', 'Islam', 'Bandung', '2005-05-20', ''),
-('0056530747', 'Resya Rostiawati', 'VIII', 'caringin gg.biba', 'P', 'Islam', 'Bandung', '2005-06-06', 'Buruh'),
-('0056540438', 'Boy Geovani Agi', 'VIII', 'Nyegseret 201/198 B', 'L', 'Islam', 'bandung', '2005-01-17', 'Karyawan Swasta'),
-('0056550378', 'Hendra Komara', 'VIII', 'Kp.Cibolang', 'L', 'Islam', 'Bandung', '2005-03-01', ''),
-('0056550890', 'Eri Hermawan', 'VII', 'Jl. Cibolerang barat', 'L', 'Islam', 'Bandung', '2005-10-19', 'Wiraswasta'),
-('0056560345', 'Rizki Atharik', 'VII', 'Jl.Sukapura No.16', 'L', 'Islam', 'Bandung', '2005-07-06', 'Buruh'),
-('0056560558', 'Arif Rahman Hakim', 'VIII', 'Babakan Ciparay Gg.H.Abdul Rojak', 'L', 'Islam', 'Bandung', '2005-06-22', ''),
-('0056560724', 'Detty Mustikasari', 'VIII', 'Kp.Palasari', 'P', 'Islam', 'Bandung', '2005-12-24', 'Wiraswasta'),
-('0056570389', 'Reza Yudistira', 'VIII', 'Kp.Citeureup Gg.Nurhadi II', 'L', 'Islam', 'Bandung', '2005-03-23', 'Wiraswasta'),
-('0056570814', 'Nike Sri Hartati', 'VIII', 'Gg.Tegallega 31A/20 C', 'P', 'Islam', 'Bandung', '2005-11-12', 'Wiraswasta'),
-('0056590111', 'Robby Rezkia Fauzy', 'VIII', 'Blok Sepatu No.88', 'L', 'Islam', 'Bandung', '2005-07-24', 'Wiraswasta'),
-('0056600051', 'Dandi Rizkiandi', 'VIII', 'Jl.Soekarno Hatta Gg Hasan', 'L', 'Islam', 'Bandung', '2005-05-30', 'Wiraswasta'),
-('0056640253', 'Fajar Afriadi', 'VIII', 'Jl.Inhofftank Gg Perikanan II', 'L', 'Islam', 'Bandung', '2005-04-17', 'Wiraswasta'),
-('0056710539', 'Perli Andrian', 'VIII', 'Kopo Citarip Barat', 'L', 'Islam', 'Wonogiri', '2005-05-14', 'Wiraswasta'),
-('0056720136', 'Jeri Ramdani', 'VIII', 'Jl.Mengger Girang IV', 'L', 'Islam', 'Bandung', '2005-12-24', 'Karyawan Swasta'),
-('0056760647', 'Daffa Rizky Nugraha', 'VIII', 'Komp.Sarijadi Jl.Sarimadu No.48 blok 25', 'L', 'Islam', 'bandung', '2005-10-22', 'Karyawan Swasta'),
-('0056791301', 'Jajang Nurjaman', 'VII', 'Gang Raden Dewi VI', 'L', 'Islam', 'Sumedang', '2005-09-03', ''),
-('0056830926', 'Eki Sastrawijaya', 'VII', 'Jl. H. Basuki 3', 'L', 'Islam', 'Bandung', '2005-12-12', ''),
-('0056850399', 'Agung Ramadan', 'VIII', 'Bapak suhaya no.10', 'L', 'Islam', 'Bandung', '2005-12-23', 'Buruh'),
-('0056900221', 'Donni Sanjaya', 'VIII', 'Jl.Astanaanyar No.164', 'L', 'Islam', 'Bandung', '2005-10-01', 'Wiraswasta'),
-('0056901231', 'Megawati', 'VII', 'jl.mengger girang rt.08 rw 08', 'P', 'Islam', 'Bandung', '2005-10-21', 'Wiraswasta'),
-('0056910820', 'Rima Anisa Putri', 'VIII', 'Kp.cisirung', 'P', 'Islam', 'Bandung', '2005-05-05', 'Wiraswasta'),
-('0056920505', 'Yosef Choerul Annam', 'VIII', 'suryani dalam III no.7', 'L', 'Islam', 'Cianjur', '2005-05-31', ''),
-('0056930552', 'Abi Karami', 'VIII', 'Cibaduyut Lama Komp.Sauyunan III No.1', 'L', 'Islam', 'Bandung', '2005-03-24', 'Wiraswasta'),
-('0056950606', 'Deandro Andhara', 'VIII', 'kopo sayati gg.hamidi no.92', 'L', 'Islam', 'Bandung', '2005-01-31', ''),
-('0056960012', 'Egi Robiansyah', 'VIII', 'Jl.Bbk Ciparay Gg Misbah', 'L', 'Islam', 'Bandung', '2005-04-14', 'Karyawan Swasta'),
-('0056961276', 'Yuli Sulistiawati', 'VII', 'Jl, Baru raya II No. 9 Rt. 04/03', 'P', 'Islam', 'Bandung', '2005-07-01', 'Wiraswasta'),
-('0056990827', 'Sherly Felli Yanti L', 'VIII', 'Nata endah I blok J.118', 'P', 'Islam', 'Bandung', '2005-02-18', 'Karyawan Swasta'),
-('0057000626', 'Reggy Shafta Hadi', 'VIII', 'Mekar mulya No.12', 'L', 'Islam', 'Bandung', '2005-02-06', ''),
-('0057001076', 'Dika Surya Perdana', 'VII', 'Komplek Permata Kopo Blok C No 53', 'L', 'Kristen', 'Bandung', '2005-04-17', ''),
-('0057011216', 'Sulistianti', 'VII', 'Kampung Bojng Asih', 'P', 'Islam', 'Bandung', '2005-12-14', ''),
-('0057020055', 'Ery Nugraha', 'VIII', 'Jl.Abdul Halim', 'L', 'Islam', 'Cimahi', '2005-08-22', 'Lainnya'),
-('0057020290', 'Asep Permana', 'VIII', 'Jl.Inhofftang Gg Perikanan 2', 'L', 'Islam', 'Bandung', '2005-12-23', 'Wiraswasta'),
-('0057030440', 'Deni Nugroho', 'VIII', 'Kp.Caringin', 'L', 'Islam', 'Sumedang', '2005-03-05', 'Wiraswasta'),
-('0057030570', 'Herlina', 'VIII', 'cibaduyut Kp.Warnasari', 'P', 'Islam', 'Bandung', '2005-09-05', ''),
-('0057040584', 'Rendy Ardiansyah', 'VIII', 'soekarno hatta no.371', 'L', 'Islam', 'Bandung', '2005-08-23', ''),
-('0057081204', 'Muhammad Arief Jayana', 'VII', 'Komplek Bumi Sukagalih Permai D21', 'L', 'Islam', 'Bandung', '2005-12-06', 'Karyawan Swasta'),
-('0057110220', 'Diki Wahyudi', 'VIII', 'Jl.Babakan Ciparay Gg Air Mancur I', 'L', 'Islam', 'Bandung', '2005-01-23', 'Karyawan Swasta'),
-('0057130669', 'Reza Ramdhani', 'VIII', 'baleendah jl.bale agung no.44', 'L', 'Islam', 'bandung', '2005-01-02', 'Buruh'),
-('0057150515', 'Dendi Mochamad Darwis', 'VIII', 'Kp.Mengger', 'L', 'Islam', 'Bandung', '2005-08-30', 'Wiraswasta'),
-('0057160518', 'Ervan Maulana', 'VIII', 'Babakan Ciparay Gg.Biasan', 'L', 'Islam', 'Bandung', '2005-03-14', 'Wiraswasta'),
-('0057170407', 'Farhan Saeful Rahman', 'VIII', 'Kopo gg.babakan kulit utara no.23', 'L', 'Islam', 'Bandung', '2005-07-01', 'Wiraswasta'),
-('0057190133', 'Gumilar Saputra', 'VIII', 'Jl.Inhofftank Gg Blok Desa', 'L', 'Islam', 'Bandung', '2005-02-02', 'Buruh'),
-('0057190766', 'Dewi Ayu Lestari', 'VIII', 'Pasudan Gg.h.Rais No.153/18 C', 'P', 'Islam', 'Bandung', '2005-09-23', 'Wiraswasta'),
-('0057200715', 'Vikri Ramdhani', 'VIII', 'astanaanyar', 'L', 'Islam', 'cirebon', '2005-01-01', 'PNS/TNI/Polri'),
-('0057210727', 'Dwiyanti', 'VIII', 'Pungkur No.159/18 c', 'P', 'Islam', 'Bandung', '2005-01-13', 'Buruh'),
-('0057251021', 'Raju Fajar Rahman', 'VII', 'Mengger Tengah', 'L', 'Islam', 'Bandung', '2005-10-29', ''),
-('0057270806', 'Ipul Saipulloh', 'VIII', 'Kp.Kiaracondong', 'L', 'Islam', 'Bandung', '2005-06-29', 'Buruh'),
-('0057280022', 'Muslim', 'VIII', 'Jl.Mengger Tengah No.56', 'L', 'Islam', 'Bandung', '2005-01-09', 'Buruh'),
-('0057290160', 'Aditya Candra Pratama', 'VIII', 'Babakan Sangkuriang', 'L', 'Islam', 'Bandung', '2005-02-08', 'Karyawan Swasta'),
-('0057360262', 'Mohamad Ilham Yusup', 'VIII', 'Jl.Mohtoha Gg Murdasan II', 'L', 'Islam', 'Bandung', '2005-09-16', 'Buruh'),
-('0057360512', 'Chandra Setiawan Komara', 'VIII', 'Komp.Bojong Malaka Indah D1-53', 'L', 'Islam', 'Bandung', '2005-08-10', 'Karyawan Swasta'),
-('0057380855', 'Haris Munandar', 'VII', 'Jalan Sampora', 'L', 'Islam', 'Bandung', '2005-06-25', 'Wiraswasta'),
-('0057381154', 'Fieshal Muhammad Haifa', 'VII', 'Jl. Baru Raya No. 256', 'L', 'Islam', 'Bandung', '2005-11-20', 'Wiraswasta'),
-('0057390206', 'Ahmar Maulana', 'VIII', 'Jl.Cibuntu Sayuran', 'L', 'Islam', 'Bandung', '2005-06-10', 'Wiraswasta'),
-('0057390419', 'Mochamad Lukman Aliansyah', 'VIII', 'Astana Anyar No.157/22 D', 'L', 'Islam', 'Bandung', '2005-07-31', 'Wiraswasta'),
-('0057430287', 'Aldi Syabiqul Ilham', 'VII', 'Kp Mengger Hilir', 'L', 'Islam', 'Bandung', '2005-07-11', 'Buruh'),
-('0057430586', 'Rian Hadiansyah Hambali', 'VIII', 'Situ Sipatahunan', 'L', 'Islam', 'Bandung', '2005-11-13', ''),
-('0057440082', 'Ade Lukmansyah', 'VIII', 'Jl.Ciburuy No.34/204B', 'L', 'Islam', 'Bandung', '2005-04-29', 'PNS/TNI/Polri'),
-('0057451255', 'Coba', 'VII', 'Jl. Kb. Kopi Gg. Karya Bakti', 'P', 'Islam', 'Bandung', '2005-07-09', 'Wiraswasta'),
-('0057470122', 'Dendy Firmansyah', 'VIII', 'Kp.Ciawitali', 'L', 'Islam', 'Bandung', '2005-07-29', 'Buruh'),
-('0057480564', 'Dzaky Faris Hafizh', 'VIII', 'Komp.Kopo permai II B 4 no.1', 'L', 'Islam', 'Bandung', '2005-11-24', 'Wiraswasta'),
-('0057490169', 'Dika Harya Syah Putra', 'VIII', 'Jl.Bapak Suhaya 2 No.58', 'L', 'Islam', 'Bandung', '2005-03-31', 'Wiraswasta'),
-('0057490341', 'M Davy Fergieana Setyawan', 'VIII', 'Kp.Cibiuk', 'L', 'Islam', 'Bandung', '2005-05-26', 'Karyawan Swasta'),
-('0057490986', 'Yunus Nur Ikhlas', 'VII', 'Jl. Mengger Hilir Rt 01/04', 'L', 'Islam', 'Bandung', '2005-10-04', 'PNS/TNI/Polri'),
-('0057510095', 'Dzaki Raihan', 'VIII', 'Kav.Ranca Intan 2', 'L', 'Islam', 'Bandung', '2005-04-26', 'Karyawan Swasta'),
-('0057510392', 'Rizki Aryana', 'VIII', 'sukaati I', 'L', 'Islam', 'Bandung', '2005-11-11', ''),
-('0057520087', 'Alpinas Padli', 'VIII', '-', 'L', 'Islam', 'Subang', '2005-06-09', 'Buruh'),
-('0057530466', 'Agung Ahmad Darajat', 'VIII', 'H. Safari No.181/22 A', 'L', 'Islam', 'Bandung', '2005-04-04', 'Wiraswasta'),
-('0057550302', 'Muhamad Ridwan', 'VIII', 'Jl.Pangampaan No.334 /19B', 'L', 'Islam', 'Bandung', '2005-03-11', 'Buruh'),
-('0057550692', 'Farrel Anggara Permana', 'VIII', 'jamika No.128/85', 'L', 'Islam', 'bandung', '2005-08-14', 'Wiraswasta'),
-('0057590571', 'Ilham Purnama Cahaya', 'VIII', 'Moch.Toha Gg.ciseureuh V', 'L', 'Islam', 'Bandung', '2005-07-28', ''),
-('0057650260', 'Leri Febriyana', 'VIII', 'Kp.Cijantung', 'L', 'Islam', 'Bandung', '2005-02-25', 'Lainnya'),
-('0057700367', 'Aripin', 'VIII', 'Cigondewah kidul', 'L', 'Islam', 'Bandung', '2005-03-08', ''),
-('0057740555', 'Afriano Ilham Agasi', 'VIII', 'cibadak gg.citepus no.68/9A', 'L', 'Islam', 'Bandung', '2005-11-03', ''),
-('0057760092', 'Christoporus', 'VIII', 'Jl.Caringin Gg Hasan II Blok Ado', 'L', 'Katholik', 'Medan', '2005-06-10', 'Buruh'),
-('0057760403', 'Aulia Rahman', 'VIII', 'Holis caringin no.339', 'L', 'Islam', 'Bandung', '2005-06-17', 'Wiraswasta'),
-('0057781030', 'Adam Miftah Farid', 'VII', 'Jl.Holis Gg.Ibu Itu', 'L', 'Islam', 'Bandung', '2005-12-30', 'Buruh'),
-('0057790004', 'Anggi Ramdani', 'VIII', 'Curug Candung No.6', 'L', 'Islam', 'Bandung', '2005-12-13', 'Karyawan Swasta'),
-('0057830987', 'Ade Sutrisna Abdul Rozak', 'VII', 'Jalan Sukabirus', 'L', 'Islam', 'Bandung', '2005-11-17', 'Buruh'),
-('0057880031', 'Rendy Ardianto', 'VIII', 'Jl.Laswi Blok Desa', 'L', 'Islam', 'Bandung', '2005-05-06', 'Buruh'),
-('0057880409', 'Hadi Permana', 'VIII', 'Cigondewah kidul', 'L', 'Islam', 'Bandung', '2005-03-31', 'Karyawan Swasta'),
-('0057920180', 'Muhamad Rafi Maulana', 'VII', 'Jl.Ters Holis', 'L', 'Islam', 'Bandung', '2005-07-27', 'Buruh'),
-('0057930967', 'M. Ramdan', 'VII', 'Gg. Rasdan Rt. 01/06 No. 32', 'L', 'Islam', 'Bandung', '2005-12-19', ''),
-('0057961176', 'Sarah Sri Sahyati', 'VII', 'BBk Ciseureuh Timur RT 04 / 07', 'P', 'Islam', 'Bandung', '2005-11-20', ''),
-('0058011273', 'Tantri Sri Hardianti', 'VII', 'Jl. Siti Munigar 22E Nyengseret Astanaanyar Bandun', 'P', 'Islam', 'Bandung', '2005-05-20', 'Wiraswasta'),
-('0058050408', 'Febby Nugraha Ariansyah', 'VIII', 'Cibadak Gg.Sereh No.144/9 B', 'L', 'Islam', 'Bandung', '2005-10-02', 'Wiraswasta'),
-('0058060040', 'Adit Maulana Yusuf', 'VIII', 'Jl.Asep Berlian Gg Bunga', 'L', 'Islam', 'Bandung', '2005-07-11', ''),
-('0058081214', 'Sopyannur', 'VII', 'Jalan Astananyar', 'L', 'Islam', 'Cianjur', '2005-11-17', ''),
-('0058140656', 'Hafizh Kurnia Degano', 'VIII', 'cibaduyut blok lumbung', 'L', 'Islam', 'Bekasi', '2005-07-27', 'Karyawan Swasta'),
-('0058150192', 'Taupik Ismail', 'VII', 'Jl.Madesa', 'L', 'Islam', 'Bandung', '2005-03-28', 'Wiraswasta'),
-('0058160816', 'Putri Ayu Lestari', 'VIII', 'Luna IV No.48/238', 'P', 'Islam', 'Bandung', '2005-04-05', ''),
-('0058170800', 'Amellinda Koestary', 'VIII', 'Kp.Cilebak desa rancamanyar', 'P', 'Islam', 'Cilacap', '2005-06-16', 'Wiraswasta'),
-('0058170957', 'Cecep Jalaludin', 'VII', 'Jalan Ciparay tengah RT/RW 04/06', 'L', 'Islam', 'Bandung', '2005-04-10', 'Wiraswasta'),
-('0058230437', 'Ari Ramadhan', 'VIII', 'Sriwijaya II Gg.VI No.19', 'L', 'Islam', 'bandung', '2005-01-11', 'Wiraswasta'),
-('0058240315', 'Septiyan Rahmawan', 'VIII', 'Jl.Pagarsih Gg Sukapakir Dlm III', 'L', 'Islam', 'Bandung', '2005-09-29', 'Buruh'),
-('0058251183', 'Alam Nugraha', 'VII', 'Komplek BMI Blok H2 No 64', 'L', 'Islam', 'Bandung', '2005-09-19', ''),
-('0058251253', 'Devi Asri Novitasari', 'VIII', 'Jalan Moh.Toha, gg Haji Mukti RT/RW 01/03', 'P', 'Islam', 'Bandung', '2005-11-12', ''),
-('0058270508', 'Agung Ibrahim', 'VIII', 'Babakan Ciparay Gg.ucu', 'L', 'Islam', 'Bandung', '2005-04-10', 'Buruh'),
-('0058320694', 'Garin Alpiansyah', 'VIII', 'Pagarsih Gg.Holili', 'L', 'Islam', 'bandung', '2005-07-02', 'Wiraswasta'),
-('0058320834', 'Yesi Herdiansyah', 'VIII', 'Cijerah', 'P', 'Islam', 'Ciamis', '2005-07-02', 'Wiraswasta'),
-('0058350141', 'Muhammad Iqbal Abdullah', 'VIII', 'Jl.Batu Karut', 'L', 'Islam', 'Bandung', '2005-07-30', 'Karyawan Swasta'),
-('0058350736', 'Mega Apriyanti', 'VIII', 'Situ Gunting Barat no.15', 'P', 'Islam', 'Bandung', '2005-04-01', 'Buruh'),
-('0058380548', 'Tommy Wijaya', 'VIII', 'Komp.Rancamanyar Regency 2 Jl.Nuri no.31', 'L', 'Islam', 'Lubuk dalam', '2005-03-14', 'Wiraswasta'),
-('0058400608', 'Djihal Khamal Rizqi Fauzi', 'VIII', 'Hasyim wahid gg.crangrang timur no.6', 'L', 'Islam', 'Bandung', '2005-07-13', 'Wiraswasta'),
-('0058420461', 'Sahrul', 'VIII', 'Nyengseret Selatan No.400/198 B', 'L', 'Islam', 'bandung', '2005-06-12', 'Wiraswasta'),
-('0058420836', 'Yuni Nur Rohimi', 'VIII', 'Pasir koja', 'P', 'Islam', 'Bandung', '2005-08-07', 'Buruh'),
-('0058430661', 'Mochamad Devin Risnandar Pasya', 'VIII', 'peta gg.jamhari', 'L', 'Islam', 'Bandung', '2005-03-12', 'Wiraswasta'),
-('0058480952', 'Aldi Renaldi', 'VII', 'Cigondewah Rahayu Rt.04 Rw 01 Bandung', 'L', 'Islam', 'Bandung', '2005-07-01', ''),
-('0058490510', 'Alwan Muzafar', 'VIII', 'Kp.Parung Halang Gg.Jati IV', 'L', 'Islam', 'Bandung', '2005-04-17', 'Karyawan Swasta'),
-('0058500714', 'Sandy Prastyo', 'VIII', 'Karapitan 2 No.11 B', 'L', 'Islam', 'bandung', '2005-05-03', 'Wiraswasta'),
-('0058540587', 'Richard Septiandi Karim', 'VIII', 'paralon gg.sawargi', 'L', 'Islam', 'Bandung', '2005-09-05', ''),
-('0058590425', 'Rendy Argiya Agustian', 'VIII', 'Kp.Baleendah', 'L', 'Islam', 'Sukabumi', '2005-08-26', 'Wiraswasta'),
-('0058590611', 'Guruh Maulana', 'VIII', 'Jendral Sudirman gg.pasir anyar', 'L', 'Islam', 'Bandung', '2005-12-18', ''),
-('0058600648', 'Detri Septiawan', 'VIII', 'Kp.Mahkeling Blok C8', 'L', 'Islam', 'bandung', '2005-09-03', 'Wiraswasta'),
-('0058630334', 'Hindra Gunawan', 'VIII', 'Jl.Cigiringsing', 'L', 'Islam', 'Bandung', '2005-06-25', 'Karyawan Swasta'),
-('0058640182', 'Nova Satria Nugraha', 'VII', 'Jl.Kopo Gg Bp Merta No.35', 'L', 'Islam', '', '2005-11-28', 'Lainnya'),
-('0058701184', 'Alam Syah', 'VII', 'Jalan Mochamad Toha Gang Eris 58', 'L', 'Islam', 'Bandung', '2005-11-04', ''),
-('0058710349', 'Ryan Andriansyah', 'VIII', 'Paledang', 'L', 'Islam', 'Bandung', '2005-09-28', 'Karyawan Swasta'),
-('0058750431', 'Tri Aswar Ramadhan', 'VIII', 'PLN Dalam No.80', 'L', 'Islam', 'Bandung', '2005-01-09', 'Wiraswasta'),
-('0058760225', 'Indra Ardiansyah', 'VII', 'Jl.Kopo gg H Taupik No.507', 'L', 'Islam', 'Bandung', '2005-05-29', 'Karyawan Swasta'),
-('0058760933', 'Muhammad Lukman Baihaqi', 'VII', 'Jl.Bbk Tarogong Rt 06/05 Kel Sukaasih Kec Bojonglo', 'L', 'Islam', 'Bandung', '2005-10-10', 'Buruh'),
-('0058770331', 'Fahrul Mochamad Abizar', 'VIII', 'Babakan Tarogong', 'L', 'Islam', 'Bandung', '2005-04-15', 'Karyawan Swasta'),
-('0058790047', 'Alza Frimus Sasabila', 'VIII', 'Jl.Sukamenak  Gg H Sarbini No.7B', 'L', 'Islam', 'Bandung', '2005-05-08', 'Karyawan Swasta'),
-('0058821257', 'Eva Ofiyanti', 'VII', 'Jl.Kebon Kalapa No.25 Rt.01 Rw.02', 'P', 'Islam', 'Bandung', '2005-09-01', ''),
-('0058840374', 'Diang Randi', 'VIII', 'Andir RI Winata', 'L', 'Islam', 'Tasikmalaya', '2005-05-09', ''),
-('0058850569', 'Helmi Pebriyanti', 'VIII', 'cibaduyut raya gg.mamaja', 'P', 'Islam', 'Bandung', '2005-02-18', ''),
-('0058880324', 'Ali Rohman Irawan', 'VIII', 'Kp.Cilebak', 'L', 'Islam', 'Bandung', '2005-04-14', 'Wiraswasta'),
-('0058880767', 'Emelia Fajrin', 'VIII', 'Gg.H.Hasan II', 'P', 'Islam', 'Bandung', '2005-09-23', 'Karyawan Swasta'),
-('0058890803', 'Gia Aderiana Alawiah', 'VIII', 'Pasirkoja Gg.Satata Sariksa', 'P', 'Islam', 'Garut', '2005-11-07', 'Wiraswasta'),
-('0058900610', 'Feri Apriyanto', 'VIII', 'holis selatan', 'L', 'Islam', 'Bandung', '2005-04-22', ''),
-('0058910847', 'Deril Keny Adam', 'VII', 'Jalan Radio Babakan Tanjung No 7', 'L', 'Islam', 'Bandung', '2005-08-26', 'Buruh'),
-('0058930020', 'Ivan Hudi Aras', 'VIII', '-', 'L', 'Islam', 'Bandung', '2005-12-23', 'Buruh'),
-('0058930336', 'Langlang Tiana Fauzan', 'VIII', 'Jl.Kopo Cirangrang No.96', 'L', 'Islam', 'Bandung', '2005-05-28', 'Buruh'),
-('0058930406', 'Eriansyah', 'VIII', 'Sasak gantung no.44/18 c', 'L', 'Islam', 'Bandung', '2005-10-26', 'Lainnya'),
-('0058941283', 'Alvin Farrel Susanto', 'VII', 'Setra Duta Cemara K2-16', 'L', 'Islam', 'Bandung', '2005-11-22', ''),
-('0058960805', 'Indah Yuliasri', 'VIII', 'inhofftank', 'P', 'Islam', 'Bandung', '2005-07-11', 'Wiraswasta'),
-('0058961181', 'Aditya Mahendra', 'VII', 'Jalan Kopo Blok Tempe No 363/198A', 'L', 'Islam', 'Bandung', '2005-10-19', ''),
-('0059010202', 'Agisna Rihadz Fauzi', 'VIII', 'Jl.Kopo Cirangrang Gg Babakan Baru I No.20', 'L', 'Islam', 'Bandung', '2005-07-28', 'Wiraswasta'),
-('0059010211', 'Andi Prasetyo', 'VII', 'Jl.Bbk Irigasi Gg AMD VIII', 'L', 'Islam', 'Bandung', '2005-11-13', 'Wiraswasta'),
-('0059051054', 'Muhammad Daniel Parhan', 'VII', 'Jl. Soekarno Hatta Gg.Situgunting', 'L', 'Islam', 'Bandung', '2005-05-24', 'Wiraswasta'),
-('0059091243', 'Santi sulastri', 'VII', 'Jl. Cibaduyut Gg. Terusan maeja No.10 rt 02/02', 'P', 'Islam', 'Bandung', '2005-12-21', ''),
-('0059110294', 'Fariz Rahmat Mulyadi', 'VIII', 'Jl.', 'L', 'Islam', 'Cirebon', '2005-02-14', ''),
-('0059130595', 'Abdul Majid', 'VIII', 'Kp.bojongsoang', 'L', 'Islam', 'Bandung', '2005-03-18', ''),
-('0059140335', 'Indra Lesmana', 'VIII', 'Jl.Kopo Gg A Sutisna', 'L', 'Islam', 'Bandung', '2005-01-13', 'Wiraswasta'),
-('0059141316', 'Soni Ibrahim', 'VII', 'Jalan Mengger Tengah', 'L', 'Islam', 'Bandung', '2005-12-05', 'Lainnya'),
-('0059150275', 'Soni Faisal', 'VIII', 'Kp.Babakan Mugraha', 'L', 'Islam', 'Bandung', '2005-07-12', 'Lainnya'),
-('0059160455', 'Reformasi Jeri Heryadin', 'VIII', 'karasak lama cibintinu gg.palita II', 'L', 'Islam', 'bandung', '2005-01-07', 'Lainnya'),
-('0059190312', 'Salman Syahrul Sidiq', 'VIII', 'Jl.', 'L', 'Islam', 'Bandung', '2005-07-08', 'PNS/TNI/Polri'),
-('0059250474', 'Fazri Madani', 'VIII', 'Peta Gg.Jamhari No.168', 'L', 'Islam', 'Bandung', '2005-03-22', 'Buruh'),
-('0059260503', 'Syarief Nugraha', 'VIII', 'inhofftank', 'L', 'Islam', 'Bandung', '2005-05-14', 'Wiraswasta'),
-('0059270484', 'Mochamad Azi', 'VIII', 'Cigondewah rahayu', 'L', 'Islam', 'Bandung', '2005-10-17', ''),
-('0059340024', 'Mochammad Achsan Firdaus', 'VIII', 'Jl.Gempol Sari', 'L', 'Islam', 'Bandung', '2005-05-06', 'Lainnya'),
-('0059350071', 'Reksi Maulana', 'VIII', 'Kp.Bojong Suren No.100', 'L', 'Islam', 'Cirebon', '2005-11-06', 'Wiraswasta'),
-('0059360947', 'Wangsa Iqbal', 'VII', 'jl.Mengger4 Girang Gg.Aki Kayat No.16 Bandung', 'L', 'Islam', 'Bandung', '2005-12-01', 'Wiraswasta'),
-('0059370471', 'Devara Muhammad Azhar', 'VIII', 'Kp.Leuwi Melang', 'L', 'Islam', 'Bandung', '2005-08-27', ''),
-('0059380959', 'Dandi Mardiansyah', 'VII', 'Jalan Leuwi Panjang', 'L', 'Islam', 'Bandung', '2005-03-15', ''),
-('0059400223', 'Fahtan Naufal', 'VII', 'Jl.Nyengseret No.22A/94', 'L', 'Islam', 'Bandung', '2005-08-14', 'Buruh'),
-('0059470622', 'Muhammad Fikri Islamey', 'VIII', 'sasak gantung no.70/10B', 'L', 'Islam', 'Bandung', '2005-04-09', ''),
-('0059471321', 'Yudi Agung Senjaya', 'VII', 'Jalan Gempol Sarii', 'L', 'Islam', 'Bandung', '2005-04-12', 'Karyawan Swasta'),
-('0059480210', 'Ali Nur Oktavian', 'VII', 'Jl.Cibaduyut Dlm', 'L', 'Islam', 'Bandung', '2005-10-18', 'Wiraswasta'),
-('0059491065', 'Yes Roni Gultom', 'VII', 'Bumi Asri Gempol Sari Blok A No.26 Rt 04/05', 'L', 'Kristen', 'Bandung', '2005-11-18', 'Wiraswasta'),
-('0059510716', 'Vitra Januar Saputra', 'VIII', 'Komp.Graha Rancamanyar Jl.Angger I no.15', 'L', 'Islam', 'bandung', '2005-01-18', 'Wiraswasta'),
-('0059520306', 'Prima Firman Hadi', 'VIII', 'Kp.Ciputat', 'L', 'Islam', 'Bandung', '2005-03-07', 'Karyawan Swasta');
-INSERT INTO `siswa` (`NISN`, `Nama`, `Kelas`, `alamat`, `jk`, `agama`, `tmp_lahir`, `tgl_lahir`, `pek_ortu`) VALUES
-('0059530588', 'Rifqi Fadliana', 'VIII', 'cibiuk kp.cisuminta no.7', 'L', 'Islam', 'Bandung', '2005-08-01', ''),
-('0059540812', 'Mya Audina', 'VIII', 'Gg.mekar sari I', 'P', 'Islam', 'Bandung', '2005-04-26', 'Wiraswasta'),
-('0059550708', 'Muhamad Ramdan', 'VIII', 'Leuwi panjang Gg.kebon kalapa no.51', 'L', 'Islam', 'bandung', '2005-12-09', 'Karyawan Swasta'),
-('0059560695', 'Hafidudin Riziq', 'VIII', 'Cetarip Barat No.3', 'L', 'Islam', 'bandung', '2005-05-24', 'Wiraswasta'),
-('0059570224', 'Imam Sihabudin', 'VII', 'Jl.Kopo Gg Sukaleur', 'L', 'Islam', 'Bandung', '2005-05-25', 'Buruh'),
-('0059580906', 'Romi Naufal Shany', 'VII', 'Jl. Kopo Sayati Gg. madkasih Kec. Margahayu Rt 04/', 'L', 'Islam', 'Bandung', '2005-10-20', 'Buruh'),
-('0059600339', 'Moch Fahmi Mahesa Putra', 'VIII', 'Kp.Coblong No.14', 'L', 'Islam', 'Bandung', '2005-02-09', 'Karyawan Swasta'),
-('0059610038', 'Timur Angin', 'VIII', 'Jl.Gumuruh No.24A/113', 'L', 'Islam', 'Bandung', '2005-01-20', 'Karyawan Swasta'),
-('0059620576', 'Kurniadi Sulistiana', 'VIII', 'Kp.sukaluyu', 'L', 'Islam', 'Bandung', '2005-01-17', ''),
-('0059620809', 'Mia Sri Rahayu', 'VIII', 'Jl.Moch.Toha Gg.salpian no.138', 'P', 'Islam', 'Bandung', '2005-05-07', 'Buruh'),
-('0059630117', 'Bagas Hadi Saputro', 'VIII', 'Griya Panorama Inda/19h A 4', 'L', 'Islam', 'Bandung', '2005-03-19', 'Karyawan Swasta'),
-('0059630732', 'Imer Triastuti', 'VIII', 'Karees Kulon No.2/33', 'P', 'Islam', 'Bandung', '2005-05-25', 'Wiraswasta'),
-('0059671122', 'Muhammad Fajar Ramadhan', 'VII', 'Jalan Kopo Gang Paninengan II No 218/196A', 'L', 'Islam', 'Bandung', '2005-01-04', ''),
-('0059680144', 'Reza Apriansyah', 'VIII', 'Parung Halang', 'L', 'Islam', 'Garut', '2005-04-10', 'Wiraswasta'),
-('0059700759', 'Angelina Nurputriyani', 'VIII', 'pelindung hewan Gg.bapak atam iskandar no.14', 'P', 'Islam', 'Bandung', '2005-10-10', 'Buruh'),
-('0059710999', 'Dicky Setiawan', 'VII', 'Jalan Mengger Girang No 23', 'L', 'Islam', 'Bandung', '2005-10-18', 'Karyawan Swasta'),
-('0059761202', 'Muamar Gustian', 'VII', 'Jalan Cibuntu Selatan Gang Hasan Mugni', 'L', 'Islam', 'Garut', '2005-08-11', ''),
-('0059770798', 'Aisyah Wais Al Qor\'ni', 'VIII', 'cibuntu tengah', 'P', 'Islam', 'Bandung', '2005-05-07', 'Wiraswasta'),
-('0059780246', 'Azi Tia Sumarna', 'VIII', 'Jl.Caringin No.88', 'L', 'Islam', 'Bandung', '2005-08-25', 'Wiraswasta'),
-('0059780468', 'Ari Surya Pradana', 'VIII', 'Karasak lama', 'L', 'Islam', 'Bandung', '2005-05-09', ''),
-('0059790301', 'Muhamad Fajar Andrian', 'VIII', 'Jl.Mohtoha Gg Bbk Ciseureuh Timur', 'L', 'Islam', 'Bandung', '2005-05-04', 'Karyawan Swasta'),
-('0059800027', 'Muhammad Arga Fasya', 'VIII', 'Kav Rancaemas H.', 'L', 'Islam', 'Bandung', '2005-08-24', 'Karyawan Swasta'),
-('0059830579', 'Mochamad Robiyansyah', 'VIII', 'Kp.Reungascondong', 'L', 'Islam', 'Bandung', '2005-08-02', ''),
-('0059840328', 'Dadan Husen Firmansyah', 'VIII', 'Babakan', 'L', 'Islam', 'Bandung', '2005-01-25', 'Buruh'),
-('0059930668', 'Rahangga Dwi Putra', 'VIII', 'Terusan pasirkoja no.187', 'L', 'Islam', 'bandung', '2005-07-28', 'Wiraswasta'),
-('0059970613', 'Hasyim Hasna Habib', 'VIII', 'babakan tarogong 122 A', 'L', 'Islam', 'Bandung', '2005-03-13', ''),
-('0059980330', 'Deni Yulianto', 'VIII', 'Jl.Kebon Kopi Gg Karya Bakti No.50', 'L', 'Islam', 'Bandung', '2005-07-10', 'Karyawan Swasta'),
-('0061002120', 'M Fikri Akbari', 'VII', 'Jl. Pagarsih Gg. Satibi No. 313/87', 'L', 'Islam', 'Bandung', '2006-10-03', 'Wiraswasta'),
-('0061006124', 'Ajeng Mela Sasti', 'VII', 'Jln. Sindang Palay', 'L', 'Islam', 'Bandung', '2006-08-10', 'Wiraswasta'),
-('0061011099', 'Anton Julian Maulana', 'VII', 'Kampung Ciguriang Hilir', 'L', 'Islam', 'Bandung', '2006-07-02', 'Wiraswasta'),
-('0061012084', 'Ahmad Aldi Hardiansyah', 'VII', 'Gang Babakan Ciseureuh Timur No 82/204A Jalan Moch', 'L', 'Islam', 'Bandung', '2006-09-27', 'Karyawan Swasta'),
-('0061017110', 'Taufik Hilmawan Saputra', 'VII', 'Jalan Cibaduyut Gang. Ma Maja No. 06 RT/RW 03/05', 'L', 'Islam', 'Bandung', '2006-06-13', 'Wiraswasta'),
-('0061037084', 'Diki Sahidan', 'VII', 'Mengger Tengah', 'L', 'Islam', 'Bandung', '2006-06-19', 'Buruh'),
-('0061038119', 'Fikri Arya Nugraha', 'VII', 'Jl. Caringin No. 178 Rt.01/05', 'L', 'Islam', 'Bandung', '2006-01-09', 'Wiraswasta'),
-('0061039125', 'Erika Mega Silvia', 'VII', 'Jl.Pagarsih Gg.Citepus Dalam II No.13 Rt.08 Rw.03', 'P', 'Islam', 'Bandung', '2006-07-30', 'Wiraswasta'),
-('0061048113', 'Riky Fauzi Budiman', 'VII', 'Kampung Cilisung', 'L', 'Islam', 'Bandung', '2006-07-01', ''),
-('0061049109', 'Sendi Ferdiansyah', 'VII', 'Jl. Terusan Suryani Gg. Al-Husna 2', 'L', 'Islam', 'Bandung', '2006-02-07', 'Buruh'),
-('0061050417', 'Luki Hidayat', 'VIII', 'Ancol Utara I No.46/136 D', 'L', 'Islam', 'Cianjur', '2006-01-14', 'Wiraswasta'),
-('0061055021', 'Bagus Febriyan Muhammad Putra', 'VII', 'Bojong Malaka Indah H 5 -20', 'L', 'Islam', 'Jakarta', '2006-02-22', 'Karyawan Swasta'),
-('0061055107', 'Cecep Sukma', 'VII', 'Babakan Tarogong Gang Raden Dewi VI RT 10', 'L', 'Islam', 'Bandung', '2006-10-26', ''),
-('0061056109', 'Rafi Daryl Hafiz', 'VII', 'Jl. Karasak Baru No. 15', 'L', 'Islam', 'Bandung', '2006-06-28', 'Wiraswasta'),
-('0061064110', 'Anla Rijabani Ramsus', 'VII', 'Jl. Cijerah I Blok V No 83 RT 05/05', 'L', 'Islam', 'Bandung', '2006-09-30', ''),
-('0061065092', 'Gungun Gunawan', 'VII', 'Jl. Astana Anyar No.157 / 22 D RT.05/RW.03 Bandung', 'L', 'Islam', 'Garut', '2006-08-23', 'Wiraswasta'),
-('0061070902', 'Rahmat Riyanto', 'VII', 'Jalan Emong 28/16D', 'L', 'Islam', 'Bandung', '2006-03-27', 'Wiraswasta'),
-('0061071036', 'Dika Anggara', 'VII', 'Jl. Pelindung Hewan Gg. Mesjid Darusallam Rt. 01/0', 'L', 'Islam', 'Bandung', '2006-03-01', 'Wiraswasta'),
-('0061071061', 'Rifqi Ahmad Febriansyah', 'VII', 'Jl.Cijerah Kp.Sayuran Gg.Manunggal II', 'L', 'Islam', 'Bandung', '2006-02-05', 'Karyawan Swasta'),
-('0061073121', 'Wifaldi', 'VII', 'Gang Curug Candung No 80', 'L', 'Islam', 'Bandung', '2006-09-02', ''),
-('0061074086', 'Muhammad Rizky Alfharizy', 'VII', 'Jalan Kopo Gang Sukaleueur XI No 76', 'L', 'Islam', 'Bandung', '2006-01-19', 'Karyawan Swasta'),
-('0061076087', 'Rienaldi', 'VII', 'Kampung Nyenang', 'L', 'Islam', 'Cimahi', '2006-05-05', 'Wiraswasta'),
-('0061087106', 'Rafa Akhrojal', 'VII', 'Jl.Aki Padma', 'L', 'Islam', 'Bandung', '2006-05-14', 'Wiraswasta'),
-('0061088091', 'Utep Kusmianto', 'VII', 'Jalan Caringin Gang Blok Upat RT/RW 03/13', 'L', 'Islam', 'Bandung', '2006-06-16', 'Wiraswasta'),
-('0061131098', 'Riswanto', 'VII', 'Blok Lumbung', 'L', 'Islam', 'Pemalang', '2006-09-25', 'Wiraswasta'),
-('0061180846', 'Angga Permana Saputra', 'VII', 'Jalan Cibuntu Timur', 'L', 'Islam', 'Bandung', '2006-08-20', 'Buruh'),
-('0061220960', 'Dias Wahyudin', 'VII', 'Gg. Cikawao dalam ii no.12-36A', 'L', 'Islam', 'Bandung', '2006-01-01', ''),
-('0061241057', 'Nana Septiana', 'VII', 'Jl. Moch Toha No.27', 'L', 'Islam', 'Bandung', '2006-09-25', 'Buruh'),
-('0061341193', 'Gema Fajar Anugerah', 'VII', 'Jalan Luna no 63/23 B', 'L', 'Islam', 'Bandung', '2006-03-11', 'Buruh'),
-('0061371126', 'Nabil Rayhan', 'VII', 'Jalan Cibolerang Gang Abd Rohman No 2', 'L', 'Islam', 'Selayar', '2006-12-05', ''),
-('0061431063', 'Soni Setiawan', 'VII', 'Jl. Babakan Irigasi Gg.Amd 8', 'L', 'Islam', 'Bandung', '2006-11-04', 'Buruh'),
-('0061451244', 'Sinta Maulida', 'VII', 'Jl. Cingkungkurak Rt 02 Rw 06', 'P', 'Islam', 'Bandung', '2006-07-03', 'Wiraswasta'),
-('0061490191', 'Raka Apriana', 'VII', 'JL. Suka Pakir Dalam 2 No. 61/197C', 'L', 'Islam', 'Bandung', '2006-04-08', 'Wiraswasta'),
-('0061501022', 'Rendi Andika Suwandi', 'VII', 'Kampung Cibiana', 'L', 'Islam', 'Bandung', '2006-04-26', 'Wiraswasta'),
-('0061511112', 'Fitrah Ramadhan', 'VII', 'Jalan Kopo No 256/196B Blok 270 Gang Mesjid Jami A', 'L', 'Islam', 'Bandung', '2006-01-03', ''),
-('0061541203', 'Muhamad Rizki', 'VII', 'Sukaati V No 14', 'L', 'Islam', 'Bandung', '2006-06-04', ''),
-('0061590565', 'Efsa Firmansyah', 'VIII', 'Moch.Toha Gg.Murdasan', 'L', 'Islam', 'Bandung', '2006-03-22', ''),
-('0061601144', 'Alvin Defanno Manasye Arya S', 'VII', 'Jl. Caringin Gg. Lumbung I', 'L', 'Islam', 'Pasuruan', '2006-09-08', 'Wiraswasta'),
-('0061650907', 'Septian Delkantira', 'VII', 'Sekekuda RT. 01 RW. 07', 'L', 'Islam', 'Bandung', '2006-09-27', 'Tidak bekerja'),
-('0061690881', 'Al Farel Rinaldy', 'VII', 'Jalan Radio STT Telkom No 62', 'L', 'Islam', 'Bandung', '2006-05-16', ''),
-('0061741145', 'Alya Faizah Firgi', 'VII', 'Komplek Rahayu 3 B7 132', 'P', 'Islam', 'Bandung', '2006-05-02', 'Wirausaha'),
-('0061751038', 'Erika Kurnia', 'VII', 'Jl.Terusan Jamika Gg.Mama Difa Rt.02/05', 'P', 'Islam', 'Bandung', '2006-03-15', 'Wiraswasta'),
-('0061761143', 'Alif Rasidi', 'VII', 'Jl.Pelindung Hewan Gg Darussalam No.,26 Bandung', 'L', 'Islam', 'Bandung', '2006-04-14', 'Wiraswasta'),
-('0061781049', 'Mochamad Sidik Permana', 'VII', 'Jl. Otista Awiwulung No. 151 Rt 04/08', 'L', 'Islam', 'Bandung', '2006-06-24', 'Wiraswasta'),
-('0061790873', 'Rapid Ariq Hammam', 'VII', 'Jalan Waruga Jaya No 24/203', 'L', 'Islam', 'Bandung', '2006-08-29', 'Wiraswasta'),
-('0061861234', 'Natalia Elisabeth', 'VII', 'Situ Gunting Rt 03/09 No.14 Kel Bacip Kec Bacip', 'P', 'Kristen', 'Bandung', '2006-03-22', 'Wiraswasta'),
-('0061920707', 'Muhammad Fazri Ihsanuddin', 'VIII', 'Sindang palay no.128', 'L', 'Islam', 'bandung', '2006-03-22', 'Petani'),
-('0061931177', 'Wawan Kurniawan', 'VII', 'Jl. Terusan Jamika Gg. Bah Pian RT 10/ 06', 'L', 'Islam', 'Bandung', '2006-09-01', 'Wiraswasta'),
-('0061940671', 'Rudi Cahyadi', 'VIII', 'suryani no.17', 'L', 'Islam', 'bandung', '2006-03-06', 'Buruh'),
-('0061951218', 'Yudhistira Arya Rusmana', 'VII', 'Kampung Sekeandur', 'L', 'Islam', 'Bandung', '2006-07-17', 'Wiraswasta'),
-('0061980856', 'Hizkia Andre Gunawan', 'VII', 'Jalan Kopo Gang Masjid Al Hidayah No 33', 'L', 'Kristen', 'Bandung', '2006-03-21', 'Wiraswasta'),
-('0061980928', 'Febby Summaker Agustinus', 'VII', 'Jalan Pagarsih RT/RW 05/09 Kel. Jamika Kec. Bojong', 'L', 'Islam', 'Bandung', '2006-08-02', 'Wiraswasta'),
-('0061991318', 'Tibyan Alfath Syarif', 'VII', 'Jalan CIbolerang No 160', 'L', 'Islam', 'Bandung', '2006-04-25', ''),
-('0062041258', 'Ikeu Fuji Priantini', 'VII', 'Jl. Babakan Ciparay Gg. H. Abdul Rojak No.287', 'P', 'Islam', 'Bandung', '2006-05-12', 'Wiraswasta'),
-('0062050739', 'Neng Resi Russhintari', 'VIII', 'Jl.Moch.Toha Gg.Mesjid', 'P', 'Islam', 'Garut', '2006-04-08', 'Wiraswasta'),
-('0062101211', 'Rio Romansyah', 'VII', 'Jalan Cisirung Kampung Cibedug Girang', 'L', 'Islam', 'Bandung', '2006-11-22', ''),
-('0062131148', 'Cahyana', 'VII', 'Kampung Ciguriang Girang RT. 02 RW. 04', 'L', 'Islam', 'Bandung', '2006-01-31', 'Wiraswasta'),
-('0062181281', 'Aldi Rinaldi', 'VII', 'Jalan Rajawali Timur No 158 Gang Budi Karya', 'L', 'Islam', 'Bandung', '2006-10-31', 'Sudah Meninggal'),
-('0062191039', 'Fauzi Abdulloh Firdaus', 'VII', 'Jl. Cibuntu Timur', 'L', 'Islam', 'Bandung', '2006-07-29', 'Wiraswasta'),
-('0062270935', 'Muhamad Ichsan Alfarisi', 'VII', 'Cibolerang Barat Rt.05 Rw.01 Bandung', 'L', 'Islam', 'Bandung', '2006-05-01', ''),
-('0062291087', 'Moch. Hafidz Hadiansyah', 'VII', 'Jl.Cibaduyut Lama Komp. Sauyunan Mas Raya I No.17', 'L', 'Islam', 'Bandung', '2006-02-16', ''),
-('0062301077', 'Edwin Yoga Pratama', 'VII', 'Gang Lumbung 4 Caringin Bandung', 'L', 'Islam', 'Boyolali', '2006-07-10', 'Wiraswasta'),
-('0062301186', 'Dadang Dicky', 'VII', 'Jl. Mengger Girang Rt 03/08', 'L', 'Islam', 'Bandung', '2006-05-11', 'Karyawan Swasta'),
-('0062470969', 'Muhamad Iqbal Syah Putra', 'VII', 'Jl. Caringin Gg. Lumbung 2 Rt. 02/03', 'L', 'Islam', 'Bandung', '2006-10-01', ''),
-('0062521119', 'Maulana Yusuf', 'VII', 'Jalan Sadang Pangan', 'L', 'Islam', 'Bandung', '2006-03-23', 'Pedagang Kecil'),
-('0062550863', 'Maulana Mizan Fadillah', 'VII', 'Jalan Sukamenak No 34 Curug Dog Dog', 'L', 'Islam', 'Bandung', '2006-07-12', 'Karyawan Swasta'),
-('0062551259', 'INDAH SRI PUTRI RAMDANI', 'VII', 'JL. CIBOLERANG N0 153', 'P', 'Islam', 'Bandung', '2006-01-01', 'Wiraswasta'),
-('0062610940', 'Rifki Adji Zulfahmi', 'VII', 'Dayeuhkolot Bojong Asih Rt. 03 Rw.05', 'L', 'Islam', 'Klaten', '2006-05-15', 'Wiraswasta'),
-('0062711089', 'Muhamad Fajar', 'VII', 'Jl. Babakan Ciamis No.260', 'L', 'Islam', 'Bandung', '2006-05-16', ''),
-('0062721158', 'Imania Sabila', 'VII', 'Jl. Leuwi Panjang Gg. Rukun Sari I No. 16 Rt. 05 R', 'P', 'Islam', 'Bandung', '2006-05-26', 'Wiraswasta'),
-('0062780914', 'Zainoer Akhsan', 'VII', 'Ds Lengkong Rt 03/03 No.42', 'L', 'Islam', 'Bandung', '2006-10-29', 'Wiraswasta'),
-('0062781314', 'Sandy Irawan', 'VII', 'Kampung Penclut', 'L', 'Islam', 'Bandung', '2006-01-25', ''),
-('0062801223', 'Desi Eka Putri', 'VII', 'Komplek Margahayu Kencana D8 No. 15', 'P', 'Islam', 'Bandung', '2006-04-01', 'Wiraswasta'),
-('0062821016', 'Muchamad Teddy', 'VII', 'Kampung Pasir Pogor', 'L', 'Islam', 'Bandung', '2006-08-16', ''),
-('0062880293', 'Dimas Panji Maulana', 'VII', 'Rajawli Timur Gang Sukarela No 137', 'L', 'Islam', 'Bandung', '2006-03-19', ''),
-('0062920994', 'Aril Mustaqbillal', 'VII', 'Jalan Adikusuma', 'L', 'Islam', 'Bandung', '2006-07-29', 'Buruh'),
-('0062950984', 'Wildan Noval Aditya', 'VII', 'Jl. Inhoftank No.30 Rt 01/05', 'L', 'Islam', 'Bandung', '2006-07-06', 'Wiraswasta'),
-('0062960951', 'Ahmad Rizal Zalaludin', 'VII', 'Jalan Babakan Antasari Cangkuang Wetan, Dayeuhkolo', 'L', 'Islam', 'Bandung', '2006-01-14', 'Wiraswasta'),
-('0062961064', 'Wildan Pirdaus', 'VII', 'Jl. Leuwianyar VII No. 56', 'L', 'Islam', 'Bandung', '2006-11-01', 'Wiraswasta'),
-('0062970876', 'Rizky Muhammad Akbar', 'VII', 'Jalan Cibaduyut Gang Ibu Ilem No 152', 'L', 'Islam', 'Bandung', '2006-05-09', 'Wiraswasta'),
-('0063020976', 'Rifqi Morand', 'VII', 'Jl. Astanaanyar No. 59 22/D Rt. 06/03', 'L', 'Islam', 'Bandung', '2006-05-15', 'Buruh'),
-('0063051221', 'Annisa Nurfadilah', 'VII', 'Kp. Parunghalang Rt.05/02', 'L', 'Islam', 'Bandung', '2006-07-08', 'Wiraswasta'),
-('0063060995', 'Asep Tarna', 'VII', 'Kp Sekeandur Jl. Cisirung Palasari', 'L', 'Islam', 'Bandung', '2006-01-19', 'Karyawan Swasta'),
-('0063110916', 'Agis Saputra', 'VII', 'Gempol Sari Rt 02/RW 01', 'L', 'Islam', 'Bandung', '2006-05-28', 'Wiraswasta'),
-('0063121239', 'Popy Julianti', 'VII', 'Jl.bbk.Irigasi Rt.06/03 no.622 kota bandung', 'P', 'Islam', 'Bandung', '2006-07-01', 'Wiraswasta'),
-('0063140886', 'Bayu Aji Pratama', 'VII', 'Jl. Suryani Dalam IV Rt. 07/02', 'L', 'Islam', 'Bandung', '2006-05-06', 'Wiraswasta'),
-('0063281125', 'Muhammad nashir kazhim', 'VII', 'Permata Kopo Blok CA 104 RT/RW 06/08', 'L', 'Islam', 'Bandung', '2006-04-08', ''),
-('0063290948', 'Yudha Agustina', 'VII', 'Jalan Babakan Tarogong Gang Laksana No 88 RT 01 RW', 'L', 'Islam', 'Bandung', '2006-08-22', 'Wiraswasta'),
-('0063291029', 'Aan Krisjayanto', 'VII', 'Komp Pasadena Jl. Lantana E.125', 'L', 'Islam', 'Bandung', '2006-03-18', 'Wiraswasta'),
-('0063301282', 'Alfonsus Alvin', 'VII', 'Jalan Srigunting Raya Gang Sauyunan II/29', 'L', 'Kristen', 'Bandung', '2006-08-19', ''),
-('0063341191', 'Fauzan Fikran Julian', 'VII', 'Perum Graha Ranca Manyar Jalan Tanjung No 17', 'L', 'Islam', 'Bandung', '2006-07-23', ''),
-('0063420874', 'Ridhoyatul Hidayat', 'VII', 'Jalan Mengger Tengah', 'L', 'Islam', 'Bandung', '2006-04-15', 'Karyawan Swasta'),
-('0063441295', 'Faisal Akbar', 'VII', 'Jalan Babakan Tarogong', 'L', 'Islam', 'Bandung', '2006-03-03', ''),
-('0063460963', 'Febrian Nugroho', 'VII', 'Jl.warung Jambu No.3 Kiaracondong', 'L', 'Islam', 'Bandung', '2006-02-13', 'Wiraswasta'),
-('0063480754', 'Tanzha Afriani Mutia Dewi', 'VIII', 'Kp.Cibago Cangkuang Kulon No.78/303', 'P', 'Islam', 'Bandung', '2006-04-17', 'Wiraswasta'),
-('0063491171', 'Ramadhan', 'VII', 'Sekelda Girangu', 'L', 'Islam', 'Bandung', '2006-12-29', 'Wiraswasta'),
-('0063701288', 'Bagas Bangbang Pramudia', 'VII', 'Blok Ager Sari', 'L', 'Islam', 'Bandung', '2006-04-30', ''),
-('0063751268', 'Riki Rian Saputra', 'VII', 'Per Pasanggrahan Lagadar Rt 01/01 No.16 Blok A 4', 'L', 'Islam', 'Cimahi', '2006-04-18', ''),
-('0063811133', 'Riki Matahari', 'VII', 'Kampung Penclut', 'L', 'Islam', 'Bandung', '2006-04-20', ''),
-('0063820966', 'Kinkin Hirmansah', 'VII', 'Ciparay Tengah Rt 06/05 Kel. Cibaduyut kidul Kec. ', 'L', 'Islam', 'Bandung', '2006-06-13', ''),
-('0063960853', 'Gemilang Dharma Rachbuti', 'VII', 'Pondok Rahayu', 'L', 'Islam', 'Bandung', '2006-01-22', 'Karyawan Swasta'),
-('0063971075', 'David Ismail Herianto', 'VII', 'Jl. Babakan Tarogong No. 13 Rt. 05/05', 'L', 'Islam', 'Bandung', '2006-03-01', 'Wiraswasta'),
-('0064030990', 'Aldi Sopiyan', 'VII', 'Jl. Caringin No 94', 'L', 'Islam', 'Bandung', '2006-02-20', 'Wiraswasta'),
-('0064051247', 'Tri Setia Hernawati', 'VII', 'Jalan Soekarno hatta Blok agarsari', 'P', 'Islam', 'Bandung', '2006-09-15', 'Wiraswasta'),
-('0064101271', 'Silvi Tinur', 'VII', 'Jalan Ciroyom Gang Ikhlas RT 09 RW 11', 'P', 'Islam', 'Bandung', '2006-03-26', ''),
-('0064111168', 'M. Naufal Al Ghifari', 'VII', 'Jl. Suryani Dalam IV No.26', 'L', 'Islam', 'Bandung', '2006-03-07', 'PNS/TNI/Polri'),
-('0064151285', 'Andrian Ahmadi', 'VII', 'Jalan Caringin Cikungkurak', 'L', 'Islam', 'Bandung', '2006-06-18', ''),
-('0064251090', 'Muhammad Ruli', 'VII', 'Mata Endah Belakang C12 No.50', 'L', 'Islam', 'Bandung', '2006-01-17', 'Wiraswasta'),
-('0064251157', 'Ilham Maulana Rahman', 'VII', 'Jl.Cibaduyut Gg. Ipong', 'L', 'Islam', 'Bandung', '2006-05-04', 'Wiraswasta'),
-('0064261272', 'Sri Susi Susanti', 'VII', 'Gg. H.Hasan 1 Rt 04/07', 'P', 'Islam', 'Bandung', '2006-08-23', 'Wiraswasta'),
-('0064341011', 'Mochamad Irvan Purnomo Sidik', 'VII', 'Perum Gading Junti Blok AC 3 No.25', 'L', 'Islam', 'Bandung', '2006-09-18', 'Wiraswasta'),
-('0064360981', 'Tircka Rivaldie Prayoga', 'VII', 'Kp.Bojong Cilebak Rt 01/08', 'L', 'Islam', 'Bandung', '2006-01-31', 'Wiraswasta'),
-('0064361034', 'Cecep Idan Ramdani', 'VII', 'Jalan Indrayasa, Kp.Warung nangka RT/RW 03/08', 'L', 'Islam', 'Bandung', '2006-01-04', ''),
-('0064471102', 'Yusni Nur Gina', 'VII', 'Kp.Kebon Kalapa No.24', 'P', 'Islam', 'Bandung', '2006-01-29', 'Wiraswasta'),
-('0064471215', 'Sri Wahyuni', 'VII', 'Babakan Leuwi Bandung', 'L', 'Islam', 'Bandung', '2006-01-31', ''),
-('0064480989', 'Aji Priyatna', 'VII', 'Jl. Caringin No.14', 'L', 'Islam', 'Bandung', '2006-03-17', 'Wiraswasta'),
-('0064520787', 'Putri Ayu Novianti', 'VIII', 'Babakan tarogong gg.bojong asih 4', 'P', 'Islam', 'Bandung', '2006-01-15', ''),
-('0064521023', 'Rizki Sulaeman', 'VII', 'Kampung Ciguriang Girang', 'L', 'Islam', 'Bandung', '2006-07-14', ''),
-('0064530636', 'Agung Gumilang', 'VIII', 'Pasirluyu', 'L', 'Islam', 'Bandung', '2006-08-04', 'Wiraswasta'),
-('0064541149', 'Chairil Atthariq Sugiharto', 'VII', 'Jl. Moch. Toha Gg. Pauca 128/201 A Rt 05/06', 'L', 'Islam', 'Bandung', '2006-02-24', 'Karyawan Swasta'),
-('0064541178', 'Yudha Suwarja', 'VII', 'Jl. Babakan Irigasi', 'L', 'Islam', 'Bandung', '2006-09-11', 'Wiraswasta'),
-('0064551220', 'Anisha Handayani', 'IX', 'Jl.Soekarno hatta Blok Ageur sari', 'P', 'Islam', 'Bandung', '2006-10-28', ''),
-('0064571117', 'Irfan Yassid Fadillah', 'VII', 'Jalan Holis', 'L', 'Islam', 'Bandung', '2006-09-23', ''),
-('0064621129', 'Panji Alpian Nurfadhillah', 'VII', 'Jalan Siliwangi No 97', 'L', 'Islam', 'Bandung', '2006-03-24', ''),
-('0064641248', 'Aga Rangga', 'VII', 'Jl. Karasak Gg. Cadas Ngampar', 'L', 'Islam', 'Bandung', '2006-03-02', 'Wiraswasta'),
-('0064651139', 'Yoga Apriliando', 'VII', 'Jl. Caringin Gg. Lumbung 2 Rt. 04/03', 'L', 'Islam', 'Bandung', '2006-04-01', 'Wiraswasta'),
-('0064671128', 'Novi Ardianti', 'VII', 'Jalan Mekarwangi kampung Anggacarang', 'P', 'Islam', 'Bandung', '2006-03-13', ''),
-('0064681123', 'Muhamad Zaenal Abidin', 'VII', 'Pagarsih, Gang Indik RT/RW 03/01', 'L', 'Islam', 'Brebes', '2006-06-11', 'Wiraswasta'),
-('0064731040', 'Fikri Bagja Gumelar', 'VII', 'Gg. Bapak Suhaya 1 No. 33A', 'L', 'Islam', 'Bandung', '2006-12-01', 'Wiraswasta'),
-('0064740844', 'Alkah Pitria Nur\'ain', 'VII', 'Jalan Cintaasih No 363', 'P', 'Islam', 'Bandung', '2006-12-28', 'Wiraswasta'),
-('0064751138', 'Teguh Saputro', 'VII', 'Jalan Maleber Utara Gang Tudung Sari', 'L', 'Islam', 'Kebumen', '2006-08-04', 'Karyawan Swasta'),
-('0064761085', 'Jona Ray Mondo', 'VII', 'Jl.Suryani 53', 'L', 'Islam', 'Bandung', '2006-01-01', 'Karyawan Swasta'),
-('0064780778', 'Lita Lestari', 'VIII', 'cibuntu timur', 'P', 'Islam', 'Bandung', '2006-05-02', ''),
-('0064791210', 'Rayhan Azka Muhammad', 'VII', 'Ga g Adikacih Tengah No 15', 'L', 'Islam', 'Bandung', '2006-03-23', 'Wiraswasta'),
-('0064800869', 'Muhammad Fikri Zulfikar', 'VII', 'Jalan Cimindi Putri No 161/48', 'L', 'Islam', 'Bandung', '2006-08-31', 'Wiraswasta'),
-('0064810938', 'Muhammad Iqbal Assyidik', 'VII', 'Jl. Rasdan V No. 11/94 rt 01/06 Bandung', 'L', 'Islam', 'Bandung', '2006-03-28', 'Wirausaha'),
-('0064880061', 'Kevin Zuan Adya Lesmana', 'VIII', 'Jl.Kopo Gg Lapang 4', 'L', 'Islam', 'Bandung', '2006-01-28', 'Wiraswasta'),
-('0064880230', 'Muhammad Ridho', 'VIII', 'Kp.Kulalet', 'L', 'Islam', 'Bandung', '2006-04-30', 'Wiraswasta'),
-('0064890891', 'Fardin Muhamad Yuspar', 'VII', 'Jl.Astana Anyar - Gg.Pajagalan 5 Rt 5/03 No.157/22', 'L', 'Islam', 'Bandung', '2006-06-01', 'Wiraswasta'),
-('0065040609', 'Donny Indrawan', 'VIII', 'Kp.Ciguriang hilir', 'L', 'Islam', 'Bandung', '2006-06-01', ''),
-('0065061212', 'Rizky Mardiatna', 'VII', 'Jalan Kota Baru VII No 5A', 'L', 'Islam', 'Hongkong', '2006-11-17', ''),
-('0065071115', 'Ilham Rahmattulloh', 'VII', 'Jalan Holis Gang Cibuntu 2', 'L', 'Islam', 'Bandung', '2006-02-01', ''),
-('0065080950', 'Adi Supriadi', 'VII', 'jl. Peta gg Buah 206 Bandung', 'L', 'Islam', 'Bandung', '2006-04-25', 'Wiraswasta'),
-('0065091106', 'Cecep Tiska Antariksa', 'VII', 'BLk LP Banceuy Kp.Kebon Kelapa Rt.01 Rw.02', 'L', 'Islam', 'Bandung', '2006-03-01', 'Wiraswasta'),
-('0065110917', 'Alfian Hafiansyah', 'VII', 'Cibaduyut Ciparay tengah RT/RW 05/05', 'L', 'Islam', 'Bandung', '2006-01-01', ''),
-('0065120904', 'Ricko Indriyanto', 'VII', 'Kamp.cilebak Rt.03/02', 'L', 'Islam', 'Bandung', '2006-05-01', 'Wiraswasta'),
-('0065141037', 'Dzikri Abdillah Akbar', 'VII', 'Gg. Naripan Rt 02/04', 'L', 'Islam', 'Bandung', '2006-09-05', 'Lainnya'),
-('0065181003', 'Faizal Ihsan Maulana', 'VII', 'Kampung CIbolerang', 'L', 'Islam', 'Bandung', '2006-09-20', 'Karyawan Swasta'),
-('0065190841', 'Ahmad Fauzi', 'VII', 'Kampung Cigondewah Hilir', 'L', 'Islam', 'Bandung', '2006-03-10', ''),
-('0065190905', 'Rizki Annafi Kuswan', 'VII', 'Kp. Terate Mekar Rt 02/02', 'L', 'Islam', 'Bandung', '2006-02-28', 'Karyawan Swasta'),
-('0065260921', 'Bayu Budianto', 'VII', 'Jl.Cibaduyut gg eleh umi rt.02/01', 'L', 'Islam', 'Bandung', '2006-08-22', 'Wiraswasta'),
-('0065310909', 'Tedy Komara Mulya', 'VII', 'Jl.Babakan Tarogong Rt 06/05 No.521', 'L', 'Islam', 'Bandung', '2006-02-24', 'Wiraswasta'),
-('0065340919', 'Anton Prayogo', 'VII', 'PI', 'L', 'Islam', 'Bandung', '2006-01-01', 'Wiraswasta'),
-('0065411150', 'Devi Anita Sari', 'VII', 'Kp. Siguriang Girang', 'L', 'Islam', 'Bandung', '2006-04-13', 'Wiraswasta'),
-('0065421080', 'Febriandi Rizky', 'VII', 'Jl.Cibaduyut Gg.TVRI I', 'L', 'Islam', 'Bandung', '2006-02-07', 'Wiraswasta'),
-('0065440913', 'Yaris Zulkarnaen', 'VII', 'Permata Kopo Ga. 46', 'L', 'Islam', 'Bandung', '2006-07-21', 'Wiraswasta'),
-('0065460882', 'Andi Jaenudin', 'VII', 'Jalan Kopo Gang Suka Leueur RT 08 RW 06 Bandung', 'L', 'Islam', 'Bandung', '2006-11-03', 'Wiraswasta'),
-('0065501280', 'Aldi Ariyandi', 'VII', 'Cibuntu Timur', 'L', 'Islam', 'Bandung', '2006-07-13', 'Buruh'),
-('0065511152', 'Eneng Chintia Paramita N', 'VII', 'Jl.Cigondewah Kidul', 'P', 'Islam', 'Cianjur', '2006-01-24', 'Karyawan Swasta'),
-('0065531201', 'Mochamad Rival Pranajaya', 'VII', 'Gang Madrasah', 'L', 'Islam', 'Bandung', '2006-04-03', 'PNS/TNI/Polri'),
-('0065540996', 'Bayu Akbar Januar', 'VII', 'Kp. Ciguriang Hilir', 'L', 'Islam', 'Bandung', '2006-01-20', 'Wiraswasta'),
-('0065580939', 'Refky Ghandi', 'VII', 'Komp Kopo Permai II 3 AD No. 9', 'L', 'Islam', 'Bandung', '2006-02-03', 'Wiraswasta'),
-('0065601180', 'Abdul Saefudin', 'VII', 'Jalan Caringin Cikungkurak Gang Mesjid At-Taqorrub', 'L', 'Islam', 'Bandung', '2006-05-07', ''),
-('0065641000', 'Dimas Andrias', 'VII', 'Jalan Kebon Kangkung XI No 70', 'L', 'Islam', 'Bandung', '2006-03-20', 'Wiraswasta'),
-('0065651289', 'Bagus Fajar Sidiq', 'VII', 'Jalan Natawijaya No 13/19A', 'L', 'Islam', 'Tasikmalaya', '2006-10-22', 'Karyawan Swasta'),
-('0065660992', 'Anjar Nugraha', 'VII', 'Jalan Buah Batu No 10', 'L', 'Islam', 'Garut', '2006-07-16', 'Wiraswasta'),
-('0065701069', 'Andika Fauzi', 'VII', 'Perum Kota Baru Jl.Dahlia No.54 Terusan Cibaduyut', 'L', 'Islam', 'Bandung', '2006-04-11', 'Wiraswasta'),
-('0065711251', 'Asti Fitriyani', 'VII', 'Jalan Inhofftank Kebon Lega 1', 'L', 'Islam', 'Bandung', '2006-07-12', 'Wiraswasta'),
-('0065730991', 'Andri Sukma', 'VII', 'Komplek Taman Cibaduyut Indah Blok H-32A', 'L', 'Islam', 'Bandung', '2006-06-18', 'Wiraswasta'),
-('0065790988', 'Agus Rudianto', 'VII', 'Kp. Ciseureuh No.36', 'L', 'Islam', 'Bandung', '2006-08-24', 'Buruh'),
-('0065811131', 'Ridwan Hermawan Syah', 'VII', 'Gang Perikanan Tengah No 77', 'L', 'Islam', 'Bandung', '2006-04-26', ''),
-('0065861026', 'Zaenal Mutaqin', 'VII', 'Jalan Cisirung Palasari', 'L', 'Islam', 'Bandung', '2006-01-31', ''),
-('0065901189', 'Dimas Putra Mahesa', 'VII', 'Jalan kopo Sayati gang madkasih no.213', 'L', 'Islam', 'Bandung', '2006-05-26', 'Wiraswasta'),
-('0065910934', 'Moch. Iqbal', 'VII', 'jl.karasak lama Gg. Cadas ngampar no.67 Rt.05 Rw.0', 'L', 'Islam', 'Bandung', '2006-01-01', ''),
-('0065911108', 'Diky Septiana', 'VII', 'Cibaduyut warung nangka Rt/RW 03/08', 'L', 'Islam', 'Bandung', '2006-05-22', 'Wiraswasta'),
-('0065911127', 'Nanda Marta Sunarya', 'VII', 'Jalan Terusan Leuwi Anyar VII No 78', 'L', 'Islam', 'Bandung', '2006-06-29', ''),
-('0065951042', 'Hasyifa Nur Fadhillah', 'VII', 'Jalan Raya Laswi Blk 671 RT. 02/11', 'P', 'Islam', 'Bandung', '2006-03-18', ''),
-('0066071088', 'Mochammad Daffa', 'VII', 'Jl. Caringin No. 67', 'L', 'Islam', 'Bandung', '2006-06-16', 'Wiraswasta'),
-('0066110599', 'Aldi Al Farizi', 'VIII', 'Raya dayeuhkolot no.152', 'L', 'Islam', 'Bandung', '2006-03-15', ''),
-('0066121199', 'Lukman Permana', 'VII', 'Jalan Babakam Orogaso Gang AmdVIII No 660', 'L', 'Islam', 'Bandung', '2006-02-21', ''),
-('0066130530', 'Muhamad Fitra Yanuar Sutedjo', 'VIII', 'Karasak lama Blok desa 107', 'L', 'Islam', 'Bandung', '2006-01-09', 'Wiraswasta'),
-('0066181095', 'Rafa Purnama', 'VII', 'Kp. Penciut', 'L', 'Islam', 'Bandung', '2006-02-20', 'Karyawan Swasta'),
-('0066190486', 'Muhamad Fauzi Ridwan', 'VIII', 'babakan tarogong gg.anom no.20', 'L', 'Islam', 'Bandung', '2006-01-28', ''),
-('0066200447', 'Irvan Kusumah', 'VIII', 'Kp.Citamiang kaler', 'L', 'Islam', 'bandung', '2006-01-24', 'Wiraswasta'),
-('0066231219', 'Ai Riska Yulistiani', 'VII', 'Jalan Holis Tanjakan Ma aren 482', 'P', 'Islam', 'Garut', '2006-02-26', ''),
-('0066280243', 'Arie Muchamad Sidiq', 'VIII', 'Jl.Inhpfftank Gg Perikanan II', 'L', 'Islam', 'Bandung', '2006-01-16', 'Karyawan Swasta'),
-('0066311233', 'Mira Sugiarti', 'VII', 'Jl. pagarsih Gg. Citepus Rt 09/03 No.76/9A', 'P', 'Islam', 'Bandung', '2006-03-12', ''),
-('0066331195', 'Hidayatul Aji', 'VII', 'Jalan Ma Eja', 'L', 'Islam', 'Padang', '2006-01-10', 'Wiraswasta'),
-('0066421107', 'Deri Apriansyah', 'VII', 'Kp.Nusa No.89 Rt.01 Rw.15', 'L', 'Islam', 'Bandung', '2006-04-05', 'Wiraswasta'),
-('0066421163', 'Muhammad Basil', 'VII', 'Kp. Situ Gunting', 'L', 'Islam', 'Tasikmalaya', '2006-08-17', 'Karyawan Swasta'),
-('0066501274', 'Triani', 'VII', 'Cibintinu RT/RW 04/05', 'P', 'Islam', 'Bandung', '2006-05-11', 'Wiraswasta'),
-('0066501305', 'Kris Saputra', 'VII', 'Jalan Peta Gang Buah No 216/95', 'L', 'Islam', 'Bandung', '2006-02-17', 'Buruh'),
-('0066520182', 'Prayogi Padilah Ramadan', 'VII', 'Jl. Leuwi Panjang Gg. Kebon kalapa', 'L', 'Islam', 'Garut', '2006-01-01', 'Wiraswasta'),
-('0066610549', 'Voby Buana Parastia', 'VIII', 'Kp.Ciguriang Hilir no.57', 'L', 'Islam', 'Bandung', '2006-06-21', 'Buruh'),
-('0066660961', 'Elqi Ramdan Desprianto', 'VII', 'Jalan Pasirluyu no.349 blok 205A', 'L', 'Islam', 'Bandung', '2006-01-01', ''),
-('0066690838', 'Ade Fahmi Nurizal', 'VII', 'Bihbul Raya III No 25', 'L', 'Islam', 'Bandung', '2006-06-20', 'Buruh'),
-('0066690965', 'Irwan Zaelani', 'VII', 'Jalan Citarip Barat RT 04 RW 07 kel kopo Kec. Bojo', 'L', 'Islam', 'Bandung', '2006-09-19', 'Wiraswasta'),
-('0066721187', 'Dicky Ganesha', 'VII', 'Jl. Cicukang II Rt.07 Rw. 07', 'L', 'Islam', 'Bandung', '2006-05-13', 'Wiraswasta'),
-('0066740930', 'Ikbal Andryansyah', 'VII', 'Bojong asih dayeuh kolot Rt 05 Rw 14', 'L', 'Islam', 'Bandung', '2006-01-01', 'Wiraswasta'),
-('0066770878', 'Abyan Nugraha Ruslia', 'VII', 'Kopo Elok Jalan Bintang no.9', 'L', 'Islam', 'Bandung', '2006-09-20', 'Wiraswasta'),
-('0066861225', 'Devi Sri Anjani', 'VII', 'Jl.Holis No 11 Rt 01/11 Kel Cogondewah Kaler Kec B', 'P', 'Islam', 'Bandung', '2006-02-13', ''),
-('0066900852', 'Firman Aan Ferdian', 'VII', 'Gang Pagarsih Barat IV', 'L', 'Islam', 'Bandung', '2006-02-04', 'Buruh'),
-('0066991032', 'Aditia Firmansyah', 'VII', 'Jl. Cibuntu Timur RT/RW 04/03', 'L', 'Islam', 'Bandung', '2006-08-07', ''),
-('0067080868', 'Muhammad Daud Ibrahim', 'VII', 'Jalan Caringin Blok Beas No 201', 'L', 'Islam', 'Bandung', '2006-05-10', 'Wiraswasta'),
-('0067140949', 'Zidan darsono', 'VII', 'jl. Inhoftank rt 04/06', 'L', 'Islam', 'Bandung', '2006-05-12', ''),
-('0067201092', 'Muhammad Khaidar Bagir', 'VII', 'Baleendah Kec. Baleendah Rt. 01/15', 'L', 'Islam', 'Bandung', '2006-03-01', 'Wiraswasta'),
-('0067210492', 'Naufal Amiruddin Pratama', 'VIII', 'pagarsih gg.mastabir 179/89', 'L', 'Islam', 'Bandung', '2006-02-15', ''),
-('0067220942', 'Rizki Fadilah', 'VII', 'Jl. Denki Selatan III No. 96 Rt 03/02', 'L', 'Islam', 'Ciamis', '2006-01-21', 'Wiraswasta'),
-('0067221024', 'Satiyandi Abdurrahman', 'VII', 'Jalan Rasdan No 62/94', 'L', 'Islam', 'Bandung', '2006-01-11', ''),
-('0067231182', 'Akbar Arifin', 'VII', 'Jalan Inhofftank Blok Desa XII/2', 'L', 'Islam', 'Bandung', '2006-08-04', ''),
-('0067231227', 'Fika Tanzillah', 'VII', 'Jalan Pasir Koja Gang H. Idrus Dalam No 43 RT 12 R', 'P', 'Islam', 'Cilacap', '2006-06-01', ''),
-('0067251252', 'Devi Anisa Apriliani', 'VII', 'Jl.Pelindung Hewan III Rt 03/09', 'P', 'Islam', 'Bandung', '2006-04-28', 'Wiraswasta'),
-('0067281070', 'Ariyo Aditya', 'VII', 'Kampung Sampora RT 01/RW 17', 'L', 'Islam', 'Cianjur', '2006-09-27', 'Wiraswasta'),
-('0067331298', 'Hilman Kamaludin', 'VII', 'Jalan Kopo Gang arasdi Dalam II No 36', 'L', 'Islam', 'Bandung', '2006-06-01', 'Karyawan Swasta'),
-('0067381229', 'Jelita', 'VII', 'Jl. Bbk Leuwi Bandung Dayeuhkolot No. 79', 'P', 'Islam', 'Bandung', '2006-07-07', 'Wiraswasta'),
-('0067401118', 'Khusnul Prasetya Wiar\'Faizn', 'VII', 'Graha Rancamanyar Jalan Anggrek 4 No 26', 'L', 'Islam', 'Bandung', '2006-06-15', ''),
-('0067430968', 'Moh Abdul Rozak', 'VII', 'Astana Anyar Gg.Pajagalan V Rt.05 Rw.03 No.59/22 D', 'L', 'Islam', 'Bandung', '2006-02-07', 'Wiraswasta'),
-('0067471275', 'wanda afifah', 'VII', 'bbk Irigasi Rt. 04/07 bandung', 'P', 'Islam', 'Bandung', '2006-05-15', ''),
-('0067520954', 'Arif Rahman', 'VII', 'Gg. Perikanan II RT/RW 07/05 Pelindung Hewan Astan', 'L', 'Islam', 'Bandung', '2006-01-24', 'Wiraswasta'),
-('0067570865', 'Mochamad Ilham Pratama', 'VII', 'Jalan Ranca Manyar Kapling Nusa No 4', 'L', 'Islam', 'Bandung', '2006-09-29', 'Wiraswasta'),
-('0067580946', 'Tendi Septiandi', 'VII', 'Jl. Ters. Suryani GG. Al-Huda Rt 05/02 Kel. Babaka', 'L', 'Islam', 'Bandung', '2006-09-20', 'Wiraswasta'),
-('0067640997', 'Billal Almahdi', 'VII', 'Kampung Curug Digdig Gang Sudirja', 'L', 'Islam', 'Klaten', '2006-11-12', 'Karyawan Swasta'),
-('0067641121', 'Muhammad Nizar Pratama', 'VII', 'Rancamanyar II jl. Cendrawasih No.34 Rt 04/20', 'L', 'Islam', 'Bandung', '2006-10-05', ''),
-('0067651315', 'Shandy Ramadhan', 'VII', 'Jalan Sehat Bahagia', 'L', 'Islam', 'Bandung', '2006-01-03', ''),
-('0067741242', 'Rosmiati', 'VII', 'Cibintinu RT/RW 03/05', 'P', 'Islam', 'Bandung', '2006-06-11', 'Wiraswasta'),
-('0067820912', 'Wahyu Kurnia', 'VII', 'Jalan Kopo Cirangrang RT/RW 02/04', 'L', 'Islam', 'Bandung', '2006-01-01', 'Buruh'),
-('0067830726', 'Diyah Cofifah Mutangalin', 'VIII', 'Kp.Citamiang kaler', 'P', 'Islam', 'Magelang', '2006-02-13', 'Buruh'),
-('0067861185', 'Cahyana ramdani', 'VII', 'Jl.Soekarno Hatta Blok Ager Sari Rt 07/10', 'L', 'Islam', 'Bandung', '2006-01-04', ''),
-('0067870388', 'Renaldy', 'VIII', 'Kp.Bojong sereuh', 'L', 'Islam', 'Bandung', '2006-06-24', 'Wiraswasta'),
-('0067901066', 'Affan Firousy Rahmani Akbar', 'VII', 'Jl. Holis Cibuntu Barat No.87 Rt 04/01', 'L', 'Islam', 'Bandung', '2006-01-15', ''),
-('0067951001', 'Egi Abdul Rojak', 'VII', 'Kampung Cilisung Barat', 'L', 'Islam', 'Bandung', '2006-10-16', 'Wiraswasta'),
-('0068011197', 'Intan Cahaya Utami', 'VII', 'Jalan Terusan Pasir Koja Gang Sukapakir Tengah', 'P', 'Islam', 'Bandung', '2006-07-08', ''),
-('0068030888', 'David Sohiry', 'VII', 'Jl. Peta 244', 'L', 'Islam', 'Bandung', '2006-08-01', 'Sudah Meninggal'),
-('0068071111', 'Fajar Andriansyah', 'VII', 'Kampung Babakan', 'L', 'Islam', 'Bandung', '2006-09-11', ''),
-('0068071267', 'Restiana Inka Fauzi', 'VII', 'Kp Babakan Rt 05/06', 'P', 'Islam', 'Bandung', '2006-02-28', ''),
-('0068080901', 'Muhammad Halim Faturahman', 'VII', 'Jl. Kopo 66 Sukaleueur Rt. 02 Rw. 07 Kel. Babakan ', 'L', 'Islam', 'Bandung', '2006-04-11', 'Wiraswasta'),
-('0068091006', 'Iqbal Firmansyah', 'VII', 'Jalan Kopo Gang Syukur No 5', 'L', 'Islam', 'Bandung', '2006-09-01', ''),
-('0068091130', 'Rama Maulana', 'VII', 'Gang Babakan Tarogong II No 181/196B', 'L', 'Islam', 'Bandung', '2006-10-20', ''),
-('0068091206', 'Muhammad Rizky', 'VII', 'Kp.Dayeuhkolot Rt.09/07 kab.bandung', 'L', 'Islam', 'Tanjung Pinang', '2006-06-01', 'Wiraswasta'),
-('0068111116', 'Imam Shalahuddin', 'VII', 'Jalan Ciparay Tengah', 'L', 'Islam', 'Bandung', '2006-01-18', ''),
-('0068131096', 'RIAN FERDIANSYAH', 'VII', 'Gg. Citepus Dalam RT.10 RW.03', 'L', 'Islam', 'Bandung', '2006-07-28', 'Wiraswasta'),
-('0068171246', 'Sita Sapta Suci', 'VII', 'Jalan Caringin Gg. Lumbung I Dalam Rt.04/Rw.03', 'P', 'Islam', 'Bandung', '2006-05-15', 'Wiraswasta'),
-('0068180908', 'Sofian Taufik', 'VII', 'Cigondewah rahayu RT/RW 04/01 Bandung Kulon', 'L', 'Islam', 'Ciamis', '2006-09-18', 'Wiraswasta'),
-('0068220839', 'Agung Afriyanto', 'VII', 'Kavling Ranca Mas Blok H 27', 'L', 'Islam', 'Bandung', '2006-04-24', 'Karyawan Swasta'),
-('0068220895', 'Kevin Dhafa Alfauki', 'VII', 'Jl.Mengger Girang Rt.01 Rw.08 Pasirluyu Regol Band', 'L', 'Islam', 'Bandung', '2006-02-01', 'Wiraswasta'),
-('0068241031', 'Adam Pamungkas', 'VII', 'Jl.SituAseur Timur 9 No 142/198 B', 'L', 'Islam', 'Tegal', '2006-08-29', 'Buruh'),
-('0068320956', 'Bambang Yudistira', 'VII', 'Jl. Makam Caringin No.41 Bandung', 'L', 'Islam', 'Bandung', '2006-11-15', ''),
-('0068341302', 'Jaka Sutresna', 'VII', 'Jalan Terusan Suryani Gang Abadi No 146', 'L', 'Islam', 'Garut', '2006-09-12', ''),
-('0068361047', 'Luqman Aditya', 'VII', 'Jl. Cibuntu Timur', 'L', 'Islam', 'Bandung', '2006-10-10', 'Wiraswasta'),
-('0068361190', 'Erik Gumelar Pratama', 'VII', 'Jl. Inhofftank No. 86 (Depan SD Dwikora)', 'L', 'Islam', 'Bandung', '2006-06-20', ''),
-('0068391056', 'Muhammad Zidan apriansyah', 'VII', 'Terusan suryani GG.aL hUDA rT.02 rW.02', 'L', 'Islam', 'Bandung', '2006-04-13', ''),
-('0068411072', 'Astried Yuniar', 'VII', 'Kp. Citamiang Kaler', 'P', 'Islam', 'Bandung', '2006-06-22', 'Buruh'),
-('0068430978', 'Suchi Aditya Putra', 'VII', 'Jl. Cibaduyut Raya Gg.Maeja Rt 01/03 No. 150 Bandu', 'L', 'Islam', 'Bandung', '2006-06-29', 'Wiraswasta'),
-('0068441311', 'Riza Hermawan Arbustoni', 'VII', 'Cigondewah Rahayu Ciherang', 'L', 'Islam', 'Banyumas', '2006-01-27', 'Pedagang Kecil'),
-('0068531100', 'SYIFA ANDRIYANSAH', 'VII', 'KOMPLEKS BAHUAN JL. TEGAL CAMAT RT 005 RW 010', 'L', 'Islam', 'Bandung', '2006-10-12', 'Karyawan Swasta'),
-('0068561265', 'Nanda Rahmanisa', 'VII', 'Jl.sukamenak No.90', 'P', 'Islam', 'Bandung', '2006-05-01', ''),
-('0068580772', 'Gabriyella Apriyani Christina', 'VIII', 'Kopo Permai III F 26/2', 'P', 'Kristen', 'Bandung', '2006-04-17', 'Karyawan Swasta'),
-('0068580860', 'Khoirul Anam', 'VII', 'Jl.Terusan Suryani rt.01 rw.02', 'L', 'Islam', 'Banyumas', '2006-02-23', 'Wiraswasta'),
-('0068601238', 'Nita Febrianti', 'VII', 'Jl. Ciparay Tengah Rt. 03/05', 'P', 'Islam', 'Bandung', '2006-02-23', 'Karyawan Swasta'),
-('0068601240', 'Reni Siti Ambariah', 'VII', 'Blok Jambangan Rt 01/10 Kaler', 'P', 'Islam', 'Bandung', '2006-02-28', ''),
-('0068611093', 'Nanda Eka Mardiansyah', 'VII', 'Jl. Moh Toha Gg. Karnyamas FO/96', 'L', 'Islam', 'Bandung', '2006-03-12', 'Karyawan Swasta'),
-('0068621254', 'Dewi Handayani', 'VII', 'Kebon Kelapa RT/RW 04/02', 'P', 'Islam', 'Bandung', '2006-05-29', 'Wiraswasta'),
-('0068631245', 'Sintia Fitriyana', 'VII', 'Blok Aci RT 04 RW 08 Cibolerang', 'P', 'Islam', 'Cianjur', '2006-06-13', 'Wiraswasta'),
-('0068800691', 'Fajar Aziz', 'VIII', 'Kp.Cilebak', 'L', 'Islam', 'bandung', '2006-01-30', 'Wiraswasta'),
-('0068831079', 'Febri Eri Saputra', 'VII', 'Jl. Cigondewah Kidul Rt 05 Rw 01 No.33', 'L', 'Islam', 'Bandung', '2006-02-25', 'Wiraswasta'),
-('0068840962', 'Fahmi Septia Langga', 'VII', 'Cibaduyut Gang Baru Raya No 3 RT 03 RW 11', 'L', 'Islam', 'Bandung', '2006-09-22', 'Wiraswasta'),
-('0068840970', 'Muhamad Rofi', 'VII', 'Pasirkoja Rt.06 rw.13', 'L', 'Islam', 'Bandung', '2006-09-01', ''),
-('0068881004', 'Fauzi Firdaus', 'VII', 'Jalan Kopo Gang Parasdi Dalam V', 'L', 'Islam', 'Sumedang', '2006-04-22', 'Karyawan Swasta'),
-('0068931153', 'Fajar Ramdan', 'VII', 'Jl. Babakan Tarogong Gg. I Sindangsih I', 'L', 'Islam', 'Tasikmalaya', '2006-12-19', 'Wirausaha'),
-('0068931200', 'Miptah Zaenal Aripin', 'VII', 'Jl. Babakan tarogong. Gg. Bojong Asih RT 05/RW 04', 'L', 'Islam', 'Bandung', '2006-01-09', 'Wiraswasta'),
-('0068991175', 'Rizqan Muhammad Ramdan', 'VII', 'Jl.Kopo Gg. Citarib Barat', 'L', 'Islam', 'Bandung', '2006-01-18', 'Wiraswasta'),
-('0069000897', 'Muhamad Fauzi Nugraha', 'VII', 'Lembang', 'L', 'Islam', 'Ciamis', '2006-01-19', 'Wiraswasta'),
-('0069011008', 'Irga Agriana', 'VII', 'Kampung Bojong Cileubak', 'L', 'Islam', 'Bandung', '2006-01-10', 'Wiraswasta'),
-('0069091155', 'Galih Nugraha Pratama', 'VII', 'Jl. Leuwipanjang Blok No.62', 'L', 'Islam', 'Bandung', '2006-09-09', 'Wiraswasta'),
-('0069101104', 'Arinda Disa Putri', 'VII', 'Jalan Babakan Ciparay Gang Panurhawi No 19', 'L', 'Islam', 'Bandung', '2006-05-09', ''),
-('0069111045', 'Iqbal Ramdiyansyah', 'VII', 'Rancamanyar RT/RW 03/13', 'L', 'Islam', 'Cimahi', '2006-06-18', 'Wiraswasta'),
-('0069171120', 'Moch Naim Hayat', 'VII', 'Gg Muncang No.44 A Pungkur', 'L', 'Islam', 'Bandung', '2006-07-01', ''),
-('0069171235', 'Neng Elsa', 'VII', 'Jl.Pagarsih Barat IV Gg.Madrasah Rt.05 Rw.01', 'P', 'Islam', 'Bandung', '2006-04-17', 'Wiraswasta'),
-('0069180864', 'Maulana Risji', 'VII', 'Jalan Kopo Bihbul Raya', 'L', 'Islam', 'Bandung', '2006-06-04', 'Wiraswasta'),
-('0069180945', 'Syaeful Fadillah', 'VII', 'Jalan Rajawali Timur Gg. Sastra 007/007 Kel. Ciroy', 'L', 'Islam', 'Bandung', '2006-06-01', ''),
-('0069201014', 'Mochamad Rezky Nurfaizi', 'VII', 'Jalan Jendral Sudirman Gang Moch Fatah II No 315/1', 'L', 'Islam', 'Bandung', '2006-06-26', ''),
-('0069221033', 'Bayu Setiawan', 'VII', 'Jln. H. safari gg Budi asih no 215', 'L', 'Islam', 'Bandung', '2006-09-11', 'Wiraswasta'),
-('0069281078', 'Fadli Firdaus', 'VII', 'Kp.Cinta Asih Rt 07/02', 'L', 'Islam', 'Bandung', '2006-08-04', 'Wiraswasta'),
-('0069321110', 'Ega Suhandi', 'VII', 'Jl. Cibaduyut Rt 03/04', 'L', 'Islam', 'Bandung', '2006-06-16', 'Wiraswasta'),
-('0069331073', 'Bayu Sukma Ramadhan', 'VII', 'Jalan Baladewa RT/RW 03/08', 'L', 'Islam', 'Bandung', '2006-06-06', 'Wiraswasta'),
-('0069331136', 'Rizki Agustian Firmansyah', 'VII', 'Kampung Bojongkukun', 'L', 'Islam', 'Bandung', '2006-08-28', ''),
-('0069350866', 'Muhamad Aldi Reynaldi', 'VII', 'Jalan Cibaduyut Raya No 289', 'L', 'Islam', 'Bandung', '2006-07-17', 'Tidak bekerja'),
-('0069390850', 'Dwiki Firdaus', 'VII', 'Jalan Soekarno Hatta No 230/196A', 'L', 'Islam', 'Bandung', '2006-10-08', 'Karyawan Swasta'),
-('0069401162', 'Mochamad Faisal Fitrah', 'VII', 'Mengger Girang 4', 'L', 'Islam', 'Bandung', '2006-01-08', 'Wiraswasta'),
-('0069401207', 'Nadya Nur Fadilah', 'VII', 'Jalan Soekarno Hatta Blk LP Banceuy', 'L', 'Islam', 'Bandung', '2006-03-30', ''),
-('0069480859', 'Imam Supriyanto', 'VII', 'Babakan Cisuminta', 'L', 'Islam', 'Bandung', '2006-02-17', ''),
-('0069480898', 'Mahesa AL Ghifari', 'VII', 'Jl. H. Alfi rt. 03/01 Kel. Cibuntu belakang no 37', 'L', 'Islam', 'Bandung', '2006-05-01', 'Wiraswasta'),
-('0069480900', 'Muhamad Sultan Aditya', 'VII', 'Jl. Cibolerang Margasuka rt 02/06', 'L', 'Islam', 'Bandung', '2006-04-01', 'Buruh'),
-('0069521082', 'Guntur', 'VII', 'Jalan Mahmud No.8 Kp. Kiaracondong Rt.05/18', 'L', 'Islam', 'Bandung', '2006-05-15', ''),
-('0069540964', 'Haidir Fajrul Falah', 'VII', 'Jl. Pajagalan Gg. Adimaja No. 15 Rt. 05 Rw. 06 ban', 'L', 'Islam', 'Bandung', '2006-06-23', 'Wiraswasta'),
-('0069561232', 'Melasari', 'VII', 'pi', 'P', 'Islam', 'Ciamis', '2006-06-30', 'Wiraswasta'),
-('0069600885', 'Asep Fani Handika Putra', 'VII', 'Jl. Kopo Sukaleueur Rt. 08/06', 'L', 'Islam', 'Bandung', '2006-01-01', 'Wiraswasta'),
-('0069611236', 'Nia Febriana', 'VII', 'Jl.Sukaleeur Rt.07/06', 'P', 'Islam', 'Bandung', '2006-02-01', 'Wiraswasta'),
-('0069660943', 'Syahrul Hudaeni', 'VII', 'Jalan Bojong Asih', 'L', 'Islam', 'Bandung', '2006-03-07', ''),
-('0069671237', 'Nida Dara Puspita', 'VII', 'Jl. Babakan Tarogong Gg. Sindang Asih no. 76/196 C', 'P', 'Islam', 'Bandung', '2006-10-01', 'Wiraswasta'),
-('0069701058', 'Nauval Faksi Eriansyah', 'VII', 'Jl. Jend. Sudirman Gg.Radibrata', 'L', 'Islam', 'Bandung', '2006-03-13', 'Karyawan Swasta'),
-('0069721226', 'Erika Alfitriani', 'VII', 'Jl Ters. Buah Batu Cipagalo', 'P', 'Islam', 'Bandung', '2006-01-01', 'Wiraswasta'),
-('0069751160', 'Krisna Wijaya', 'VII', 'Jl. Pagarsih Gg. Mukalmi', 'L', 'Islam', 'Bandung', '2006-03-09', 'Wiraswasta'),
-('0069780903', 'Ramdan', 'VII', 'Cibintinu No. 70', 'L', 'Islam', 'Bandung', '2006-05-01', 'Wiraswasta'),
-('0069880326', 'Azka Mochamad Hadiyan Rusyda', 'VIII', 'Jl.Mochtoha  Gg Ijan No.17', 'L', 'Islam', 'Bandung', '2006-02-19', 'Buruh'),
-('0069891308', 'Muhamad Fakhri Effendi', 'VII', 'Jalan Kopo Gang Gagak Handoko No 30', 'L', 'Islam', 'Bandung', '2006-01-22', ''),
-('0069911161', 'Michael Adriel', 'VII', 'Gg. Sejahtera II No.8', 'L', 'Kristen', 'Bandung', '2006-08-25', 'Karyawan Swasta'),
-('0071014126', 'Juwita Intan Nur Alam', 'VII', 'Jl. Moch Toha Gg. Murdasan', 'P', 'Islam', 'Bandung', '2007-01-26', 'Wiraswasta'),
-('0071019119', 'Isa Ibnu Salman', 'VII', 'Jalan Kopo Gang Babakan Rahayu', 'L', 'Islam', 'Bandung', '2007-02-19', ''),
-('0071033113', 'Riski Riyani', 'VII', 'Jalan Pasirkoja Gang Swadaya', 'P', 'Islam', 'Bandung', '2007-06-03', ''),
-('0071043101', 'Mochamad Fakhry Alfiansyah', 'VII', 'Jalan Cibaduyut Raya Blk No 27', 'L', 'Islam', 'Bandung', '2007-01-30', 'Pedagang Kecil'),
-('0071371019', 'Muhamad Hengky Farizi', 'VII', 'Jalan Earna Cinta', 'L', 'Islam', 'Bandung', '2007-05-11', ''),
-('0073031035', 'Dandi Ardiansyah', 'VII', 'gg.Citepus dalam no. 83/9A Rt.09 Rw.03', 'L', 'Islam', 'Bandung', '2007-04-01', ''),
-('0073541084', 'Irfan Fadllurahman', 'VII', 'Jl. Babakan Ciparay Gg. Pa Oyo No.19', 'L', 'Islam', 'Bandung', '2007-03-24', 'Wirausaha'),
-('0076021179', 'ZFRIZAL', 'VII', 'JL. BOJONG BUAH', 'L', 'Katholik', 'Tapanuli', '2007-04-01', 'Wiraswasta'),
-('0076121017', 'Muhamad Aldi SP', 'VII', 'Kampung Legok Kaso', 'L', 'Islam', 'Bandung', '2007-05-04', ''),
-('0077991230', 'Livia Renjani', 'VII', 'Jl.Mengger hilir RT/RW 03/03 no 102', 'P', 'Islam', 'Bandung', '2007-03-23', ''),
-('9944510265', 'Mega Awaludin', 'VIII', 'Cigondewah Kaler', 'L', 'Islam', 'Bandung', '1994-07-05', 'Wiraswasta');
+LOCK TABLES `siswa` WRITE;
+/*!40000 ALTER TABLE `siswa` DISABLE KEYS */;
+INSERT INTO `siswa` VALUES ('0021085083','Adik Ilham Maulana','IX','Jl.Kebon sirih 3 No.249/5B','L','Islam','Ciamis','2002-12-11','Wiraswasta'),('0021701055','Parulian Alexander Sihombing','IX','Jl.Situ Tarate','L','Kristen','Bandung','2002-11-20','Karyawan Swasta'),('0025030837','Raden Mochamad Lutfi','IX','Jl. Pa Gatot 4 No 64 G','L','Islam','Bandung','2002-01-01','Wiraswasta'),('0027410303','Muhammad Ansori','VIII','Jl.Denki II No.462/203A','L','Islam','Bandung','2002-08-11','Wiraswasta'),('0028720104','Meggi Mesha','VIII','Komp Margahayu Kencana No.E.15','L','Islam','Padang','2002-12-04','Wiraswasta'),('0029960070','Rangga Setiadi','VIII','Jl.Jend Sudirman Gg Ibu Enung No.156/79','L','Islam','Bandung','2002-10-05','Buruh'),('0031020048','Kriston Wahyu Budiman Silalahi','VIII','Soekarno hatta Gg.Pusri','L','Islam','Bandung','2003-10-07',''),('0031049011','Sumpena','VIII','Jl.Soekarno Hatta Gg Hasan II','L','Islam','Bandung','2003-07-28','Buruh'),('0031087036','Dadan Ruhiyat','VIII','Kp.Sasak Dua Banjaran','L','Islam','Bandung','2003-10-31',''),('0031131036','Adam Rizki Dwi Yoga Zaki Bagarif','IX','Nata Endah Blok J No.24','L','Islam','Bandung','2003-02-20','Wiraswasta'),('0031461007','Hasan Abdul Rohman','IX','Pagarsih Gg Pamar Hadi','L','Islam','Bandung','2003-03-11','Buruh'),('0031571016','Guntur Aurelian','IX','Jl.Indrayasa','L','Islam','Bandung','2003-10-16','Karyawan Swasta'),('0032570758','Ade Herlina Desmia Wati','VIII','Ahmad Yani Gg.samsi 5 No.306','P','Islam','Jakarta','2003-12-29','Karyawan Swasta'),('0032710293','Fajar Mochammad Ghufron Firmansy','VIII','Gg Ento No.25/65','L','Islam','Bandung','2003-05-21','Buruh'),('0032821043','Oki Hidayat Prasetya','IX','Jl.Margacinta No.81','L','Islam','Bandung','2003-10-02','Buruh'),('0032930158','Achmad Nur Fauzhi','VIII','Jl.Astanaanyar','L','Islam','Cianjur','2003-09-06','Wiraswasta'),('0033050332','Padhlika Islami Kusumah','VIII','Jl.Inhofftank Gg Panyeuseuhan No.9','L','Islam','Bandung','2003-08-28','Wiraswasta'),('0033501019','Ahmad Selamet','IX','Jl.Mohtoha Gg Murdasan','L','Islam','Bandung','2003-10-09','Lainnya'),('0033690398','Adi Sukma','VIII','Babakan garut','L','Islam','Bandung','2003-10-20','Buruh'),('0033861026','Muhamad Nur','IX','Ds.Bolero','L','Islam','Bandung','2003-06-28','Wiraswasta'),('0034071029','Iboy Suherman','IX','Gg Empang Ciburuy','L','Islam','Tasikmalaya','2003-11-17',''),('0034101051','Nazar Mauludian Anugrah','IX','Jl.Kopo Gg.Pabrik kulit selatan','L','Islam','Garut','2003-07-09','Wiraswasta'),('0034120036','Sigit Ginanjar','VIII','Jl.Karasak Lama','L','Islam','Bandung','2003-11-08','Karyawan Swasta'),('0034340849','Diki Wahyudi Tarigan','VII','Desa Nanjung No 39','L','Islam','Namo Suro','2003-09-13','Wiraswasta'),('0034571031','Ramadan Januari D','IX','Jl.Mohtoha Blk No.186','L','Islam','Bandung','2003-02-23',''),('0034720151','Soni Robi Sugandi','VIII','Gg Rahayu II No.78/91A','L','Islam','Bandung','2003-11-03','Buruh'),('0034810045','Algi Herdiana','VIII','Jl.Babakan Ciparay','L','Islam','Bandung','2003-07-05','Tidak bekerja'),('0034891027','Aan Abdul Rohman','IX','Jl.Kopo Gg.Babakan Asih No.372 / 198','L','Islam','Bandung','2003-12-15','Lainnya'),('0034951005','Muhamad Hardianto','IX','Jl.Caringin Blok Kupat','L','Islam','Cianjur','2003-10-10','Buruh'),('0035391045','Fajar Hermawan','IX','Kampung Babakan Antasari','L','Islam','Bandung','2003-09-09','Wiraswasta'),('0035421063','Reza Rochmansyah','IX','Moch.Toha Gg.Naradireja Sekekuda','L','Islam','Bandung','2003-10-23','Wiraswasta'),('0035971000','Abu Rizal Ahmad','IX','Jl.Kopo Gg H. Hamim No.412','L','Islam','Sumedang','2003-11-02','Buruh'),('0035991017','Muhammad Rizal Mauludin','IX','Cijerah Blok IV Gg Perkutut No.127','L','Islam','Bandung','2003-07-20','Karyawan Swasta'),('0037331042','Andri Fa Al Ghofar','IX','Gg.Manunggal II C Kp.Sayuran','L','Islam','Bandung','2003-12-23','Karyawan Swasta'),('0037421012','Ghallih Yudit Aditia','IX','Jl.Baru Raya VII','L','Islam','Gombong','2003-02-04','Buruh'),('0037781025','Hendri Rendiyansyah','IX','Jl.Indrayasa ,warung nangka','L','Islam','Bandung','2003-12-17','Karyawan Swasta'),('0037950638','Aji Mustopa','VIII','Pajagalan IV no.74/22 D','L','Islam','bandung','2003-04-28','Wiraswasta'),('0038000271','Reza Pahlevi Hasugian','VIII','Kp.Cembul Pojok','L','Islam','Medan','2003-07-22','Wiraswasta'),('0038180154','Wendra Agus Merdhika','VIII','Jl.Citepus I','L','Islam','Toboali','2003-08-17',''),('0038510632','Ujang Firmansyah','VIII','inhofftank','L','Islam','Garut','2003-04-08',''),('0038520689','Den Restu Singgih','VIII','inhofftank','L','Islam','bandung','2003-11-28','Wiraswasta'),('0038761047','Mutiara Aprilia','IX','Komplek Baleendah Permai No 220 J Padi Endah 5','P','Islam','Bogor','2003-04-06','PNS/TNI/Polri'),('0039401004','Dicky Irwandi','IX','Kp Mekarsari','L','Islam','Bandung','2003-10-23','PNS/TNI/Polri'),('0039440317','Visal Aryandi','VII','Jl.Sukapakir Tengah','L','Islam','Bandung','2003-07-31','Karyawan Swasta'),('0039460238','Ucu Deni','VII','Kp.Babakan','L','Islam','Bandung','2003-07-10','Wiraswasta'),('0041000066','Muhamad Rafi Oktapian','VIII','cibaduyut raya gg.durman','L','Islam','bandung','2004-10-01','Karyawan Swasta'),('0041002044','Farhan Musaidan','VIII','Kancra dalam III no.21','L','Islam','bandung','2004-11-18','Wiraswasta'),('0041004104','Davit Al Baqi','IX','Jl.Inhofftank Blok Desa XII No.24','L','Islam','Bandung','2004-03-06','Buruh'),('0041012039','Muhammad Zamzam Multazam','VIII','Kopo cirangrang','L','Islam','Bandung','2004-12-05',''),('0041016001','Gusti Pratama Hidayat','VIII','Jl.Karasak No.38','L','Islam','Bekasi','2004-08-29','Tidak bekerja'),('0041019081','Rahayu Wanti Destiani','VIII','Ters.Pasirkoja No.72 Gg.H.Taufiq','P','Islam','Bandung','2004-12-02','Wiraswasta'),('0041020373','Denis Ramadhan Rohaedi','VIII','Pagarsih Gg.Sukapura','L','Islam','Bandung','2004-12-19','Wiraswasta'),('0041020443','Fahmi Ramdhani','VIII','Gg.Jamhari 217c/95','L','Islam','bandung','2004-12-30','Karyawan Swasta'),('0041022019','Yogi Firmansyah','VII','Jl.Cibaduyut','L','Islam','Bandung','2004-11-18','Buruh'),('0041023063','Seno Lifiano','VIII','babakan tarogong gg.laksana','L','Islam','Bandung','2004-11-16',''),('0041027103','Rizaldi Sukma Bayu Pamungkas','IX','Kp.Situ Aksan Gg Madrasah','L','Islam','Bandung','2004-07-29',''),('0041031014','Rinto Pambudi','VIII','Jl.babakan Tarogong Gg Laksana I No.72','L','Islam','Bandung','2004-04-22','Wiraswasta'),('0041035010','Irfan Firmansyah','VIII','Jl.Bbk Tarogong Gg Bahrul Ihsan No.503/196B','L','Islam','Bandung','2004-07-05','Wiraswasta'),('0041035069','Fauzan Syahrul Ramadhan','VIII','Kopo Gg.Babakan Tarogong II No.294/196 B','L','Islam','bandung','2004-12-22','Karyawan Swasta'),('0041037040','Andrian Permana','VIII','Inhoftank','L','Islam','Bandung','2004-11-05','Karyawan Swasta'),('0041038015','Zulkipli Saja,ah','VIII','Parung Halang','L','Islam','Bandung','2004-12-21','Tidak bekerja'),('0041039009','Exel Indra Ramasandika Daffaputr','VIII','Jl.Pelanduk No.6','L','Islam','Bandung','2004-12-21','Wiraswasta'),('0041039069','Ihsan Ismawan','VIII','Pagarsih Barat Gg.Madrasah','L','Islam','bandung','2004-11-07','Wiraswasta'),('0041040100','Syifa Septiana Muhammad Firizqi','IX','Jl.Peta Gg Jamhari No.225/95','L','Islam','Bandung','2004-09-08','Wiraswasta'),('0041046037','Dicky Irawan','VIII','Mengger Girang','L','Islam','Bandung','2004-12-18',''),('0041048007','Virgil Givari Setiadi','VIII','Kopo Gg Panyileukan No.429/196B','L','Islam','Banfung','2004-09-16','Wiraswasta'),('0041050170','Diki Sanusi','VIII','Jl.Sampora','L','Islam','Bandung','2004-03-16','Buruh'),('0041056100','Muhamad Misbahudin','IX','Jl.Mohtoha Gg H Mukti','L','Islam','Tegal','2004-06-05','Wiraswasta'),('0041058029','Deden Johari','VIII','Jl.Cibolerang','L','Islam','Bandung','2004-01-20','PNS/TNI/Polri'),('0041060039','Riyan Ihwan','VIII','leuwi melang','L','Islam','Bandung','2004-11-18',''),('0041060075','Yuli Susanti','VIII','jl.inhofftank','P','Islam','Bandung','2004-12-23',''),('0041061041','Riyan Hidayat','IX','Kp.Sekeandur','L','Islam','Bandung','2004-06-13','Karyawan Swasta'),('0041067015','Acep Wahyu Hidayat','VIII','Kp Peuris','L','Islam','Bandung','2004-08-26','Wiraswasta'),('0041072053','Nur Ristiyanto','VIII','Babakan Tarogong gg.anom','L','Islam','Bandung','2004-11-23','Wiraswasta'),('0041078027','Rifa Maulana','VIII','Jl.Inhofftank Gg Blok Desa XII','L','Islam','Bandung','2004-06-04','Buruh'),('0041080101','Aditya Febrian Pratama','IX','Jl. Terusan Cibaduyut Gg. Tarate III 133','L','Islam','Bandung','2004-02-25','Wiraswasta'),('0041081014','Ryan Aji Saputra','VIII','Jl.Kebokopi','L','Islam','Kebumen','2004-11-29','Buruh'),('0041083029','Kevin Chandra Maesya','VIII','Jl.Pagarsih Gg Onong No.113/89','L','Islam','Bandung','2004-09-29',''),('0041083062','Ramadhan Al Fitri','VIII','Moch.Toha Km5,3 bbk.cisumirta','L','Islam','Bandung','2004-01-29',''),('0041087044','Muhamad Arif Qumaeni','VIII','Sukamulya','L','Islam','bandung','2004-06-14','Karyawan Swasta'),('0041087056','Bayu Septian','VIII','babakan tarogong gg.anom','L','Islam','Bandung','2004-09-03','Wiraswasta'),('0041088104','Aldi Gunawan','IX','Kampung Mengger Hilir','L','Islam','Bandung','2004-03-08','Buruh'),('0041100316','Supriadi','VIII','Jl.Pagarsih Gg Pasantren No.105/88','L','Islam','Bandung','2004-12-01','Wiraswasta'),('0041150292','Eko Santoso','VIII','Jl.Inhofftank gg Perikanan 2','L','Islam','Bandung','2004-01-06','Wiraswasta'),('0041180050','Asep Eka Nugraha','VIII','Jl.Mengger Tengah No.65','L','Islam','Bandung','2004-12-13','Buruh'),('0041281032','Aldi Rizki Fauzi','IX','Jl.Kopo Gg Lapang IV','L','Islam','Bandung','2004-02-08','Wiraswasta'),('0041300813','Nadia Pratiwi','VIII','Peta Gg.Jamhari','P','Islam','Bandung','2004-12-09','Karyawan Swasta'),('0041320090','Budi Rahmadi Saleh','VIII','Jl.Ters Pasir Koja Gg Sukapakir Tengah No.12','L','Islam','Bandung','2004-12-10','Buruh'),('0041320436','Angga Trianandra Mulyawan','VIII','Pesona Kramat Jaya Blok C No.5','L','Islam','garut','2004-12-13','Buruh'),('0041320662','Mochamad Rezki Sanusi','VIII','kopo gg.lapang','L','Islam','bandung','2004-06-29','Karyawan Swasta'),('0041350681','Andri Aprianda','VIII','gg.makmur jl.moch.toha no.28','L','Islam','Karawang','2004-04-14','Wiraswasta'),('0041420617','Mahes Mahendra Gustian','VIII','terusan pasirkoja gg.raden dewi I','L','Islam','Bandung','2004-08-28',''),('0041451024','Dery Dwangga Putra','IX','Jl.Kopo Sayati Gg Narsani','L','Islam','Bandung','2004-06-09','Wiraswasta'),('0041460278','Willy Riivaldi','VIII','Jl.Kopo Gg Maramis II No.61','L','Islam','Bandung','2004-11-16','Wiraswasta'),('0041460709','Pahrul Abdurrafi','VIII','Moh.Toha Gg.silih asih','L','Islam','bandung','2004-08-21','Karyawan Swasta'),('0041480007','Asep Sobana','VIII','Jl.Citamiang Kaler','L','Islam','Bandung','2004-11-06','Wiraswasta'),('0041510629','Risman Cahya Maulana','VIII','Gg.Rasdan no.62/94','L','Islam','Bandung','2004-05-14',''),('0041610236','Sandi Purnama','VIII','Jl.Cobolerang','L','Islam','Bandung','2004-03-19','Wiraswasta'),('0041610288','Andre Dwi Riansyah','VIII','Jl.Pelindung Hewan / Aspol Tegalega No.9E','L','Islam','Bandung','2004-10-28','PNS/TNI/Polri'),('0041611033','Heri Janudin','IX','Jl.Sayuran','L','Islam','Bandung','2004-07-10','Karyawan Swasta'),('0041620248','Dida Rohmanda','VIII','Kp.Cilebak No.75','L','Islam','Gunung Kidul','2004-01-13','Buruh'),('0041661059','Rizky Ilyas Achmad Nugraha','IX','Terusan Cibaduyut Jl.Terate V No.117','L','Islam','Garut','2004-08-25','Wiraswasta'),('0041661312','Rizal Ramadhan','VII','Jalan Jurang Blk No 33','L','Islam','Bandung','2004-01-16',''),('0041680218','Deden Muhammad Rosadi','VII','Gg Bp Suhaya II No.72/97','L','Islam','Bandung','2004-07-08','Wiraswasta'),('0041690269','Muhammad Fikry Setiawan','VIII','jl.Sri Reezeki No.25','L','Islam','Bandung','2004-05-23','Karyawan Swasta'),('0041730002','Aldi Rizki Prasetya','VIII','Jl.Kopo Gg Narpan','L','Islam','Bandung','2004-10-24',''),('0041730372','Deni Abdurahman','VIII','Ds.lengkong bojongsoang','L','Islam','Bandung','2004-11-11','Buruh'),('0041760799','Alya Rizka Dhianti','VIII','RE.Martadinata Blk 7C','P','Islam','Bandung','2004-09-25','Wiraswasta'),('0041771058','Fauzi Puja Subagja','IX','JlRaya Dayeuhkolot Kp.Kaum','L','Islam','Bandung','2004-05-05','Wiraswasta'),('0041850575','Juhana','VIII','inhofftank gg.bp.manta no.37','L','Islam','Bandung','2004-12-25',''),('0041910382','Muhamad Lutfi','VIII','kebon lega I No.17 a','L','Islam','Bandung','2004-07-14',''),('0041910649','Didin Rahmat','VIII','Kp.Cibedug hilir','L','Islam','bandung','2004-09-06','Karyawan Swasta'),('0041930309','Ricko Rahmat Hidayat','VIII','Gg H Zakaria','L','Islam','Bandung','2004-05-29','Buruh'),('0041950008','Bayu Sadita','VIII','Warna Cinta','L','Islam','Bandung','2004-06-13','Buruh'),('0041950811','Murni Narulita Sari','VIII','Babakan Tarogong Gg.sindang asih I','P','Islam','Bandung','2004-03-21','Wiraswasta'),('0041971028','Fajar Ramadhan','IX','Jl Peta Gg Tanjung 10','L','Islam','Bandung','2004-01-13','Wiraswasta'),('0041990458','Rizal Fajri','VIII','Inhofftank','L','Islam','bandung','2004-09-03','Karyawan Swasta'),('0042000577','Muhammad Saeful Anwar','VIII','madesa','L','Islam','Bandung','2004-08-25','Wiraswasta'),('0042031060','Berliet Raja Raton Raga','IX','Kp Andir','L','Islam','Bandung','2004-04-11','Wiraswasta'),('0042080696','Hilman Ahmad Fauzi','VIII','Halte Utara','L','Islam','Bandung','2004-01-09','Wiraswasta'),('0042170174','Ilham Suryadi','VII','Jl.Cibolerang','L','Islam','Bandung','2004-12-17','Buruh'),('0042180797','Agus Seyfudin','VIII','Jamika No.42','L','Islam','Bandung','2004-08-18','Buruh'),('0042250416','Kristiawan Suryana','VIII','Empang Gg.mesjid II No.12','L','Islam','Bandung','2004-10-08','Karyawan Swasta'),('0042331052','Deni Ridwanullah','IX','Jalan Babakan Irigasi Gang AMD No 581','L','Islam','Majalengka','2004-03-08','Karyawan Swasta'),('0042340422','Rafi Maulana Habibi','VIII','Suryani Dalam IV No.25','L','Islam','Bandung','2004-08-16','Wiraswasta'),('0042390183','Ramdani','VIII','Jl.Cirangrang Tomur','L','Islam','Bandung','2004-11-23','Wiraswasta'),('0042430400','Akmal Naufal Naasik','VIII','Pelindung Hewan','L','Islam','Bandung','2004-11-06','Buruh'),('0042530276','Sopian Yuda Hidayat','VII','Jl.Kopo Cirangrang Gg Bapa Aji','L','Islam','Garut','2004-11-03','Buruh'),('0042530377','Geri Erdinsah','VIII','pelangi n0. 22 belakang','L','Islam','Bandung','2004-08-01',''),('0042530500','Rizki Firmansyah','VIII','Kp.Bojong Tanjung','L','Islam','Tasikmalaya','2004-10-21',''),('0042570580','Muhammad Daffa Hikmat','VIII','Komp.Nata Endah blok H-147 Jl.Kopo Bihbul','L','Islam','Bandung','2004-12-28',''),('0042610148','Rizki Rahmat Sodikin','VIII','Kp.Cibadak','L','Islam','Cianjur','2004-11-14','Buruh'),('0042670642','Aria Galuh Pamungkas','VIII','cingkukurak gg.karyabakti','L','Islam','Bandung','2004-12-02',''),('0042690126','Edward Santoso Putra','VIII','Jl.Kebonlega No.39','L','Islam','Bandung','2004-10-14','Wiraswasta'),('0042720467','Ari Mulyadi','VIII','Kp.Pasirkoja No.65','L','Islam','Bandung','2004-05-25','Wiraswasta'),('0042730783','Neng Yulianti','VIII','Soekarno Hatta Gg.H.Hasan','P','Islam','Bandung','2004-07-22','Wiraswasta'),('0042840173','Hendra Permana','VIII','Jl.Rasdan No.106/94','L','Islam','Bandung','2004-10-17','Buruh'),('0042860054','Dede Taufik Hidayat','VIII','Jl.Ters Pasirkoja Gg Raden Dewi 2','L','Islam','Bandung','2004-10-07','Lainnya'),('0042901007','Irfan Firmansyah','VII','Babakan Ciseureuh No 4','L','Islam','Bandung','2004-12-11','Wiraswasta'),('0042901165','Muhammad Miraj Sidik','VII','Jl. Nyengseret Gg. Jember No.20','L','Islam','Bandung','2004-10-09',''),('0042940098','Ferdie Alfaridzi Faizal','VIII','jl.Kopo Km 7 No.65','L','Islam','Bandung','2004-12-07','Karyawan Swasta'),('0042970704','Mochamad Reza Ramadhan','VIII','kebon manggu no.162/22C','L','Islam','bandung','2004-01-05','Wiraswasta'),('0043010675','Tyas Tresna Yuniar','VIII','cigoendewah kaler','P','Islam','Ciamis','2004-06-06','Karyawan Swasta'),('0043031020','Chandra Alpiansyah','IX','Gg Manunggal II','L','Islam','Bandung','2004-07-04','Wiraswasta'),('0043190673','Sri Hartini Rosianti','VIII','raya cibeureum gg.warnasari no.56','P','Islam','bandung','2004-06-22','Wiraswasta'),('0043211046','Indah Laraswati Arieyani','IX','Jalan Mochamad Yunus IV No 3','P','Islam','Bandung','2004-09-04','Karyawan Swasta'),('0043221034','Refaldi Guchi','IX','Jl.Nitipraja Gg Ratna No.127','L','Islam','Bandung','2004-07-27','Wiraswasta'),('0043260069','Nur Wachid Indarto','VIII','Komp Rancamas','L','Islam','Purwerejo','2004-11-26','Buruh'),('0043410601','Aldi Santoso','VIII','subrata no.32','L','Islam','Bandung','2004-06-09','Wiraswasta'),('0043500255','Galih Repor Nawangsit','VIII','Jl.Babakan Ciparay','L','Islam','Bandung','2004-11-03','Wiraswasta'),('0043501054','Ilham Munijar','IX','Jalan Cigondewah Kaler','L','Islam','Bandung','2004-02-22',''),('0043511048','Ade Tabii Hidayat','IX','Jl.Peta Gg.Sukamulya II No.14','L','Islam','Bandung','2004-01-31','Karyawan Swasta'),('0043540842','Yogie Agung Prima','IX','Jl. Kopo Gg. Pabrik Kulit Utara No 688','L','Islam','Bandung','2004-08-02','Wiraswasta'),('0043551030','Luki','IX','Blok Ager Sari','L','Islam','Tanjung Damai','2004-02-23','Wiraswasta'),('0043580189','Sandi Awal Nugraha','VII','Jl.Monhamad Toha Gg Pak Uca','L','Islam','Bandung','2004-05-24','Buruh'),('0043581015','Agung Gumelar','IX','Jl.Karasak Selatan No.50','L','Islam','Bandung','2004-04-12','Karyawan Swasta'),('0043610200','Adam Priadi Bangun','VIII','Gg Manunggal II C No.23','L','Islam','Bandung','2004-04-05','Wiraswasta'),('0043671021','Ghani Ramadhan','IX','Kp.Kebon Kalapa Sampora','L','Islam','Bandung','2004-01-12','Karyawan Swasta'),('0043690172','Gunadi Kusnaedi Efendi','VIII','Jl.Babakan Tarogong Gg Tanjung no.10','L','Islam','Bandung','2004-08-17','Karyawan Swasta'),('0043691013','Rahmat Taufik Hidayat','IX','Ters Suryani','L','Islam','Bandung','2004-11-29','Buruh'),('0043720385','Muhammad Piqri Syahrial','VIII','Babakan Tarogong Gg.Bojong Asih II No.7','L','Islam','Bandung','2004-01-24','Karyawan Swasta'),('0043720725','Divia Septimiandra','VIII','Kp.Harikukun','P','Islam','Bandung','2004-09-01',''),('0043771062','Mochamad Solehudin Sudrajat','IX','Moh Toha','L','Islam','Bandung','2004-04-30','Wiraswasta'),('0043811009','Muhammad Reza','IX','Jl.Kopo Citarip Barat No.76','L','Islam','Palembang','2004-05-04','Buruh'),('0043880135','Ilham Maulana','VIII','Gg Sekeloa 4','L','Islam','Bandung','2004-07-08','Buruh'),('0043921001','Elan Aprilianto','IX','Griya Jagabaya Blok A1 No.4','L','Islam','Bandung','2004-04-16','Wiraswasta'),('0043980672','Ryan Fathur Rachman','VIII','inhofftank','L','Islam','bandung','2004-07-29','Wiraswasta'),('0043990277','Taufik Hidayat','VIII','Jl.Kopo Gg Cirangrang No.24','L','Islam','Bandung','2004-05-27','Karyawan Swasta'),('0044010387','Refsi Rai Purnama','VIII','Bojong Seureuh','L','Islam','Bandung','2004-06-01',''),('0044010498','Rizal Wahyudin','VIII','inhofftank','L','Islam','Garut','2004-10-31','Wiraswasta'),('0044010742','Neng Via Permatasari','VIII','Sukamanah II','P','Islam','Bandung','2004-10-26',''),('0044130833','Wieke Widya Haspara A.L','VIII','inhoftank','P','Islam','Bandung','2004-11-07',''),('0044140356','Yehezkiel Valendtino Paays','VIII','Jl.Ters Pasirkoja No.142','L','Kristen','Ambon','2004-08-28','Wiraswasta'),('0044151061','Erlangga Mochamad Yusuf Herlamba','IX','Jl.H.Samsudin Gg.H.Sayuti No.47','L','Islam','Bandung','2004-07-28','Wiraswasta'),('0044170826','Salma Nur Fadhillah','VIII','Kp.Kebon Kelapa','P','Islam','Tasikmalaya','2004-09-30','Wiraswasta'),('0044210365','Anthony Septiawan Illham','VIII','Sukabirus','L','Islam','Bandung','2004-09-25',''),('0044241059','Novan Erlangga','VII','Jl.Curug Candung Gg.Mekar 12','L','Islam','Bandung','2004-11-20','Karyawan Swasta'),('0044270228','Mochamad Ilham Nur Mansyah','VIII','Komp Sumbersari Jl Sumbersari','L','Islam','Bandung','2004-08-30','Wiraswasta'),('0044300566','Fachru Rozzy','VIII','Inhofftank Gg.Bp.Manta No.45','L','Islam','Bandung','2004-12-06',''),('0044330009','Deni Hamdani','VIII','Gg Sukajaya','L','Islam','Bandung','2004-12-18','Karyawan Swasta'),('0044330843','Gerra Ruchi Karathanura','IX','Komp. Cluster Bali 2 A -1','L','Islam','Medan','2004-02-03','Wiraswasta'),('0044360741','Neng Solihin','VIII','Situ gunting barat babakan ciparay','P','Islam','Bandung','2004-03-23','PNS/TNI/Polri'),('0044420562','Budi Sugiyono','VIII','Blok Ager','L','Islam','Ngawi','2004-08-18',''),('0044450258','Indra Andrianto','VIII','Caringin','L','Islam','Bandung','2004-05-27','Wiraswasta'),('0044501018','Agnes Suryagandhi Manurung','IX','Jl.Karasak Cibintinu','L','Kristen','Majalengka','2004-01-01','Wiraswasta'),('0044550187','Robby Ramadhan','VII','Jl.Sasak Gantung V No.142/17D','L','Islam','Bandung','2004-01-07','Karyawan Swasta'),('0044550289','Asep Kurnia','VIII','Jl.Pagarsih Gg Pasantren','L','Islam','Bandung','2004-09-06','Buruh'),('0044620442','Fadilla Setya Permana','VIII','Komp.Ciparay Indah B.139','L','Islam','bandung','2004-10-15','Karyawan Swasta'),('0044650234','Rifky Prasetya','VIII','Jl.Kopo Gg Sukaleuur XII No.337','L','Islam','Bandung','2004-12-29','PNS/TNI/Polri'),('0044670428','Septian Pratama','VIII','Rancaekek Blok 9 JL.Sedap Malam Kencana 46 a','L','Islam','Purwakarta','2004-06-14','Lainnya'),('0044730393','Taufik Hidayat','VIII','Kp.Bojong sereuh','L','Islam','Bandung','2004-06-17',''),('0044790006','Aris Munandar','VIII','Jl Inhofftank','L','Islam','Bandung','2004-09-29','Buruh'),('0044870670','Rizaldi Nopriansyah','VIII','caringin no.178','L','Islam','bandung','2004-11-30','Buruh'),('0044880749','Rosi Oktaviani','VIII','Terusan Pasir koja Gg.Sukaparkir','P','Islam','Bandung','2004-10-27','Buruh'),('0044900802','Aulya Nur Alif','VIII','Kp.cilisung','P','Islam','Bandung','2004-11-14','Wiraswasta'),('0044911064','Rifka Yoga Prasetia','IX','Bbk.Tarogong Gg.tanjung VIII','L','Islam','Bandung','2004-11-19','Wiraswasta'),('0044990030','R Febi Hermawan','VIII','Jl.Babakan Tarogong No.122A','L','Islam','Bandung','2004-02-21','Karyawan Swasta'),('0045000958','Dandhie Karina Mulyadi','VII','Jl. Terusan Cibaduyut Gg. Situtarate Rt. 07/01','L','Islam','Bandung','2004-10-01',''),('0045040528','Mochamad Arif Nurrohman','VIII','Batu Rahayu','L','Islam','Bandung','2004-10-23','PNS/TNI/Polri'),('0045111014','Ade Fajar Gumilar','IX','Jl.Nyengseret Gg Amil No.294/94','L','Islam','Bandung','2004-01-01','Karyawan Swasta'),('0045160698','Ilham Nugraha','VIII','Karasak selatan Kp.cibintinu','L','Islam','bandung','2004-11-01','PNS/TNI/Polri'),('0045170685','Ari Gunawan','VIII','Karasak Selatan Kp.Cibintinu','L','Islam','bandung','2004-11-01','PNS/TNI/Polri'),('0045210168','Deden Romadon','VIII','Jl.Soekarno Hatta','L','Islam','Jakarta','2004-12-31','Buruh'),('0045290235','Romi Iskandar','VIII','Jl.Oto Iskandardinata No.578','L','Islam','Bandung','2004-08-05','Wiraswasta'),('0045321039','Mochammad Andika Ramadhan','IX','Komp.Paledang  Regensi No.8','L','Islam','Bandung','2004-12-26','Karyawan Swasta'),('0045330395','Tri Julianto','VIII','Moch.Toha Gg.Dungusema II No.5','L','Islam','Bandung','2004-07-04',''),('0045360296','Irfan','VIII','Jl.Babakan Ciparay Gg Madesa No.7','L','Islam','Bandung','2004-08-04',''),('0045380983','Wildan M Yasir','VII','Cibolerang Gg Taruna IV Rt 06/05','L','Islam','Cianjur','2004-07-04','Wiraswasta'),('0045390838','Muhammad Budi Kusatiana S','IX','Bantar','L','Islam','Cirebon','2004-07-16','Sudah Meninggal'),('0045420396','Wildany Hafidz','VIII','Kp.Cikondang','L','Islam','Bandung','2004-11-11',''),('0045441006','Tri Resdianto','IX','GBA D2 No.27','L','Islam','Bandung','2004-07-25','PNS/TNI/Polri'),('0045480340','Muhamad Agil Prakoso','VIII','Sukabirus','L','Islam','Bandung','2004-05-15','Lainnya'),('0045480568','Fikri Muhammad Perdana','VIII','Moch>toha Gg.dendi selatan V no.40','L','Islam','Bandung','2004-12-01',''),('0045580297','Iben Maulana','VIII','Kp.Mekarsari','L','Islam','Bandung','2004-06-13','Karyawan Swasta'),('0045581040','Agung Sundapa Abi','IX','Jl.Kopo Cirangrang No.46','L','Islam','Bandung','2004-12-16','Buruh'),('0045600039','Wildan Ayubi','VIII','Jl.Kopo Bihbul Gg H Idris Dalam','L','Islam','Bandung','2004-12-08','Wiraswasta'),('0045650150','Salman Fariji','VIII','Jl.Caringin Gg Cikunkurak','L','Islam','Cilacap','2004-02-20','Buruh'),('0045810506','Yuda Permana','VIII','Kp.Bojong sereuh','L','Islam','Bandung','2004-08-15',''),('0045830028','Muhammad Rohimat','VIII','Ciuyah','L','Islam','Bandung','2004-07-13','Buruh'),('0045910585','Reza Fauzi','VIII','sasak gantung Gg.cakradireja no.123/28 b','L','Islam','Bandung','2004-04-02',''),('0045930363','Aip Maulana','VIII','negalasari II','L','Islam','Bandung','2004-09-25','Buruh'),('0045970072','Renaldy Aditya','VIII','Jl.Babakan Tarogong Gg Laksana I No.39','L','Islam','Bandung','2004-10-13','Wiraswasta'),('0046010185','Reynaldi Eddis Subakti','VII','Jl.Kopo Gg Syukur No.55','L','Islam','Bandung','2004-12-24','Tidak bekerja'),('0046060631','Tisna Sutisna','VIII','Astanaanyar gg.entiti no.14','L','Islam','Garut','2004-04-06',''),('0046070722','Annisya Rachma Nisya','VIII','Kebon kawung Gg.bengkel No.13','P','Islam','bandung','2004-02-28','Wiraswasta'),('0046140201','Agip Hamba Rajak','VII','Kp.Situtarate II','L','Islam','Bandung','2004-05-30','Karyawan Swasta'),('0046160354','Wildan maulana','VIII','Jl.Pasirkoja Gg Hasan No.9/22','L','Islam','Bandung','2004-07-22','PNS/TNI/Polri'),('0046200163','Andri Ahdiansyah','VIII','Cibuntu Barat','L','Islam','Bandung','2004-09-07','Wiraswasta'),('0046350080','Zaenal Arifin','VIII','Jl.Caringin No.17 Gg Ekawarga II','L','Islam','Bandung','2004-12-04','PNS/TNI/Polri'),('0046370415','Krisna Kurniawan','VIII','Babakan Irigasi','L','Islam','Bandung','2004-09-27','Karyawan Swasta'),('0046430023','Mildan Fauzi','VIII','Jl.Inhofftank Gg Mesjid','L','Islam','Bandung','2004-08-01','Buruh'),('0046520734','Kristin Dwi Wahyuni','VIII','Cijerah Gg.Al Hidayah No.41','P','Islam','Kuningan','2004-08-27','Wiraswasta'),('0046550857','Ifkar Dziffani','VII','Kampung Cidemang','L','Islam','Bandung','2004-05-11','Wiraswasta'),('0046580156','Abdul Kodir Zaelani','VIII','Jl.Ciparay Tengah','L','Islam','Bandung','2004-01-27',''),('0046640025','Muhammad Ridwan','VIII','Jl.Rawa Bentang No.355','L','Islam','Bandung','2004-11-01',''),('0046660057','Fredi Pratama','VIII','Jl.Cibaduyut Raya Gg Nawawi','L','Islam','Cilacap','2004-12-07','Wiraswasta'),('0046680181','Mochamad Karta Sasmita','VIII','Suka Pakir Tengah','L','Islam','Bandung','2004-07-26','Buruh'),('0046730125','Diki Ruspandi','VIII','Kp.Kiaracondong','L','Islam','Bandung','2004-01-05','Wiraswasta'),('0046730295','Hedie Wijaya Putra','VIII','Kp.Barunagri','L','Kristen','Bandung','2004-08-13','Wiraswasta'),('0046740591','Robi Ahmad Wahyudi','VIII','terusan pasirkoja','L','Islam','Bandung','2004-11-09',''),('0046750299','Mahesha Muhammad El Faruqy','VIII','Soreang Kp.Cipeer','L','Islam','Bandung','2004-11-21','Wiraswasta'),('0046760511','Cecep Maulana','VIII','Palasari J.Cisirung No.7','L','Islam','Bandung','2004-07-01','Karyawan Swasta'),('0046820046','Alipudin Mahmud','VIII','Jl.INhofftank Gg Perikanan II','L','Islam','Bandung','2004-11-22','Tidak bekerja'),('0046880745','Purnamasari','VIII','Sukamanah','P','Islam','Bandung','2004-11-02',''),('0046911056','Ahmad Irwan Alfaridzi','IX','Jl.Babakan Ciparay Gg.H.Zakaria No.22','L','Islam','Bandung','2004-07-03','Wiraswasta'),('0047031053','Muhamad Rizky','VII','Jl.Kopo Permai II Blok 20B No.10','L','Islam','Bandung','2004-09-04','Wiraswasta'),('0047110411','Heri Setiawan','VIII','Batununggal Kp.bojong','L','Islam','Bandung','2004-07-27','Buruh'),('0047110658','Jujun Rudiansyah','VIII','caringin gg.lumbung iv','L','Islam','Tasikmalaya','2004-07-09','Buruh'),('0047190164','Aswin Nur Fatah','VIII','Jl.Babakan Tarogong Gg Tanjung IX No.253','L','Islam','Bandung','2004-07-21','PNS/TNI/Polri'),('0047220107','Ramadhan Candra Hendrawan','VIII','Jl.Kiputih Dalam No.43','L','Islam','Bandung','2004-12-02','Tidak bekerja'),('0047260605','Bayu Trisha','VIII','kopo gg.sukaleueur','L','Islam','Bandung','2004-10-24',''),('0047290115','Ahmad Taufiq Hidayat','VIII','Jl.Mohtoha Gg Empang Ciburuy','L','Islam','Bandung','2004-09-13','Lainnya'),('0047300142','Nadi Mardiansyah','VIII','Kp.Sekekuda','L','Islam','Bandung','2004-12-27','Buruh'),('0047301065','Rangga Pamungkas','IX','Jl.Boeing Raya No.37','L','Islam','Bandung','2004-04-16','Karyawan Swasta'),('0047310321','Agus Permana','VIII','Bbk Muslimin 10A','L','Islam','Bandung','2004-08-15','Buruh'),('0047320507','Yunisa Hardi','VIII','pagarsih Gg.Mastabir','L','Islam','Garut','2004-08-03','Wiraswasta'),('0047330710','Rafida Irsay Muharam','VIII','Komplek Sampora Indah Jl.Mawar no.2','L','Islam','Bandung','2004-04-27','Karyawan Swasta'),('0047410841','Anissa Mahardika Salsabila','IX','Jl. Babakan Irigasi Gg. Remaja 7 No.151','P','Islam','Bandung','2004-06-10','Karyawan Swasta'),('0047450429','Saripudin Abdul Halim','VIII','Babakan Garut 156/120','L','Islam','Bandung','2004-12-08','Karyawan Swasta'),('0047490343','Ravi Rahmat','VIII','Jl.Caringin Gg Lumbung IV No.47','L','Islam','Bandung','2004-12-08','Wiraswasta'),('0047500325','Azka Anshory','VIII','Kp.Nusa No.72','L','Islam','Bandung','2004-03-15','Buruh'),('0047580462','Seftian Indra Prahasta','VIII','Gg.Saluyu','L','Islam','Majalengka','2004-09-09','Wiraswasta'),('0047600188','Saepuloh','VII','Jl.Alkateri No.276/13D','L','Islam','Bandung','2004-10-24','Buruh'),('0047710333','Ghinan Fadhilah Putra','VIII','Kp.Burujul','L','Islam','Bandung','2004-07-24','Karyawan Swasta'),('0047710457','Rendi Setiandi','VIII','Soekarno Hatta Gg.Elos Barat No.10','L','Islam','bandung','2004-09-14','Wiraswasta'),('0047830084','Agus Ogiyana','VIII','Jl.Jamika Gg Bah Sukanta No.53','L','Islam','Bandung','2004-11-26','Buruh'),('0047840384','Mochamad Fikri Wijaya','VIII','Rajawali Timur Gg.RA Barnas II','L','Islam','Bandung','2004-06-15',''),('0047880241','Aldi Reynaldi','VIII','Jl.Mengger Girang IV','L','Islam','Bandung','2004-10-16','Lainnya'),('0047890062','Kurniawan','VIII','Jl.Babakan Irigasi Gg AMD XI','L','Islam','Bandung','2004-11-30','Buruh'),('0047940094','Dwimas Andika Nurhadi','VIII','Jl.Sukamenak','L','Islam','Sukabumi','2004-01-27','Wiraswasta'),('0047980678','Ahmad Wahyudin','VIII','Kp.situ aksan','L','Islam','bandung','2004-10-30','Wiraswasta'),('0048010854','Gugum Gumilar','VII','Kampung Pojok','L','Islam','Bandung','2004-10-11','Wiraswasta'),('0048021140','Yusuf Dewantara','VII','Jalan Kopo Gang H Topek No 362/198A','L','Islam','Bandung','2004-07-24',''),('0048150362','Agus Suryana','VIII','Kp.Sekeandur','L','Islam','Bandung','2004-08-02','Buruh'),('0048160242','Andi Yudhana','VIII','Jl.Leuwipanjang Gg Sarpai I No.5','L','Islam','Bandung','2004-05-18','Wiraswasta'),('0048170191','Surya Subagja','VII','Kp.Situ Aksan Gg Madrasah Dalam V No.24','L','Islam','Bandung','2004-12-04','Wiraswasta'),('0048190043','Ahmad Sofian','VIII','Jl.Industri No.27/28A','L','Islam','Bandung','2004-11-04','Buruh'),('0048231022','Muhamad Dennis Khasmir','IX','Jl.Cijerah II Gg Wijaya Kusumah III No.76','L','Islam','Bandung','2004-02-26','Karyawan Swasta'),('0048231053','Garin Ilham Ramadhan','IX','Jalan Raya Cibaduyut Gang Pak Kasub No 51','L','Islam','Bandung','2004-01-22','Karyawan Swasta'),('0048240390','Rizki Pratama Putra','VIII','Kp.Pasirjati','L','Islam','Bandung','2004-09-21',''),('0048270426','Reza Wijaya Kusuma','VIII','PI','L','Islam','Bandung','2004-02-02','Wiraswasta'),('0048300563','Deyan Wahyudien','VIII','soekarno hatta blok desa I no.51','L','Islam','Bandung','2004-09-25','Wiraswasta'),('0048301147','Andreas Wijaya','VII','Jl. Pagarsih No 64','L','Kristen','Bandung','2004-02-04','Wiraswasta'),('0048360259','Kiki Lesmana S','VIII','Kp.Anggacarang','L','Islam','Bandung','2004-04-05','Wiraswasta'),('0048420477','Hizkia Zamora Munarto Saleh','VIII','Moch.Toha Gg.Kurdi 2/V no.371/20 A','L','Kristen','Bandung','2004-07-18','Wiraswasta'),('0048460807','Khana Intan Nurdianti','VIII','Gempol sari','P','Islam','Bandung','2004-08-29','Wiraswasta'),('0048480657','Ipan Nugraha','VIII','cibadak blk no.70','L','Islam','Majalengka','2004-11-16','Buruh'),('0048550353','Viki Pratama','VIII','Jl.Caringin Gg Lumbung II','L','Islam','Bandung','2004-11-01','Lainnya'),('0048570352','Tanto Muhammad Gunawan','VII','Jl.Bojongsoang No.186','L','Islam','Bandung','2004-11-01','Wiraswasta'),('0048601010','Achmad Baehaki','IX','Jl.Cibaduyut Raya Gg Nawawi Blok Lumbung','L','Islam','Bandung','2004-02-08','Wiraswasta'),('0048650029','Noval Maulana','VIII','Jl.Soekarno Hatta No 78','L','Islam','Bandung','2004-11-22','Wiraswasta'),('0048651057','Aji Lesmana','IX','Jl.Pagarsih Gg. H. Satibi','L','Islam','Bandung','2004-06-07','Karyawan Swasta'),('0048690052','Dandy Amti Saskia','VIII','Bandung','L','Islam','Bandung','2004-09-29','Wiraswasta'),('0048690285','Ajie Firdaus Saca Kusumah','VIII','Kp.Babakan Mekar','L','Islam','Bandung','2004-11-25','Lainnya'),('0048800370','Dena Kostaman','VIII','Holis','L','Islam','Bandung','2004-09-17',''),('0048890493','Novan Irvansyah','VIII','babakan irigasi no.113','L','Islam','Bandung','2004-11-12',''),('0048910195','Willy Zidan Nugraha','VII','Komp Cibolerang Blok G No.88','L','Islam','Tasikmalaya','2004-11-28','Karyawan Swasta'),('0048950359','Ade Muslim','VIII','lengkong bojongsoang','L','Islam','Bandung','2004-07-05','Buruh'),('0048980485','Mochamad Dinie Firdaus','VIII','karasak lama cadas ngampar','L','Islam','Bandung','2004-06-12',''),('0048990792','Rosiana Putri','VIII','Lio genteng gg.bapak suhaya no.14','P','Islam','Tegal','2004-11-23','Wiraswasta'),('0049000176','Indra Rahman Hanjaya','VIII','Jl.Astanaanyar No.9/21','L','Islam','Bandung','2004-06-01','Wiraswasta'),('0049010879','Taufan Aditia','VII','Jalan Sriwijaya II Gang XII','L','Islam','Garut','2004-11-11','Petani'),('0049021050','Mohamad Ridzki Solehudin','IX','Jl.Moch.Toha Gg.Ciseureuh No.37/202 B','L','Islam','Bandung','2004-03-23','Wiraswasta'),('0049090263','Mochamad Rizal Fahmi Bangkit San','VIII','Jl.Kopo Citarip Barat','L','Islam','Bandung','2004-05-20','Buruh'),('0049100659','Megia Putri Damayanti','VIII','moch.toha gg.babakan ciseureuh blk 362 no.8','P','Islam','bandung','2004-05-10','Karyawan Swasta'),('0049150167','Dandi Hermawan','VIII','Jl.Ciparay Tengah','L','Islam','Bandung','2004-12-30','Wiraswasta'),('0049210284','Agy Gustiana','VIII','Jl Babakan Tarogong','L','Islam','Bandung','2004-08-23','Buruh'),('0049381023','Ari Mardani','IX','Jl.Kopo H.Saidin No.160','L','Islam','Bandung','2004-03-10','Karyawan Swasta'),('0049450081','Axel','VIII','Jl.Pungkur No.78/15C','L','Islam','Bandung','2004-04-29','Wiraswasta'),('0049500501','Rijki Sukma Aria','VIII','Situ gunting','L','Islam','Bandung','2004-08-14',''),('0049551261','INTAN RAHAYU','VII','gg. cibintinu rt 04 /03','P','Islam','Bandung','2004-04-17',''),('0049670229','Muhamad Sandi Maulana','VIII','Jl.Caringin Gg Karya Bakti','L','Islam','Tegal','2004-10-26','Buruh'),('0049751008','Herdian Adhi Prasetyo','IX','Jl.Mohtoha Gg Ciburuy No.38','L','Islam','Bandung','2004-04-06','Wiraswasta'),('0049880166','Dadan Zakaria','VIII','Kp.Sayuran','L','Islam','Bandung','2004-03-15','Buruh'),('0049880516','Dendy Revayadi','VIII','Kopo Gg.Sukaleueur dalam No.16','L','Islam','Bandung','2004-10-06','Wiraswasta'),('0049970619','Muhamad Taufik Dermawan','VIII','dengki selatan 2 no.101','L','Islam','Bandung','2004-12-12',''),('0049980124','Devi Indra Subahja','VIII','Jl.Aki Padma','L','Islam','Bandung','2004-12-12','Wiraswasta'),('0051003106','Agustami Indriyana Sani','VII','Jl. Ciparay Tengah Rt. 05/06 Cibaduyut','P','Islam','Indramayu','2005-08-14','Wiraswasta'),('0051003130','Kiki Hadi Ramadan','VII','Kampung Bojong Asih No 70','L','Islam','Bandung','2005-12-19',''),('0051004039','Teguh Priatna','VIII','Sukaati 6 no.4','L','Islam','Bandung','2005-02-16',''),('0051004130','Lutfi Muharam','VII','Lingkungan Parunglesang','L','Islam','Banjar','2005-05-03','Sudah Meninggal'),('0051005062','Much.Fikri Artiansyah','VIII','sukamenak No.175','L','Islam','Bandung','2005-05-18',''),('0051006046','Asep Ridwan Hidayat','VIII','Ciparay Tengah','L','Islam','Bandung','2005-03-12','Buruh'),('0051008032','Dedi Rialdi Sopiyan','VIII','Jl.Oasirkoja Gg Raden Dewi 4','L','Islam','Bandung','2005-09-15','Lainnya'),('0051009047','Desta Tio Familia','VIII','Rajawali Timur No.219','L','Islam','Bandung','2005-07-03',''),('0051010257','Iman Firmansyah','VIII','Komp Sanggar Mas Lestari K-94','L','Islam','Bandung','2005-10-11','PNS/TNI/Polri'),('0051012076','Anggi Putri Widiarti','VIII','Terusan Pasirkoja Gg.raden dewi III','P','Islam','Bandung','2005-09-15','Buruh'),('0051014065','Faisal Riyanto','VIII','pelindung hewan','L','Islam','bandung','2005-03-10','Wiraswasta'),('0051014104','Heri Hidayat','VII','Kp.Leuwipicung','L','Islam','Tasikmalaya','2005-11-07','Petani'),('0051015034','Nicko Setiawan','VIII','Jl.Rajawali Gg Kasuari I No.3A','L','Islam','Cilacap','2005-03-07','Tidak bekerja'),('0051015078','Nurul Afifah','VIII','Gg.liogenteng no.68/94','P','Islam','Bandung','2005-07-22','Buruh'),('0051016030','Muchamad Hasan Sholeh','VIII','Jl.Mohtoha GG Murdasan','L','Islam','Bandung','2005-06-27','Wiraswasta'),('0051018078','Nadia Elmia Hidayat','VIII','Antapani Gg.Ibu Iwih No.19','P','Islam','Bandung','2005-03-12','Lainnya'),('0051020088','Andreas Witjaksono','VIII','Kp.Bojong Asih No.84','L','Islam','Bandung','2005-10-26','PNS/TNI/Polri'),('0051024001','Ilham Rama Dani','VIII','Jl.Mohtoha Gg Rahayu V','L','Islam','Bandung','2005-03-15','Karyawan Swasta'),('0051024120','Pramadya Ramdhana','VII','Jalan Raden Patah 41A','L','Islam','Bandung','2005-11-19',''),('0051032054','Raden Ilham Suryadi','VIII','Kopo Gg.Sukaleur','L','Islam','Bandung','2005-03-20','Wiraswasta'),('0051035024','Delih Elang Wahyudi','VIII','Jl.Rajawali Barat Blk No.37','L','Islam','Bandung','2005-05-07','Karyawan Swasta'),('0051036013','Gilang Yordian','VIII','Jl.Babakan Tarogong Gg Tanjung 8 No.80','L','Islam','Bandung','2005-01-15','Buruh'),('0051036017','Mochammad AlFarhan Qalbi Nurad','VIII','Jl.Ters Buahbatu No.87','L','Islam','Sumedang','2005-05-03','Wiraswasta'),('0051037052','Ferdi Ferdiansyah','VIII','pasirluyu','L','Islam','Bandung','2005-04-20',''),('0051039053','Muhammad Gilang Fauzi','VIII','pelindung hewan gg.bpk atam iskandar','L','Islam','Bandung','2005-04-07','Wiraswasta'),('0051039092','Asep Imam Saepul Rahmat','VII','Jl. Sukamenak Gg. Sudirja rt 05/02','L','Islam','Bandung','2005-07-01','Wiraswasta'),('0051040009','Dik Dik Muslihat','VIII','Kp.Sekeawi No.50','L','Islam','Bandung','2005-09-05','Wiraswasta'),('0051041065','Hadi Prayoga Pribadi Putra','VIII','Tamim Gg.H.Pahrurozi no.59/13 d','L','Islam','bandung','2005-01-29','Buruh'),('0051046001','Donny Hamdani','VIII','Jl.Kopo Gg Pabrik Kulit Utara','L','Islam','Bandung','2005-09-24','Tidak bekerja'),('0051046036','Dandy Setia','VIII','Kp.Sekeandir','L','Islam','Bandung','2005-08-12','Karyawan Swasta'),('0051046130','Junaedi','VII','Kampung Cipeer','L','Islam','Bandung','2005-06-02',''),('0051047014','Rendi Kurniawan','VIII','Jl.Bbk Tarogong Gg Anom','L','Islam','Bandung','2005-05-14','Buruh'),('0051049010','Ridsky Deskideria Nur Fitranni','VIII','jl.Karasak Lama Gg Aki Endun No.56','L','Islam','Bandung','2005-12-15','Wiraswasta'),('0051050122','Cahyani','VII','Blok Pahreman Mekarwangi No. 77','P','Islam','Bandung','2005-11-16',''),('0051050688','Davi Aldriansyah','VIII','Cibaduyut blok situ','L','Islam','bandung','2005-02-17','Wiraswasta'),('0051053003','Syahrul Gunawan','VIII','Jl.Cibaduyut Gg Nawawi','L','Islam','Bandung','2005-01-16','Lainnya'),('0051054128','Asep Tantan','VII','Baleendah Permai Padi Endah 1 No 49','L','Islam','Bandung','2005-12-18','Wiraswasta'),('0051055079','Reza Nur  Miskat','VIII','Babakan ciparay gg.air mancur IV/55','L','Islam','Bandung','2005-08-06','Wiraswasta'),('0051058108','Ilham Syaifulloh','VII','Jl. Pungkur 193/172','L','Islam','Banyumas','2005-12-02','Wiraswasta'),('0051065076','Ani Sutiani','VIII','Caringin cingkurak Blok Beas','P','Islam','Bandung','2005-07-28','Karyawan Swasta'),('0051066093','Kevin Muhammad','VII','Taman Sari No. 35 B Rt. 06/04','L','Islam','Bandung','2005-07-01',''),('0051067054','Rafly Putra Pratama','VIII','Astanaanyar No.158/22 D','L','Islam','Bandung','2005-08-11','Buruh'),('0051068099','Dandan Daniansyah','VII','Jalan Mochamad Toha Gang Babakan Ciseureuh Timur','L','Islam','Bandung','2005-12-02','Wiraswasta'),('0051070313','Sansan Kurnia','VIII','Jl.Pagarsih No.44/99','L','Islam','Bandung','2005-04-26','Buruh'),('0051070789','Resa Silfina','VIII','sumber mulya','P','Islam','Bandung','2005-04-03',''),('0051072047','Irsya Nidah','VIII','Situ Gunting Timur','P','Islam','Bandung','2005-05-06',''),('0051073007','Ricky Firmansyah','VIII','Jl.Cibadak No.22/9B','L','Islam','Serang','2005-05-01','Buruh'),('0051080060','An\'nisa Nurjanah','VIII','Komp.Bumi Baleendah Asri Blok E 4 no.7','P','Islam','Bandung','2005-04-21',''),('0051080237','Sendi Pangestu','VII','Kp.Parung Halang','L','Islam','Indramayu','2005-05-24','Wiraswasta'),('0051086000','Abdoel Kholid Khafinudin','VIII','Kp Talun','L','Islam','Bandung','2005-03-13',''),('0051088082','Saskia','VIII','Gg.sauyunan No.59','P','Islam','Bandung','2005-12-21','Buruh'),('0051088116','Nanditya Muhammad Adi Surya','VII','Jl. Babakan Tarogong No No. 435/196 B','L','Islam','Bandung','2005-09-26','Karyawan Swasta'),('0051110522','Fiqih Faqrurazi','VIII','Pasundan Gg.H.Rais No.150','L','Islam','Bandung','2005-11-18','Wiraswasta'),('0051110700','Ilham Sofyansah','VIII','Kp.sayuran','L','Islam','bandung','2005-06-03','Karyawan Swasta'),('0051190139','Maulana Akbar Adityo','VIII','Kp.Cupu','L','Islam','Bandung','2005-01-26','Karyawan Swasta'),('0051210351','Tantan Setiawan','VIII','Jl.Leuwianyar','L','Islam','Bandung','2005-03-31','Wiraswasta'),('0051210795','Syiffa Unaza Supradiana','VIII','Andir No.116/79','P','Islam','Bandung','2005-03-09','Wiraswasta'),('0051220194','Vidi Cipta Darmawan','VII','Jl.Cibuntu Barat Gg Sanusi','L','Islam','Bandung','2005-08-09','Tidak bekerja'),('0051230205','Agus Tia Nursobah','VIII','Kp.Kaum','L','Islam','Bandung','2005-08-11','Wiraswasta'),('0051230589','Risman Ramdani','VIII','inhofftank gg.bp.manta 47/201 A','L','Islam','Bandung','2005-01-09',''),('0051260357','Yuda Abdullah Padmawinata','VIII','Jl.Inhofftank Gg Perikanan II','L','Islam','Bandung','2005-04-06','Wiraswasta'),('0051260526','Moch. Alfi Ilham Nurhayadi','VIII','Kp.Manngga dua Gg.Sukaresik','L','Islam','Bandung','2005-03-08','Buruh'),('0051271224','Devi Chyintia','VII','Jl.Nata Endah Blok D No.31 Kel Margahayu Kec Babak','P','Kristen','Bandung','2005-07-01',''),('0051280635','Yudhoyono Wisnh Gunarto','VIII','liogenteng III No.78/94 A','L','Islam','Bandung','2005-08-04',''),('0051281263','Lia Aldila Meliani','VII','Jalan Pasundan Gang H Rais 147 / 18 RT 04 RW 05','P','Islam','Bandung','2005-12-31',''),('0051290460','Rizwan Wahyudin','VIII','terusan holis','L','Islam','bandung','2005-03-17','Buruh'),('0051311320','Yoga Permana','VII','Jalan Ciheuleut','L','Islam','Ciamis','2005-07-20',''),('0051320175','Indra Hidajattulloh','VII','Gg Manunggal II C','L','Islam','Bandung','2005-02-27','Wiraswasta'),('0051340423','Ramadita Gerald Pamela','VIII','Cangkuang Sekeawi Gg.Alfamart No.31','L','Islam','Bandung','2005-06-07','PNS/TNI/Polri'),('0051351097','Rifqi Darmawan','VII','Jl. Leuwi Panjang','L','Islam','Bandung','2005-10-14','Buruh'),('0051360130','Gilang Agustin','VIII','Lembang dua','L','Islam','Bandung','2005-08-08','Buruh'),('0051360877','Rizqi Mulia','VII','Mengger Tengah','L','Islam','Tegal','2005-10-30','Wiraswasta'),('0051370446','Iqbal Cahyana','VIII','Sukaati','L','Islam','bandung','2005-05-18','Wiraswasta'),('0051380361','Afif Faturahman','VIII','Blok desa','L','Islam','Kebumen','2005-03-07',''),('0051430731','Gina Meigina','VIII','Cibolerang Pangkalan No.112','P','Islam','Bandung','2005-05-16',''),('0051440159','Aditya Muhamad Joswara','VIII','Jl.Mohtoha Gg Empang No.6','L','Islam','Bandung','2005-09-07','Karyawan Swasta'),('0051440311','Rivaldi Juliana Hermawan','VIII','Gg H Hamim','L','Islam','Garut','2005-06-21','Petani'),('0051440883','Anggi Anggara','VII','Ciparay Tengah','L','Islam','Majalengka','2005-07-05','Wiraswasta'),('0051480161','Andi Stiawan','VIII','Jl.Caringin Gg Cikungkurak','L','Islam','Garut','2005-01-13','Wiraswasta'),('0051480646','Billy Marselino','VIII','Blok sakola','L','Islam','bandung','2005-03-21','Karyawan Swasta'),('0051491170','Pulus Andri','VII','Jl. Kebon Jati Gg. Sasmitapura No. 138/8B','L','Islam','Bandung','2005-11-08','Wiraswasta'),('0051520627','Rendi Triadi','VIII','Samisari dalam I','L','Islam','Bandung','2005-04-13',''),('0051521278','Adika Panca','VII','Jalan Denki Utara Blk No 29','L','Islam','Bandung','2005-06-17','Karyawan Swasta'),('0051570171','Pirman Pirdaus Muslim','VIII','Jl.Babatan No.2','L','Islam','Garut','2005-05-28','Buruh'),('0051610712','Rian Ramdhani','VIII','Kopo Gg.Parasdi dalam II No.5','L','Islam','bandung','2005-01-10','Wiraswasta'),('0051640544','Riyan Septiana','VIII','Moch.Toha Gg.Curug Candung No.55','L','Islam','Bandung','2005-09-17','Buruh'),('0051650729','Felly Yenny Megaria','VIII','Kp.leuwi melang','P','Islam','Bandung','2005-06-07','Wiraswasta'),('0051650828','Siti Hapsah','VIII','Mengger tengah no.24','P','Islam','Bandung','2005-02-01','Karyawan Swasta'),('0051660412','Ihza Zulkarnaen','VIII','H.Kurdi 1 Gg. Sacayuda 1 No.4','L','Islam','Bandung','2005-06-13','Buruh'),('0051670100','Imadul Bilad','VIII','Kp.Patrol','L','Islam','Bandung','2005-05-26','Buruh'),('0051730463','Septia Hermawan','VIII','Dewi Sartika Gg.Rusdi','L','Islam','bandung','2005-09-14','Wiraswasta'),('0051730679','Aldi Wiguna','VIII','kopo gg.bp merta no.36','L','Islam','bandung','2005-06-12','Wiraswasta'),('0051741025','Titan Rizaldi','VII','Kampung Ciguriang Girang','L','Islam','Bandung','2005-09-14',''),('0051751313','Saepul Nuriman','VII','Jalan Kopo Gang Lapang','L','Islam','Bandung','2005-09-18','Pedagang Kecil'),('0051770129','Fikri Mochamad Alfian','VIII','Jl.Babakan Irigasi Gg Amid 8 No.623','L','Islam','Bandung','2005-04-18','Wiraswasta'),('0051820735','Lina Alista','VIII','Blok Ager sari','P','Islam','Bandung','2005-07-13','Buruh'),('0051890784','Nindytha Andriyana Rachman','VIII','Kp.cilisung no.55','P','Islam','Bandung','2005-09-21',''),('0051920652','Fachrizal Riyanto','VIII','asbes no.14 perum bojong raya','L','Islam','bandung','2005-03-10','Buruh'),('0051951208','Naufal Azizan Fikri','VII','Jalan Terusan Cibaduyut Gang Situ Tarate II','L','Islam','Bandung','2005-11-26',''),('0051970641','Andi Rahmawan','VIII','gg.banceuy no.9A','L','Islam','Kebumen','2005-02-15',''),('0052020113','Zeni Darajat','VIII','Jl Babakan Ciparay No.314','L','Islam','Bandung','2005-06-04','Wiraswasta'),('0052020494','Panji Saepul Bagja','VIII','pagarsih Gg.onong 47','L','Islam','Bandung','2005-07-21','Karyawan Swasta'),('0052050075','Rizki Fauzi','VIII','Jl.Cibaduyut Gg Babakan TVRI','L','Islam','Bandung','2005-10-11','Wiraswasta'),('0052051002','Esa Maulana Yusuf','VII','Kampung Baru','L','Islam','Bandung','2005-06-26','Pensiunan'),('0052060582','Mohamad Fikri Setiawan','VIII','Astanaanyar Gg.liogenteng','L','Islam','Bandung','2005-11-28',''),('0052080769','Firda Milati Istiqomah','VIII','Kebon Kopi','P','Islam','Bandung','2005-04-06','Wiraswasta'),('0052090607','Deny Irga Wijaya','VIII','babakan irigasi gg,remaja 8 no.4','L','Islam','Bandung','2005-07-07',''),('0052090764','Deby Setiani Saputri','VIII','Pelindung hewan','P','Islam','Bandung','2005-03-13','Wiraswasta'),('0052100537','Nandi Permana','VIII','inhofftank','L','Islam','Bandung','2005-08-24','Buruh'),('0052120044','Aldi Ramadani','VIII','Jl.Cibolerang Gg Bagja','L','Islam','Garut','2005-01-18','Wiraswasta'),('0052121114','Hilman Rachman Nur','VII','Pasigaran Rt.03/09','L','Islam','Bandung','2005-11-28','Wiraswasta'),('0052121174','Rizki Firdaus Ramadan','VII','Kp. Palasari','L','Islam','Bandung','2005-12-21','Buruh'),('0052150581','Muhamad Rizal Fauzi','VIII','Bbk.Ciparay Gg.H.Abdul Rojak 265','L','Islam','Bandung','2005-05-03',''),('0052170128','Eko Kukuh Triono','VIII','Komp Griya Permata Indah Blok C 3 No.20','L','Islam','Kebumen','2005-03-09','Wiraswasta'),('0052171044','Ilham Mustari','VII','Kp.Ciguriang girang','L','Islam','Bandung','2005-03-25','Wiraswasta'),('0052200624','Muhamad Rafly Naufal','VIII','Komp.Griya Permata Asri Blok B 2 no.15','L','Islam','Bandung','2005-11-17',''),('0052210496','Rinaldi Nur Fajar','VIII','cibuntu tengah jl.holis','L','Islam','Bandung','2005-02-24','Wiraswasta'),('0052211091','Muhammad Dikdik','VII','Baleendah Kp. Mekarsari','L','Islam','Garut','2005-06-21','Wiraswasta'),('0052240483','Mela Aryanasari','VIII','Babakan Ciparay Situ Gunting','P','Islam','Bandung','2005-03-27',''),('0052260222','Fahmi Fajria','VII','Jl.Ters Pasirkoja Gg Babakan Irigasi Gg.AMD 8','L','Islam','Bandung','2005-06-20','Buruh'),('0052290366','Ary Rahmat Pratama','VIII','Kp.Kebon Kopi Gg.Ibu Umi No.75','L','Islam','Ciamis','2005-03-22',''),('0052300099','Giovanni Dennas Purwoto','VIII','Komp.Mekarwangi Kp.Anggacariang No.2','L','Islam','Bandung','2005-07-06','Karyawan Swasta'),('0052300740','Neng Rini','VIII','Babakan Ciparay Situ Gunting Barat No.6','P','Islam','Bandung','2005-03-31','Buruh'),('0052310261','Lukman Al Ghifari','VIII','Pelindung Hewan Gg Bp Atam Iskandar No.14','L','Islam','Bandung','2005-05-13','Wiraswasta'),('0052331015','Mochammad Ferdy B','VII','Jalan Holis Gang Ajengan Hasan Marwi','L','Islam','Bandung','2005-10-02','Wiraswasta'),('0052370889','Dimas Mardianto','VII','Jalan Babakan Targogong Gang Sindang Asih 7 RT 09 ','L','Islam','Bandung','2005-11-26','Wiraswasta'),('0052410932','Lukman Hakim Gumelar','VII','Jl. Terusan pasir Koja Rt. 05 Rw. 05','L','Islam','Bandung','2005-10-01',''),('0052430602','Ali Firmansyah','VIII','peta no.311','L','Islam','Bandung','2005-08-30',''),('0052450013','Gun Gun Burhanudin','VIII','Kp.Babakan Leuwi Bandung','L','Islam','Bandung','2005-02-06',''),('0052460430','Toni Muharam','VIII','Kancra II No.15','L','Islam','Bandung','2005-05-05','Wiraswasta'),('0052510677','Yuni Wasika Maulani','VIII','Kp.babakan','P','Islam','bandung','2005-06-23','Buruh'),('0052520936','Muhamad Rezky Nur','VII','PerumPermata Kopo Blok EA No.289 Rt 04/15 Kel Saya','L','Islam','Bandung','2005-08-12','Wiraswasta'),('0052530770','Fitriana','VIII','kebon kopi no.114 gg.saluyu dalam','P','Islam','Bandung','2005-01-28','Wiraswasta'),('0052540091','Cep Riyan Fauzia','VIII','Jl.Cijeruk Ds Bojongsari','L','Islam','Bandung','2005-05-10','Karyawan Swasta'),('0052551156','Hendra Kartika','VII','Jl. Cibaduyut Gg. H. Wawi Blokumbung No 33','L','Islam','Bandung','2005-09-24',''),('0052560650','Diki Kurniawan Mulyana','VIII','peta gg.sukamulya','L','Islam','Cianjur','2005-02-12','Wiraswasta'),('0052570208','Ajie Gustika Wiganda','VIII','Jl.H Kurdi I Gg 13','L','Islam','Bandung','2005-02-06','Karyawan Swasta'),('0052571151','Dimas Azhar Fadlani','VII','Jalan Mochamad Toha Gang Silih Asih IV No 121 RT 0','L','Islam','Bandung','2005-10-31',''),('0052600264','Muhammad Sigit Nurjaman','VIII','Jl.Cidurian Utara Gg Al-Ikhlas No.102','L','Islam','Bandung','2005-04-21','Karyawan Swasta'),('0052630219','Dicky Indrawan','VIII','Mengger Tengah','L','Islam','Bandung','2005-02-11','Karyawan Swasta'),('0052670108','Renaldi Nurrohman','VIII','Jl.Parakan Saat II','L','Islam','Sudorogo','2005-03-05','Wiraswasta'),('0052680077','Toni Irawan','VIII','Jl.Soekarno Hatta Gg Elos Barat','L','Islam','Bandung','2005-06-19','Karyawan Swasta'),('0052700016','Herpin Elfansyah','VIII','Cikalong','L','Islam','Bandung','2005-02-21','Wiraswasta'),('0052710776','Linda Adhania','VIII','Kp.cigebar','P','Islam','Bandung','2005-03-28','Buruh'),('0052720041','AditiyanFebriansyah Ramadhan','VIII','Jl.Ranca Bentang No.139','L','Islam','Bandung','2005-01-12','Karyawan Swasta'),('0052720048','Andi Muhamad Ramdhan','VIII','Kp.Cilisung Kulon 12','L','Islam','Bandung','2005-10-09','Wiraswasta'),('0052720927','Fahmi Febrian','VII','Jalan Terusan Pasir Koja, Babakan Irigasi RT 02 RW','L','Islam','Bandung','2005-02-01','Buruh'),('0052721105','Bayu Taufik M','VII','Kampung Leuweung Kaleng','L','Islam','Bandung','2005-03-02',''),('0052730597','Adit Anggriawan','VIII','babakan tarogong','L','Islam','Bandung','2005-03-04',''),('0052740358','Yunus Efendi','VIII','Kebonlega II','L','Islam','Purbalingga','2005-10-10','Karyawan Swasta'),('0052740480','Ismail Khaerudin','VIII','Gg.Aki Aksan Karasak lama Cibintinu','L','Islam','Bandung','2005-03-08',''),('0052810270','M Luthfy Raenaldi Oktavian','VIII','Jl.Cibadak','L','Islam','Bandung','2005-09-10','Tidak bekerja'),('0052821286','Antasena','VII','Jalan Cibaduyut Gang Siti Mardiah No 7B','L','Islam','Bandung','2005-09-29',''),('0052830096','Erick Wahyudie','VIII','Jl.Cibaduyut Gg Sauyunan','L','Islam','Jakarta','2005-06-13','Wiraswasta'),('0052830953','Andi','VII','Jl.sadang Margahayu Tengah Rt 05/03 Cigondewah','L','Islam','Bandung','2005-10-02','Wiraswasta'),('0052840583','Muhammad Saleh Noviandi','VIII','Komp.Kopo Permai II B 2 No.6','L','Islam','Bandung','2005-11-09',''),('0052880015','Hanipan','VIII','Kp.Bojong Suren Girang','L','Islam','Bandung','2005-03-28','Wiraswasta'),('0052900534','Muhammad Ilham Nurrohman','VIII','pelindung hewan no.13/96','L','Islam','Bandung','2005-03-03','Buruh'),('0052901146','Andreas Stepanus Lumban Tobing','VII','Jl. Terusan Cibaduyut Gg. Teratai III No 166','L','Islam','Bandung','2005-10-23','Wiraswasta'),('0052940414','Ithma Hidayat','VIII','Rancabentang No.226','L','Islam','Bandung','2005-03-15','PNS/TNI/Polri'),('0052951241','Risma Fitria Rahayu','VII','Jl. Kopo Citarip Timur II No. 291 Rt 03/05','P','Islam','Bandung','2005-11-26',''),('0052980251','Evan Aris Wibowo','VIII','Gg Sukapakir','L','Islam','Bandung','2005-09-29','Karyawan Swasta'),('0053020488','Muhamad Taufik Hidayat','VIII','Peta Gg.Sukamulya II','L','Islam','Bandung','2005-03-04',''),('0053040618','Mochamad Angga Haddad Ibrahim','VIII','Cibaduyut blok lumbung','L','Islam','Bandung','2005-08-24','Wiraswasta'),('0053060021','Krisna Ramdani','VIII','Jl.Ters Suryani','L','Islam','Bandung','2005-01-09','Wiraswasta'),('0053090524','Guntur Daffa Atthariq','VIII','Peta Gg.Jamhari','L','Islam','Bandung','2005-07-26','Karyawan Swasta'),('0053090615','Irfan Fakhrurozi','VIII','cibaduyut raya gg.blok tvri I n0.16','L','Islam','Bandung','2005-10-23',''),('0053120421','Oki Ariyanto','VIII','Cikungkurak Caringin','L','Islam','Bandung','2005-10-07','Wiraswasta'),('0053220893','Hamdan Junaedi','VII','Jl.Sadang Cibolerang Rt.01 Rw.01','L','Islam','Bandung','2005-11-26','Wiraswasta'),('0053250153','Wawan Rosidin','VIII','Jl.babakan Ciparay Gg Hasan Ali','L','Islam','bandung','2005-06-26','Wiraswasta'),('0053260851','Fachrizan Fajar Muharram','VII','Jalan SUkamulya','L','Islam','Bandung','2005-05-01','Karyawan Swasta'),('0053270867','Muhamad Rafli Azhari','VII','Jalan Ratna Sari No 5','L','Islam','Surabaya','2005-11-08','Karyawan Swasta'),('0053290454','Putra Dwi Cahya Mulyana','VIII','Moh.Toha Gg.Silih Asih IV No.115/97','L','Islam','bandung','2005-04-14','Buruh'),('0053300756','Yanti Novianti','VIII','Cibuntu Tengah','P','Islam','Bandung','2005-09-09','Wiraswasta'),('0053320924','Deby Septian Nur Candra','VII','Jl. Astanaanyar No. 75/22D Rt 06','L','Islam','Bandung','2005-09-11','Wiraswasta'),('0053330733','Indah Mega Lestari','VIII','Juardi No.203/10 B','P','Islam','Bandung','2005-08-15','Karyawan Swasta'),('0053340796','Yuli Susanti','VIII','Kp.citamiang kaler','P','Islam','Bandung','2005-07-07','Wiraswasta'),('0053351055','Muhamad Idris','VII','Jl.Cibaduyut Dalam I','L','Islam','Bandung','2005-10-06','Wiraswasta'),('0053370318','Yopie Liman','VII','Kp.Mangga Dua','L','Islam','Bandung','2005-06-12','Wiraswasta'),('0053370644','Arif Rahman Marsah','VIII','pagarsih gg.satria','L','Islam','bandung','2005-06-05','Wiraswasta'),('0053381038','Fitran Fauzi Ramadhan','IX','Kp.Kiara Sinar Wangi','L','Islam','Bandung','2005-01-01','Karyawan Swasta'),('0053390660','Mohamad Akbar Fathurahman','VIII','Moch.Toha blk No.176','L','Islam','bandung','2005-01-18','Buruh'),('0053400520','Febry Alif Walliadi','VIII','soekarno hatta Gg.Pusri No.19','L','Islam','Bandung','2005-01-28','Karyawan Swasta'),('0053440478','Intan Permatasari Putri Chaniago','VIII','Moh. Toha (PERBAS) Kp.Saluyu','P','Islam','Bandung','2005-01-03','Wiraswasta'),('0053440559','Aryo Muhamad Fitsyal','VIII','Kp.Sadang sari','L','Islam','Bandung','2005-01-29',''),('0053471269','Riska Puspita','VII','Jalan Sukarno Hatta Blok ageur sari RT/RW 06/11','P','Islam','Bandung','2005-04-14',''),('0053480680','Andhika Megapradana','VIII','Dulatip no.46/13A','L','Islam','bandung','2005-03-24','Karyawan Swasta'),('0053490033','Saeful Hidayat','VIII','Kp Talun','L','Islam','Bandung','2005-12-03','Buruh'),('0053490240','Adriansyah','VII','Jl.Pelindung Hewan Gg Darussalam','L','Islam','Garut','2005-03-13','Wiraswasta'),('0053510304','Muhammad Fajar','VIII','Jl.Makam Caringin Gg Adinata No.101','L','Islam','Bandung','2005-10-09','Lainnya'),('0053520699','Ilham Nur ismail','VIII','Holis','L','Islam','bandung','2005-03-17','Wiraswasta'),('0053531037','Alfin Yanuar Ramdhan','IX','Jl.Naradireja No.59','L','Islam','Bandung','2005-01-11','Wiraswasta'),('0053540861','Muhammad Reza','VII','Kampung Bojong Reungas No 23','L','Islam','Bandung','2005-08-12','Wiraswasta'),('0053560925','Dio Rezki Fauzan','VII','Jalan Karasak No 40','L','Islam','Bandung','2005-10-04',''),('0053570227','Mahesa Pranajaya','VII','Jl.Pungkur No.155/18C','L','Islam','Garut','2005-04-03','Buruh'),('0053580633','Wahyu Januri Ramdani','VIII','leuwi panjang gg.bakti I  no.3','L','Islam','Bandung','2005-01-17',''),('0053591048','Moch. Muqiit Faturahman','VII','Jalan Sukarajin Lemahnendeut II RT/RW 007/008','L','Islam','Bandung','2005-10-31',''),('0053640032','Roni Sofian','VIII','Jl.Mohtoha','L','Islam','Bandung','2005-07-24','Buruh'),('0053740067','Naufal Ramdhan','VIII','Kp.Cisirung','L','Islam','Bandung','2005-12-23','PNS/TNI/Polri'),('0053770892','Fedryansah','VII','Gempol Sari no. 106 rt04/01','L','Islam','Bandung','2005-05-25','Wiraswasta'),('0053770894','Ilham Pahrizal','VII','Jl. Bojongloa Gg. Salam No.03','L','Islam','Tasikmalaya','2005-06-08','Wiraswasta'),('0053780832','Widayanti','VIII','Blok Hegar manah','P','Islam','Bandung','2005-02-27',''),('0053800079','Wiki Gustiar','VIII','Jl.Inhofftang Gg Perikanan II No.208','L','Islam','Bandung','2005-08-27','Wiraswasta'),('0053820753','Rica Sania','VIII','Moch.Toha Gg.Murdasan','P','Islam','Bandung','2005-04-08','Wiraswasta'),('0053850005','Aris Munandar','VIII','Kp.Margahurip','L','Islam','Bandung','2005-08-01','Wiraswasta'),('0053850110','Rizky Agusrian Syach','VIII','Jl.Leuwianyar I','L','Islam','Bandung','2005-08-18','Wiraswasta'),('0053860794','Sukma Nur Alivia','VIII','Ters.Pasir koja Gg.pesantren dalam','P','Islam','Bandung','2005-09-06','Buruh'),('0053870018','Heru Hermawan','VIII','Jl.Situ Aksan Gg Madrasah Dlm II','L','Islam','Bandung','2005-02-21','Buruh'),('0053870266','Muhamad Fajar Sidik','VIII','Jl.Leuwianyar Utara gg Narpan','L','Islam','Bandung','2005-01-01','Buruh'),('0053900346','Roby Agus Saiman','VIII','Jl.Cibolerang Blok Aci','L','Islam','Bandung','2005-08-18','Buruh'),('0053910701','Indan Suandani','VIII','inhoptank','L','Islam','bandung','2005-02-12','Buruh'),('0053930554','Adhitya Dwi Putra','VIII','pagarsih gg.warga asih no.126/90','L','Islam','Bandung','2005-06-18','Lainnya'),('0053950076','Tubagus Faizal Achmad Fauzian','VIII','Citarip Ujung','L','Islam','Bandung','2005-05-10','Wiraswasta'),('0053950338','Mochamad Ikhsan Nugraha','VIII','Kp Lengkong','L','Islam','Bandung','2005-07-26','Buruh'),('0053960667','Ni\'mal Maulana','VIII','babakan tarogong','L','Islam','bandung','2005-07-27','Wiraswasta'),('0053970880','Ahmad Yusuf','VII','Cibolerang Rt.04/08margahayu Utara','L','Islam','Bandung','2005-09-09','Wiraswasta'),('0053980190','Sandi Purnama','VII','Jl.Situgunting','L','Islam','Bandung','2005-04-02','Buruh'),('0053990703','Kurnia Vadzar','VIII','Kp.cilebak No.38','L','Islam','Garut','2005-05-19','Wiraswasta'),('0054020402','Arya Lutfiara','VIII','Babakan tarogong gg.bojong asih V','L','Islam','Bandung','2005-12-01','Wiraswasta'),('0054020922','Danang Fradita Ivnuaji','VII','Cirangrang Timur TR. 06 RW. 03','L','Islam','Bandung','2005-02-15',''),('0054040063','Muhammad Rafli Pamungkas Antasar','VIII','Jl.Kopo Gg Wiradisastra No.13/199C','L','Islam','','2005-08-08','Lainnya'),('0054040179','Muhamad Al Farizi','VII','Jl.Mohtoha Gg Curug Candung','L','Islam','Bandung','2005-03-21','Buruh'),('0054090592','Sandika','VIII','Situgunting barat no.99','L','Islam','Bandung','2005-04-23',''),('0054160026','Muhamad Salman','VIII','Jl.Gemposari','L','Islam','Bandung','2005-07-24','Buruh'),('0054190226','Isman Hadi','VIII','Jl.Ciparay Hilir','L','Islam','Bandung','2005-10-19','Karyawan Swasta'),('0054210279','Yusuf Arosyid','VIII','Graha Rancamanyar II No 1','L','Islam','Cimahi','2005-07-28','Karyawan Swasta'),('0054210305','Muhamad Iqbal Malik Fajar','VIII','Jl.Singosari Ujung No.14','L','Islam','Bandung','2005-05-02','Karyawan Swasta'),('0054220066','Nanda','VIII','Kp.Cilebak','L','Islam','Bandung','2005-04-14','PNS/TNI/Polri'),('0054220106','Muhamad Riyanto','VIII','Jl.Kebon Kopi Blok Citopeng Sari II No.206','L','Islam','Bandung','2005-04-25','Wiraswasta'),('0054251194','Hengki Hardiansyah','VII','Jalan Babakan Tarogong Bojong Asih','L','Islam','Bandung','2005-10-01',''),('0054260231','Nandar Muhammad Isra','VIII','Jl.Astanaanyar No.164','L','Islam','Bandung','2005-06-10','Karyawan Swasta'),('0054290721','Ami Amelia Hasanah','VIII','Pelindung Hewan Gg.Panda','P','Islam','Bandung','2005-04-26','Buruh'),('0054300105','Muhammad Yunus Akbar','VIII','Bougenvile II No.22','L','Islam','Bandung','2005-06-26','Tidak bekerja'),('0054300162','Andika Rahmadan','VIII','Jl.Singgasana','L','Islam','Bandung','2005-02-16','Wiraswasta'),('0054310616','Levandri Ahmad Fauzan Ajmal','VIII','babakan tarogong no.435/196 B','L','Islam','Bandung','2005-10-01',''),('0054320307','Rafli Juwandi','VIII','Komp GBA III Blok A 2 No.5','L','Islam','Lampung Tengah','2005-06-02','PNS/TNI/Polri'),('0054370380','Hose Rahman Bahari','VIII','Maragluyu No.7','L','Kristen','Bandung','2005-10-18','Wiraswasta'),('0054370410','Helmi Abdan Bayhaqi','VIII','Komp.Putraco Griya Jagabaya Blok A3 No.9','L','Islam','Bandung','2005-02-28','Buruh'),('0054410654','Farhan Naufal Amar','VIII','karasak','L','Islam','bandung','2005-04-09','Buruh'),('0054470842','Aldi Gilang Ramadhan','VII','Kampung Kaum','L','Islam','Bandung','2005-12-14','Karyawan Swasta'),('0054480676','Verrell Erisha','VIII','Anggadireja no.75','L','Islam','bandung','2005-07-30','Buruh'),('0054550600','Aldi Juliantoro','VIII','Srimahi baru no.27','L','Islam','Blora','2005-07-29',''),('0054560140','Mochamad Raffi','VIII','Jl.Mengger Girang III No.25','L','Islam','Bandung','2005-10-11','Karyawan Swasta'),('0054590830','Syah Dwianti Putri','VIII','DanuSaepudin No.36/8C','P','Islam','Bandung','2005-03-09','Wiraswasta'),('0054661264','Melati Puspitasari','VII','Jl.Aki Padma Gg.anah Rt.02/06 No.4 bandung','P','Islam','Bandung','2005-08-01','Wiraswasta'),('0054710186','Riki Setiawan','VIII','Gg Maksudi II','L','Islam','Bandung','2005-03-20','Wiraswasta'),('0054720465','Zidan Septiansyah','VIII','Kopo Citarip Barat No.103','L','Islam','bandung','2005-09-19','Karyawan Swasta'),('0054780003','Andi Kardina','VIII','Jl.Bbk Ciparay Gg Air Mancur','L','Islam','Bandung','2005-10-02','Buruh'),('0054800720','Amelia Nurilahi','VIII','Jl.Cibolerang Gg.MH. Abdul Rahman','P','Islam','Bandung','2005-05-25','Buruh'),('0054810184','Rasi Tri Pertiwi','VII','Bojong Suren','L','Islam','Bandung','2005-11-04','Wiraswasta'),('0054830545','Rudi Lesmana','VIII','curug candung','L','Islam','Bandung','2005-03-01','Wiraswasta'),('0054840268','Muhamad Arki Permana','VIII','Kp.Sayuran','L','Islam','Bandung','2005-08-13','Wiraswasta'),('0054840713','Sahrul Andriansyah','VIII','Caringin Cikungkurak Kaler','L','Islam','bandung','2005-05-29','Wiraswasta'),('0054890010','Dhika Rizki Juliandi','VIII','Jl.Ters Pasirkoja Gg Satata Sariksa','L','Islam','Bandung','2005-07-22','Buruh'),('0054890217','Bambang Adi Wijaya','VIII','Dusun Sewo Harjo','L','Islam','Subang','2005-03-20','Tidak bekerja'),('0054890383','Mochamad Yopan','VIII','Jendral Sudirman Gg.Dunguscariang no.56/79','L','Islam','Bandung','2005-09-07',''),('0054890779','Mega Febrianti','VIII','cibuntu timur','P','Islam','Bandung','2005-02-21','Buruh'),('0054911300','Iwan Setiawan','VII','Jalan Cibolerang','L','Islam','Bandung','2005-06-23',''),('0054920286','Alam Aslama Ma\'ruf','VIII','Jl.Kembar Timur No.26','L','Islam','Bandung','2005-03-09','Wiraswasta'),('0054920755','Widya Anggita Pratiwi','VIII','kebon jeruk no.188/10 b','P','Islam','Bandung','2005-03-19','Wiraswasta'),('0055000376','Erlangga Muhammad Chalik','VIII','baladewa no.33','L','Islam','Bandung','2005-08-13',''),('0055000514','Deden Setiawan','VIII','Moch.Toha Gg.riang','L','Islam','Bandung','2005-10-11','Karyawan Swasta'),('0055040598','Agil Sapdian Pratama','VIII','inhofftank','L','Islam','Bandung','2005-08-21','Wiraswasta'),('0055070068','Nia Kurniawan','VIII','Jl.Kopo Gg Maksudi II No.20','L','Islam','Bandung','2005-05-27','Wiraswasta'),('0055070074','Rifki Juniawan Permana','VIII','Jl.Babakan Ciparay Gg Abid','L','Islam','Garut','2005-07-28','Wiraswasta'),('0055081270','Riska Wahyuni','VII','Jl.Soekarno Hatta Blok Ager Sari Rt 09/10','P','Islam','Bandung','2005-10-04','Wiraswasta'),('0055170059','Haris Ahmadi','VIII','Jl.Babakan Ciparay Gg Ibu Asih','L','Islam','Lamongan','2005-09-04','Wiraswasta'),('0055180519','Fajar Maulana Yusuf','VIII','cikawao dalam 2 blk no.7','L','Islam','Bandung','2005-07-17',''),('0055180717','Wahyu Hidayat','VIII','Kp.Pasir Pogor No.193','L','Islam','bandung','2005-04-06','Lainnya'),('0055250845','Andre Prasetyo','VII','Jalan KH Usman Dhomiri No 115','L','Islam','Cimahi','2005-11-08','Karyawan Swasta'),('0055260456','Renal Dani Saputra','VIII','Karasak Lama Kp.Cibintinu','L','Islam','Kebumen','2005-01-10','Karyawan Swasta'),('0055270086','Alif Aslyana Nurulloh','VIII','Jl.Ahmad  Yani','L','Islam','Sumedang','2005-03-13','Wiraswasta'),('0055320702','Irawan Aliya Sandra','VIII','babakan ciparay/kopo jaya 1 no.17','L','Islam','Ciamis','2005-02-08','Wiraswasta'),('0055330193','Teguh Ismail','VIII','Jl.Pagarsih Gg Holili Dalam 2','L','Islam','Wonogiri','2005-10-11','Karyawan Swasta'),('0055360639','Aldo Muhammad Fernando','VIII','Cikungkurak belakang blok C no.49','L','Islam','bandung','2005-06-30','Buruh'),('0055361141','Zuli Alrizky','VII','Jalan Kopo Gang Lapang No 50','L','Islam','Bandung','2005-10-15',''),('0055370323','Algi Afdal Mardiansyah','VIII','Warung Nangka','L','Islam','Bandung','2005-03-04','Buruh'),('0055370612','Hani Ristian','VIII','Kopo Gg.parasdi dalam III no.19','P','Islam','Majalengka','2005-02-23',''),('0055370628','Rifki Adriansyah','VIII','babakan mekarsari','L','Islam','Bandung','2005-11-04',''),('0055400452','Eneng Komala Dewi','VIII','Kp.Pandereusan','P','Islam','bandung','2005-09-05','Wiraswasta'),('0055410771','Puji Gita Nursyeha','VIII','pasirkoja gg.pesantren','P','Islam','Bandung','2005-01-06','Wiraswasta'),('0055430490','Muhamad Hilman','VIII','cibolerang terusan holis','L','Islam','Bandung','2005-08-24',''),('0055430730','Fuzi Nurhandayani','VIII','Moch.Toha Gg.Empang I','P','Islam','Bandung','2005-05-12','Buruh'),('0055450065','Muhamad Amar Farhan','VIII','Perum Griya Sukarame Astri Blok B.No.5','L','Islam','Bandung','2005-07-19','Karyawan Swasta'),('0055470665','Nanda Faturahman','VIII','Nyengseret utara 269/198 B','L','Islam','bandung','2005-10-01','Tidak bekerja'),('0055490118','Bilal Wiliandri','VIII','Jl.Inhofftank','L','Islam','Bilal Wiliandri','2005-08-22','Lainnya'),('0055530281','Agam Setyawan','VIII','Jl.Pasirkoha Gg Abadi Utama No.212','L','Islam','Bandung','2005-08-12','Wiraswasta'),('0055540034','Sandy Suryana','VIII','Jl.Babakan Sawah','L','Islam','Bandung','2005-04-19','Buruh'),('0055570405','Denden Hermawan','VIII','Ters.pasirkoja gg.h.umar','L','Islam','Bandung','2005-05-07','Wiraswasta'),('0055581299','Ilham Ramadan','VII','Jalan Pagarsih Gang Sastra','L','Islam','Bandung','2005-12-27',''),('0055600310','Rijal Jaelani','VIII','Jl.Lanyar GG LA','L','Islam','Bandung','2005-02-23','Karyawan Swasta'),('0055610459','Rizky Iman Hidayahtulloh','VIII','Cigondewah No.60','L','Islam','bandung','2005-07-03','Wiraswasta'),('0055610513','Daud Anugerah Utama','VIII','Gg.PGA No.76','L','Islam','Bandung','2005-05-14','Buruh'),('0055620738','Eneng Dewi Anjani','VIII','Blok TVRI','P','Islam','Bandung','2005-06-23','Buruh'),('0055621260','Indra Permana Ramdani','VII','Jalan Cibaduyut Raya Kampung Ciparay Tengah Rt 02 ','L','Islam','Bandung','2005-04-28',''),('0055630746','Renita Yulianti','VIII','Caringan cikungkurak gg.karya bakti','P','Islam','Pati','2005-04-17','Buruh'),('0055660152','Syahrul Mubarok','VII','jl.Denki Selatan IV','L','Islam','Bandung','2005-09-25','Buruh'),('0055660232','Rezal Maulana','VII','Kp.Sekeawi','L','Islam','Ngawi','2005-02-13',''),('0055660322','Aldo Dwi Putra Suherman','VIII','Jl.Ters Buahbatu','L','Islam','Sukabumi','2005-12-01','Karyawan Swasta'),('0055660887','Cep Angga Suryana','VII','Komplek Pasirkoja','L','Islam','Bandung','2005-05-06','Wiraswasta'),('0055690472','Elan Mahpudin','VIII','Blok TVRI 2','L','Islam','Bandung','2005-06-05','Buruh'),('0055720249','Dodi Daliaki','VIII','Kp.Mengger','L','Islam','Bandung','2005-05-21','PNS/TNI/Polri'),('0055720435','Alief Maulana','VIII','H.Sayuti 62 A','L','Islam','bandung','2005-06-19','Wiraswasta'),('0055720819','Ranti Julyana','VIII','Cibaduyut Gg. Ma Maja','P','Islam','Bandung','2005-07-28','Wiraswasta'),('0055721009','Lucky Winardi','VII','Kampung Cikondang','L','Islam','Bandung','2005-02-06','Wiraswasta'),('0055740056','Faisal Solihin','VIII','Jl.Rasdan No.6','L','Islam','Bandung','2005-02-22','Wiraswasta'),('0055740213','Ardi Mardiyanto','VIII','Jl.Holis','L','Islam','Bandung','2005-03-09','Tidak bekerja'),('0055740413','Ilham Septa Komara','VIII','PI','L','Islam','Bandung','2005-07-30','PNS/TNI/Polri'),('0055810280','Zamaluludin Sumirat','VIII','Jl.Pasundan No.83/18A','L','Islam','Bandung','2005-06-25','Buruh'),('0055810843','Aldi Hermansyah','VII','Kampung Warna Cinta','L','Islam','Bandung','2005-09-19','Buruh'),('0055840360','Afendi Darmawan','VIII','kp.pandeureusan','L','Islam','Bandung','2005-10-10',''),('0055850204','Agung Setiawan','VIII','Jl.Pagarsih Gg Pa Oyon','L','Islam','','2005-08-12','Wiraswasta'),('0055850567','Febi Mochammad Fikri','VIII','babakan ciparay gg.pasarmadi','L','Islam','Bandung','2005-01-10','Wiraswasta'),('0055850944','Sandi','VII','Gg. Mesjid Darussalam Rt 05/08','L','Islam','Garut','2005-04-21','Wiraswasta'),('0055890774','Jamilatunnisa','VIII','Ters.Cibaduyut Gg.tarate ii','P','Islam','Bandung','2005-06-28','Wiraswasta'),('0055920244','Aris Kurniawab','VIII','Jl.Caringin No.111','L','Islam','Bandung','2005-12-27','Buruh'),('0055920527','Mochamad Fachmi Fadillah Al-Fiqr','VIII','Kopo Gg.H.Taupek I No.51','L','Islam','Bandung','2005-03-04','Wiraswasta'),('0055950085','Alfi Nur Syarif','VIII','Kp.Mulyasari','L','Islam','Purwerejo','2005-04-26','Lainnya'),('0055960744','Nuri Puspitasari','VIII','Cibuntu barat','P','Islam','Cibuntu','2005-06-16','Buruh'),('0055970404','Dadan Apriansyah','VIII','Margaluyu barat no.108','L','Islam','Bandung','2005-04-27','Wiraswasta'),('0055980572','Ilham Surya Saputra','VIII','Kp.cisirung Gg.pak adin no.58','L','Islam','Bandung','2005-09-22',''),('0056000344','Rifqi Zulfikar','VIII','Jl.Kopo Gg Pa Sahdi No.219A','L','Islam','Bandung','2005-04-06','Karyawan Swasta'),('0056020049','Anggara','VIII','Kp.Cibeudug Girang','L','Islam','Bandung','2005-05-31','Buruh'),('0056020858','Ihza Hanif Sukmayana','VII','Jalan Kopo Gang Lapang','L','Islam','Cianjur','2005-10-27','PNS/TNI/Polri'),('0056021228','Joana Friska Angelina','VII','Jl. Sadang Blok No.126','P','Islam','Bandung','2005-04-08','Buruh'),('0056060829','Sopwatul Milah','VIII','Cibaduyut blok pasantren','P','Islam','Bandung','2005-11-02','Buruh'),('0056080651','Diki Permana','VIII','Ciroyom gg.ciroyom 4 no.235','L','Islam','bandung','2005-02-19','Wiraswasta'),('0056090145','Riki Adi Prasetyo','VIII','Jl.Pasirkoja Gg Pasantren Dlm','L','Islam','Bandung','2005-10-25','Buruh'),('0056090448','Jeki Nambagini','VIII','Inhoftank no.65','L','Islam','Timika','2005-06-24','Karyawan Swasta'),('0056100975','Renaldi Setiadi','VII','Kp.Cilebak Rancamanyar Rt 01/03No.18','L','Islam','Bandung','2005-12-02','Wiraswasta'),('0056120327','Bobby Renaldi','VIII','Kp.Bojong Koneng','L','Islam','Bandung','2005-05-04','Wiraswasta'),('0056130574','Jerry Saftary','VIII','soekarno hatta blok desa','L','Islam','Bandung','2005-01-09',''),('0056150604','Arief Hidayat','VIII','Kopo Bihbul nata endah 3A','L','Islam','Bandar Lampung','2005-08-24',''),('0056160556','Andi Efendi','VIII','Karasak lama cibintinu gg.aki aksan','L','Islam','Bandung','2005-11-16',''),('0056170103','Mahar Dhani Alfajari Rusli','VIII','Jl.Mochtoha Gg Curugcandung','L','Islam','Bandung','2005-01-06','Wiraswasta'),('0056211041','Grace Clarissa','VII','Jl. Taman Holis Indah I5 No.47','P','Kristen','Bandung','2005-08-10',''),('0056240590','Rizki Fajar','VIII','pagarsih gg.pelita no.137','L','Islam','Bandung','2005-03-05',''),('0056240719','Yorke Muhamad Aji Wardana','VIII','kebon kopi no.192','L','Islam','semarang','2005-08-21','Karyawan Swasta'),('0056250666','Nanda Septia Kusuma Nugraha','VIII','Karyabakti','L','Islam','bandung','2005-09-07','Wiraswasta'),('0056251292','Dea Setiawan','VII','Jalan Kopo Gang H Topek No 406/198A','L','Islam','Bandung','2005-11-28',''),('0056260847','Khosyi Fauzan','VIII','Komp.Cetarip Barat Jl.Citarip Kulon IV no.193/6','L','Islam','Bandung','2005-03-02',''),('0056320035','Setiadi Firmansyah','VIII','Jl.Jend Sudirman Gg Adil No.32','L','Islam','Bandung','2005-05-18','Wiraswasta'),('0056320623','Muhammad David Sepriyadi Hartono','VIII','Nyengseret gg.amil 135','L','Islam','Bandung','2005-09-24',''),('0056350337','Mohamad Gian Rivaldi','VIII','Komp Griya Bandung Asri I Blok D 209','L','Islam','Bandung','2005-01-21','Karyawan Swasta'),('0056410560','Ayu Purnama Sidik','VIII','kebon kelapa no.25','P','Islam','Bandung','2005-01-13',''),('0056420529','Muhamad Fajar','VIII','babakan ciamis','L','Islam','Bandung','2005-07-10','Buruh'),('0056430643','Arick Setiabudi','VIII','cibaduyut raya gg.ibu ipong no.90','L','Islam','bandung','2005-04-21','Wiraswasta'),('0056440314','Septian Nurdiansyah','VIII','Gg Kenon Jukut II No.125/26','L','Islam','Bandung','2005-09-22','Wiraswasta'),('0056440915','Adi Ahmad','VII','Jl.Moch Toha Gg.Karasak Lama Cibintinu Rt.03 Rw.05','L','Islam','Bandung','2005-06-23','Wiraswasta'),('0056460256','Ilham Amrulloh','VIII','Komp Bukit Indah Cikahuripan Blok B No.34','L','Islam','Bandung','2005-03-11','Wiraswasta'),('0056480645','Ary Ardiansyah','VIII','sukaleeur VIIII no.445/198 A','L','Islam','bandung','2005-05-29','Wiraswasta'),('0056490165','Bagus Solehudin','VIII','Jl.Caringin Gg Cikungkurak','L','Islam','Bandung','2005-08-03','Wiraswasta'),('0056490445','Hendra','VIII','Kp.Ciherang Cigondewah Rahayu','L','Islam','Ciamis','2005-08-12','Buruh'),('0056520824','Rizna Ananda Putri','VIII','Haji Achsan Blk 119','P','Islam','Bandung','2005-05-20',''),('0056530747','Resya Rostiawati','VIII','caringin gg.biba','P','Islam','Bandung','2005-06-06','Buruh'),('0056540438','Boy Geovani Agi','VIII','Nyegseret 201/198 B','L','Islam','bandung','2005-01-17','Karyawan Swasta'),('0056550378','Hendra Komara','VIII','Kp.Cibolang','L','Islam','Bandung','2005-03-01',''),('0056550890','Eri Hermawan','VII','Jl. Cibolerang barat','L','Islam','Bandung','2005-10-19','Wiraswasta'),('0056560345','Rizki Atharik','VII','Jl.Sukapura No.16','L','Islam','Bandung','2005-07-06','Buruh'),('0056560558','Arif Rahman Hakim','VIII','Babakan Ciparay Gg.H.Abdul Rojak','L','Islam','Bandung','2005-06-22',''),('0056560724','Detty Mustikasari','VIII','Kp.Palasari','P','Islam','Bandung','2005-12-24','Wiraswasta'),('0056570389','Reza Yudistira','VIII','Kp.Citeureup Gg.Nurhadi II','L','Islam','Bandung','2005-03-23','Wiraswasta'),('0056570814','Nike Sri Hartati','VIII','Gg.Tegallega 31A/20 C','P','Islam','Bandung','2005-11-12','Wiraswasta'),('0056590111','Robby Rezkia Fauzy','VIII','Blok Sepatu No.88','L','Islam','Bandung','2005-07-24','Wiraswasta'),('0056600051','Dandi Rizkiandi','VIII','Jl.Soekarno Hatta Gg Hasan','L','Islam','Bandung','2005-05-30','Wiraswasta'),('0056640253','Fajar Afriadi','VIII','Jl.Inhofftank Gg Perikanan II','L','Islam','Bandung','2005-04-17','Wiraswasta'),('0056710539','Perli Andrian','VIII','Kopo Citarip Barat','L','Islam','Wonogiri','2005-05-14','Wiraswasta'),('0056720136','Jeri Ramdani','VIII','Jl.Mengger Girang IV','L','Islam','Bandung','2005-12-24','Karyawan Swasta'),('0056760647','Daffa Rizky Nugraha','VIII','Komp.Sarijadi Jl.Sarimadu No.48 blok 25','L','Islam','bandung','2005-10-22','Karyawan Swasta'),('0056791301','Jajang Nurjaman','VII','Gang Raden Dewi VI','L','Islam','Sumedang','2005-09-03',''),('0056830926','Eki Sastrawijaya','VII','Jl. H. Basuki 3','L','Islam','Bandung','2005-12-12',''),('0056850399','Agung Ramadan','VIII','Bapak suhaya no.10','L','Islam','Bandung','2005-12-23','Buruh'),('0056900221','Donni Sanjaya','VIII','Jl.Astanaanyar No.164','L','Islam','Bandung','2005-10-01','Wiraswasta'),('0056901231','Megawati','VII','jl.mengger girang rt.08 rw 08','P','Islam','Bandung','2005-10-21','Wiraswasta'),('0056910820','Rima Anisa Putri','VIII','Kp.cisirung','P','Islam','Bandung','2005-05-05','Wiraswasta'),('0056920505','Yosef Choerul Annam','VIII','suryani dalam III no.7','L','Islam','Cianjur','2005-05-31',''),('0056930552','Abi Karami','VIII','Cibaduyut Lama Komp.Sauyunan III No.1','L','Islam','Bandung','2005-03-24','Wiraswasta'),('0056950606','Deandro Andhara','VIII','kopo sayati gg.hamidi no.92','L','Islam','Bandung','2005-01-31',''),('0056960012','Egi Robiansyah','VIII','Jl.Bbk Ciparay Gg Misbah','L','Islam','Bandung','2005-04-14','Karyawan Swasta'),('0056961276','Yuli Sulistiawati','VII','Jl, Baru raya II No. 9 Rt. 04/03','P','Islam','Bandung','2005-07-01','Wiraswasta'),('0056990827','Sherly Felli Yanti L','VIII','Nata endah I blok J.118','P','Islam','Bandung','2005-02-18','Karyawan Swasta'),('0057000626','Reggy Shafta Hadi','VIII','Mekar mulya No.12','L','Islam','Bandung','2005-02-06',''),('0057001076','Dika Surya Perdana','VII','Komplek Permata Kopo Blok C No 53','L','Kristen','Bandung','2005-04-17',''),('0057011216','Sulistianti','VII','Kampung Bojng Asih','P','Islam','Bandung','2005-12-14',''),('0057020055','Ery Nugraha','VIII','Jl.Abdul Halim','L','Islam','Cimahi','2005-08-22','Lainnya'),('0057020290','Asep Permana','VIII','Jl.Inhofftang Gg Perikanan 2','L','Islam','Bandung','2005-12-23','Wiraswasta'),('0057030440','Deni Nugroho','VIII','Kp.Caringin','L','Islam','Sumedang','2005-03-05','Wiraswasta'),('0057030570','Herlina','VIII','cibaduyut Kp.Warnasari','P','Islam','Bandung','2005-09-05',''),('0057040584','Rendy Ardiansyah','VIII','soekarno hatta no.371','L','Islam','Bandung','2005-08-23',''),('0057081204','Muhammad Arief Jayana','VII','Komplek Bumi Sukagalih Permai D21','L','Islam','Bandung','2005-12-06','Karyawan Swasta'),('0057110220','Diki Wahyudi','VIII','Jl.Babakan Ciparay Gg Air Mancur I','L','Islam','Bandung','2005-01-23','Karyawan Swasta'),('0057130669','Reza Ramdhani','VIII','baleendah jl.bale agung no.44','L','Islam','bandung','2005-01-02','Buruh'),('0057150515','Dendi Mochamad Darwis','VIII','Kp.Mengger','L','Islam','Bandung','2005-08-30','Wiraswasta'),('0057160518','Ervan Maulana','VIII','Babakan Ciparay Gg.Biasan','L','Islam','Bandung','2005-03-14','Wiraswasta'),('0057170407','Farhan Saeful Rahman','VIII','Kopo gg.babakan kulit utara no.23','L','Islam','Bandung','2005-07-01','Wiraswasta'),('0057190133','Gumilar Saputra','VIII','Jl.Inhofftank Gg Blok Desa','L','Islam','Bandung','2005-02-02','Buruh'),('0057190766','Dewi Ayu Lestari','VIII','Pasudan Gg.h.Rais No.153/18 C','P','Islam','Bandung','2005-09-23','Wiraswasta'),('0057200715','Vikri Ramdhani','VIII','astanaanyar','L','Islam','cirebon','2005-01-01','PNS/TNI/Polri'),('0057210727','Dwiyanti','VIII','Pungkur No.159/18 c','P','Islam','Bandung','2005-01-13','Buruh'),('0057251021','Raju Fajar Rahman','VII','Mengger Tengah','L','Islam','Bandung','2005-10-29',''),('0057270806','Ipul Saipulloh','VIII','Kp.Kiaracondong','L','Islam','Bandung','2005-06-29','Buruh'),('0057280022','Muslim','VIII','Jl.Mengger Tengah No.56','L','Islam','Bandung','2005-01-09','Buruh'),('0057290160','Aditya Candra Pratama','VIII','Babakan Sangkuriang','L','Islam','Bandung','2005-02-08','Karyawan Swasta'),('0057360262','Mohamad Ilham Yusup','VIII','Jl.Mohtoha Gg Murdasan II','L','Islam','Bandung','2005-09-16','Buruh'),('0057360512','Chandra Setiawan Komara','VIII','Komp.Bojong Malaka Indah D1-53','L','Islam','Bandung','2005-08-10','Karyawan Swasta'),('0057380855','Haris Munandar','VII','Jalan Sampora','L','Islam','Bandung','2005-06-25','Wiraswasta'),('0057381154','Fieshal Muhammad Haifa','VII','Jl. Baru Raya No. 256','L','Islam','Bandung','2005-11-20','Wiraswasta'),('0057390206','Ahmar Maulana','VIII','Jl.Cibuntu Sayuran','L','Islam','Bandung','2005-06-10','Wiraswasta'),('0057390419','Mochamad Lukman Aliansyah','VIII','Astana Anyar No.157/22 D','L','Islam','Bandung','2005-07-31','Wiraswasta'),('0057430287','Aldi Syabiqul Ilham','VII','Kp Mengger Hilir','L','Islam','Bandung','2005-07-11','Buruh'),('0057430586','Rian Hadiansyah Hambali','VIII','Situ Sipatahunan','L','Islam','Bandung','2005-11-13',''),('0057440082','Ade Lukmansyah','VIII','Jl.Ciburuy No.34/204B','L','Islam','Bandung','2005-04-29','PNS/TNI/Polri'),('0057451255','Coba','VII','Jl. Kb. Kopi Gg. Karya Bakti','P','Islam','Bandung','2005-07-09','Wiraswasta'),('0057470122','Dendy Firmansyah','VIII','Kp.Ciawitali','L','Islam','Bandung','2005-07-29','Buruh'),('0057480564','Dzaky Faris Hafizh','VIII','Komp.Kopo permai II B 4 no.1','L','Islam','Bandung','2005-11-24','Wiraswasta'),('0057490169','Dika Harya Syah Putra','VIII','Jl.Bapak Suhaya 2 No.58','L','Islam','Bandung','2005-03-31','Wiraswasta'),('0057490341','M Davy Fergieana Setyawan','VIII','Kp.Cibiuk','L','Islam','Bandung','2005-05-26','Karyawan Swasta'),('0057490986','Yunus Nur Ikhlas','VII','Jl. Mengger Hilir Rt 01/04','L','Islam','Bandung','2005-10-04','PNS/TNI/Polri'),('0057510095','Dzaki Raihan','VIII','Kav.Ranca Intan 2','L','Islam','Bandung','2005-04-26','Karyawan Swasta'),('0057510392','Rizki Aryana','VIII','sukaati I','L','Islam','Bandung','2005-11-11',''),('0057520087','Alpinas Padli','VIII','-','L','Islam','Subang','2005-06-09','Buruh'),('0057530466','Agung Ahmad Darajat','VIII','H. Safari No.181/22 A','L','Islam','Bandung','2005-04-04','Wiraswasta'),('0057550302','Muhamad Ridwan','VIII','Jl.Pangampaan No.334 /19B','L','Islam','Bandung','2005-03-11','Buruh'),('0057550692','Farrel Anggara Permana','VIII','jamika No.128/85','L','Islam','bandung','2005-08-14','Wiraswasta'),('0057590571','Ilham Purnama Cahaya','VIII','Moch.Toha Gg.ciseureuh V','L','Islam','Bandung','2005-07-28',''),('0057650260','Leri Febriyana','VIII','Kp.Cijantung','L','Islam','Bandung','2005-02-25','Lainnya'),('0057700367','Aripin','VIII','Cigondewah kidul','L','Islam','Bandung','2005-03-08',''),('0057740555','Afriano Ilham Agasi','VIII','cibadak gg.citepus no.68/9A','L','Islam','Bandung','2005-11-03',''),('0057760092','Christoporus','VIII','Jl.Caringin Gg Hasan II Blok Ado','L','Katholik','Medan','2005-06-10','Buruh'),('0057760403','Aulia Rahman','VIII','Holis caringin no.339','L','Islam','Bandung','2005-06-17','Wiraswasta'),('0057781030','Adam Miftah Farid','VII','Jl.Holis Gg.Ibu Itu','L','Islam','Bandung','2005-12-30','Buruh'),('0057790004','Anggi Ramdani','VIII','Curug Candung No.6','L','Islam','Bandung','2005-12-13','Karyawan Swasta'),('0057830987','Ade Sutrisna Abdul Rozak','VII','Jalan Sukabirus','L','Islam','Bandung','2005-11-17','Buruh'),('0057880031','Rendy Ardianto','VIII','Jl.Laswi Blok Desa','L','Islam','Bandung','2005-05-06','Buruh'),('0057880409','Hadi Permana','VIII','Cigondewah kidul','L','Islam','Bandung','2005-03-31','Karyawan Swasta'),('0057920180','Muhamad Rafi Maulana','VII','Jl.Ters Holis','L','Islam','Bandung','2005-07-27','Buruh'),('0057930967','M. Ramdan','VII','Gg. Rasdan Rt. 01/06 No. 32','L','Islam','Bandung','2005-12-19',''),('0057961176','Sarah Sri Sahyati','VII','BBk Ciseureuh Timur RT 04 / 07','P','Islam','Bandung','2005-11-20',''),('0058011273','Tantri Sri Hardianti','VII','Jl. Siti Munigar 22E Nyengseret Astanaanyar Bandun','P','Islam','Bandung','2005-05-20','Wiraswasta'),('0058050408','Febby Nugraha Ariansyah','VIII','Cibadak Gg.Sereh No.144/9 B','L','Islam','Bandung','2005-10-02','Wiraswasta'),('0058060040','Adit Maulana Yusuf','VIII','Jl.Asep Berlian Gg Bunga','L','Islam','Bandung','2005-07-11',''),('0058081214','Sopyannur','VII','Jalan Astananyar','L','Islam','Cianjur','2005-11-17',''),('0058140656','Hafizh Kurnia Degano','VIII','cibaduyut blok lumbung','L','Islam','Bekasi','2005-07-27','Karyawan Swasta'),('0058150192','Taupik Ismail','VII','Jl.Madesa','L','Islam','Bandung','2005-03-28','Wiraswasta'),('0058160816','Putri Ayu Lestari','VIII','Luna IV No.48/238','P','Islam','Bandung','2005-04-05',''),('0058170800','Amellinda Koestary','VIII','Kp.Cilebak desa rancamanyar','P','Islam','Cilacap','2005-06-16','Wiraswasta'),('0058170957','Cecep Jalaludin','VII','Jalan Ciparay tengah RT/RW 04/06','L','Islam','Bandung','2005-04-10','Wiraswasta'),('0058230437','Ari Ramadhan','VIII','Sriwijaya II Gg.VI No.19','L','Islam','bandung','2005-01-11','Wiraswasta'),('0058240315','Septiyan Rahmawan','VIII','Jl.Pagarsih Gg Sukapakir Dlm III','L','Islam','Bandung','2005-09-29','Buruh'),('0058251183','Alam Nugraha','VII','Komplek BMI Blok H2 No 64','L','Islam','Bandung','2005-09-19',''),('0058251253','Devi Asri Novitasari','VIII','Jalan Moh.Toha, gg Haji Mukti RT/RW 01/03','P','Islam','Bandung','2005-11-12',''),('0058270508','Agung Ibrahim','VIII','Babakan Ciparay Gg.ucu','L','Islam','Bandung','2005-04-10','Buruh'),('0058320694','Garin Alpiansyah','VIII','Pagarsih Gg.Holili','L','Islam','bandung','2005-07-02','Wiraswasta'),('0058320834','Yesi Herdiansyah','VIII','Cijerah','P','Islam','Ciamis','2005-07-02','Wiraswasta'),('0058350141','Muhammad Iqbal Abdullah','VIII','Jl.Batu Karut','L','Islam','Bandung','2005-07-30','Karyawan Swasta'),('0058350736','Mega Apriyanti','VIII','Situ Gunting Barat no.15','P','Islam','Bandung','2005-04-01','Buruh'),('0058380548','Tommy Wijaya','VIII','Komp.Rancamanyar Regency 2 Jl.Nuri no.31','L','Islam','Lubuk dalam','2005-03-14','Wiraswasta'),('0058400608','Djihal Khamal Rizqi Fauzi','VIII','Hasyim wahid gg.crangrang timur no.6','L','Islam','Bandung','2005-07-13','Wiraswasta'),('0058420461','Sahrul','VIII','Nyengseret Selatan No.400/198 B','L','Islam','bandung','2005-06-12','Wiraswasta'),('0058420836','Yuni Nur Rohimi','VIII','Pasir koja','P','Islam','Bandung','2005-08-07','Buruh'),('0058430661','Mochamad Devin Risnandar Pasya','VIII','peta gg.jamhari','L','Islam','Bandung','2005-03-12','Wiraswasta'),('0058480952','Aldi Renaldi','VII','Cigondewah Rahayu Rt.04 Rw 01 Bandung','L','Islam','Bandung','2005-07-01',''),('0058490510','Alwan Muzafar','VIII','Kp.Parung Halang Gg.Jati IV','L','Islam','Bandung','2005-04-17','Karyawan Swasta'),('0058500714','Sandy Prastyo','VIII','Karapitan 2 No.11 B','L','Islam','bandung','2005-05-03','Wiraswasta'),('0058540587','Richard Septiandi Karim','VIII','paralon gg.sawargi','L','Islam','Bandung','2005-09-05',''),('0058590425','Rendy Argiya Agustian','VIII','Kp.Baleendah','L','Islam','Sukabumi','2005-08-26','Wiraswasta'),('0058590611','Guruh Maulana','VIII','Jendral Sudirman gg.pasir anyar','L','Islam','Bandung','2005-12-18',''),('0058600648','Detri Septiawan','VIII','Kp.Mahkeling Blok C8','L','Islam','bandung','2005-09-03','Wiraswasta'),('0058630334','Hindra Gunawan','VIII','Jl.Cigiringsing','L','Islam','Bandung','2005-06-25','Karyawan Swasta'),('0058640182','Nova Satria Nugraha','VII','Jl.Kopo Gg Bp Merta No.35','L','Islam','','2005-11-28','Lainnya'),('0058701184','Alam Syah','VII','Jalan Mochamad Toha Gang Eris 58','L','Islam','Bandung','2005-11-04',''),('0058710349','Ryan Andriansyah','VIII','Paledang','L','Islam','Bandung','2005-09-28','Karyawan Swasta'),('0058750431','Tri Aswar Ramadhan','VIII','PLN Dalam No.80','L','Islam','Bandung','2005-01-09','Wiraswasta'),('0058760225','Indra Ardiansyah','VII','Jl.Kopo gg H Taupik No.507','L','Islam','Bandung','2005-05-29','Karyawan Swasta'),('0058760933','Muhammad Lukman Baihaqi','VII','Jl.Bbk Tarogong Rt 06/05 Kel Sukaasih Kec Bojonglo','L','Islam','Bandung','2005-10-10','Buruh'),('0058770331','Fahrul Mochamad Abizar','VIII','Babakan Tarogong','L','Islam','Bandung','2005-04-15','Karyawan Swasta'),('0058790047','Alza Frimus Sasabila','VIII','Jl.Sukamenak  Gg H Sarbini No.7B','L','Islam','Bandung','2005-05-08','Karyawan Swasta'),('0058821257','Eva Ofiyanti','VII','Jl.Kebon Kalapa No.25 Rt.01 Rw.02','P','Islam','Bandung','2005-09-01',''),('0058840374','Diang Randi','VIII','Andir RI Winata','L','Islam','Tasikmalaya','2005-05-09',''),('0058850569','Helmi Pebriyanti','VIII','cibaduyut raya gg.mamaja','P','Islam','Bandung','2005-02-18',''),('0058880324','Ali Rohman Irawan','VIII','Kp.Cilebak','L','Islam','Bandung','2005-04-14','Wiraswasta'),('0058880767','Emelia Fajrin','VIII','Gg.H.Hasan II','P','Islam','Bandung','2005-09-23','Karyawan Swasta'),('0058890803','Gia Aderiana Alawiah','VIII','Pasirkoja Gg.Satata Sariksa','P','Islam','Garut','2005-11-07','Wiraswasta'),('0058900610','Feri Apriyanto','VIII','holis selatan','L','Islam','Bandung','2005-04-22',''),('0058910847','Deril Keny Adam','VII','Jalan Radio Babakan Tanjung No 7','L','Islam','Bandung','2005-08-26','Buruh'),('0058930020','Ivan Hudi Aras','VIII','-','L','Islam','Bandung','2005-12-23','Buruh'),('0058930336','Langlang Tiana Fauzan','VIII','Jl.Kopo Cirangrang No.96','L','Islam','Bandung','2005-05-28','Buruh'),('0058930406','Eriansyah','VIII','Sasak gantung no.44/18 c','L','Islam','Bandung','2005-10-26','Lainnya'),('0058941283','Alvin Farrel Susanto','VII','Setra Duta Cemara K2-16','L','Islam','Bandung','2005-11-22',''),('0058960805','Indah Yuliasri','VIII','inhofftank','P','Islam','Bandung','2005-07-11','Wiraswasta'),('0058961181','Aditya Mahendra','VII','Jalan Kopo Blok Tempe No 363/198A','L','Islam','Bandung','2005-10-19',''),('0059010202','Agisna Rihadz Fauzi','VIII','Jl.Kopo Cirangrang Gg Babakan Baru I No.20','L','Islam','Bandung','2005-07-28','Wiraswasta'),('0059010211','Andi Prasetyo','VII','Jl.Bbk Irigasi Gg AMD VIII','L','Islam','Bandung','2005-11-13','Wiraswasta'),('0059051054','Muhammad Daniel Parhan','VII','Jl. Soekarno Hatta Gg.Situgunting','L','Islam','Bandung','2005-05-24','Wiraswasta'),('0059091243','Santi sulastri','VII','Jl. Cibaduyut Gg. Terusan maeja No.10 rt 02/02','P','Islam','Bandung','2005-12-21',''),('0059110294','Fariz Rahmat Mulyadi','VIII','Jl.','L','Islam','Cirebon','2005-02-14',''),('0059130595','Abdul Majid','VIII','Kp.bojongsoang','L','Islam','Bandung','2005-03-18',''),('0059140335','Indra Lesmana','VIII','Jl.Kopo Gg A Sutisna','L','Islam','Bandung','2005-01-13','Wiraswasta'),('0059141316','Soni Ibrahim','VII','Jalan Mengger Tengah','L','Islam','Bandung','2005-12-05','Lainnya'),('0059150275','Soni Faisal','VIII','Kp.Babakan Mugraha','L','Islam','Bandung','2005-07-12','Lainnya'),('0059160455','Reformasi Jeri Heryadin','VIII','karasak lama cibintinu gg.palita II','L','Islam','bandung','2005-01-07','Lainnya'),('0059190312','Salman Syahrul Sidiq','VIII','Jl.','L','Islam','Bandung','2005-07-08','PNS/TNI/Polri'),('0059250474','Fazri Madani','VIII','Peta Gg.Jamhari No.168','L','Islam','Bandung','2005-03-22','Buruh'),('0059260503','Syarief Nugraha','VIII','inhofftank','L','Islam','Bandung','2005-05-14','Wiraswasta'),('0059270484','Mochamad Azi','VIII','Cigondewah rahayu','L','Islam','Bandung','2005-10-17',''),('0059340024','Mochammad Achsan Firdaus','VIII','Jl.Gempol Sari','L','Islam','Bandung','2005-05-06','Lainnya'),('0059350071','Reksi Maulana','VIII','Kp.Bojong Suren No.100','L','Islam','Cirebon','2005-11-06','Wiraswasta'),('0059360947','Wangsa Iqbal','VII','jl.Mengger4 Girang Gg.Aki Kayat No.16 Bandung','L','Islam','Bandung','2005-12-01','Wiraswasta'),('0059370471','Devara Muhammad Azhar','VIII','Kp.Leuwi Melang','L','Islam','Bandung','2005-08-27',''),('0059380959','Dandi Mardiansyah','VII','Jalan Leuwi Panjang','L','Islam','Bandung','2005-03-15',''),('0059400223','Fahtan Naufal','VII','Jl.Nyengseret No.22A/94','L','Islam','Bandung','2005-08-14','Buruh'),('0059470622','Muhammad Fikri Islamey','VIII','sasak gantung no.70/10B','L','Islam','Bandung','2005-04-09',''),('0059471321','Yudi Agung Senjaya','VII','Jalan Gempol Sarii','L','Islam','Bandung','2005-04-12','Karyawan Swasta'),('0059480210','Ali Nur Oktavian','VII','Jl.Cibaduyut Dlm','L','Islam','Bandung','2005-10-18','Wiraswasta'),('0059491065','Yes Roni Gultom','VII','Bumi Asri Gempol Sari Blok A No.26 Rt 04/05','L','Kristen','Bandung','2005-11-18','Wiraswasta'),('0059510716','Vitra Januar Saputra','VIII','Komp.Graha Rancamanyar Jl.Angger I no.15','L','Islam','bandung','2005-01-18','Wiraswasta'),('0059520306','Prima Firman Hadi','VIII','Kp.Ciputat','L','Islam','Bandung','2005-03-07','Karyawan Swasta'),('0059530588','Rifqi Fadliana','VIII','cibiuk kp.cisuminta no.7','L','Islam','Bandung','2005-08-01',''),('0059540812','Mya Audina','VIII','Gg.mekar sari I','P','Islam','Bandung','2005-04-26','Wiraswasta'),('0059550708','Muhamad Ramdan','VIII','Leuwi panjang Gg.kebon kalapa no.51','L','Islam','bandung','2005-12-09','Karyawan Swasta'),('0059560695','Hafidudin Riziq','VIII','Cetarip Barat No.3','L','Islam','bandung','2005-05-24','Wiraswasta'),('0059570224','Imam Sihabudin','VII','Jl.Kopo Gg Sukaleur','L','Islam','Bandung','2005-05-25','Buruh'),('0059580906','Romi Naufal Shany','VII','Jl. Kopo Sayati Gg. madkasih Kec. Margahayu Rt 04/','L','Islam','Bandung','2005-10-20','Buruh'),('0059600339','Moch Fahmi Mahesa Putra','VIII','Kp.Coblong No.14','L','Islam','Bandung','2005-02-09','Karyawan Swasta'),('0059610038','Timur Angin','VIII','Jl.Gumuruh No.24A/113','L','Islam','Bandung','2005-01-20','Karyawan Swasta'),('0059620576','Kurniadi Sulistiana','VIII','Kp.sukaluyu','L','Islam','Bandung','2005-01-17',''),('0059620809','Mia Sri Rahayu','VIII','Jl.Moch.Toha Gg.salpian no.138','P','Islam','Bandung','2005-05-07','Buruh'),('0059630117','Bagas Hadi Saputro','VIII','Griya Panorama Inda/19h A 4','L','Islam','Bandung','2005-03-19','Karyawan Swasta'),('0059630732','Imer Triastuti','VIII','Karees Kulon No.2/33','P','Islam','Bandung','2005-05-25','Wiraswasta'),('0059671122','Muhammad Fajar Ramadhan','VII','Jalan Kopo Gang Paninengan II No 218/196A','L','Islam','Bandung','2005-01-04',''),('0059680144','Reza Apriansyah','VIII','Parung Halang','L','Islam','Garut','2005-04-10','Wiraswasta'),('0059700759','Angelina Nurputriyani','VIII','pelindung hewan Gg.bapak atam iskandar no.14','P','Islam','Bandung','2005-10-10','Buruh'),('0059710999','Dicky Setiawan','VII','Jalan Mengger Girang No 23','L','Islam','Bandung','2005-10-18','Karyawan Swasta'),('0059761202','Muamar Gustian','VII','Jalan Cibuntu Selatan Gang Hasan Mugni','L','Islam','Garut','2005-08-11',''),('0059770798','Aisyah Wais Al Qor\'ni','VIII','cibuntu tengah','P','Islam','Bandung','2005-05-07','Wiraswasta'),('0059780246','Azi Tia Sumarna','VIII','Jl.Caringin No.88','L','Islam','Bandung','2005-08-25','Wiraswasta'),('0059780468','Ari Surya Pradana','VIII','Karasak lama','L','Islam','Bandung','2005-05-09',''),('0059790301','Muhamad Fajar Andrian','VIII','Jl.Mohtoha Gg Bbk Ciseureuh Timur','L','Islam','Bandung','2005-05-04','Karyawan Swasta'),('0059800027','Muhammad Arga Fasya','VIII','Kav Rancaemas H.','L','Islam','Bandung','2005-08-24','Karyawan Swasta'),('0059830579','Mochamad Robiyansyah','VIII','Kp.Reungascondong','L','Islam','Bandung','2005-08-02',''),('0059840328','Dadan Husen Firmansyah','VIII','Babakan','L','Islam','Bandung','2005-01-25','Buruh'),('0059930668','Rahangga Dwi Putra','VIII','Terusan pasirkoja no.187','L','Islam','bandung','2005-07-28','Wiraswasta'),('0059970613','Hasyim Hasna Habib','VIII','babakan tarogong 122 A','L','Islam','Bandung','2005-03-13',''),('0059980330','Deni Yulianto','VIII','Jl.Kebon Kopi Gg Karya Bakti No.50','L','Islam','Bandung','2005-07-10','Karyawan Swasta'),('0061002120','M Fikri Akbari','VII','Jl. Pagarsih Gg. Satibi No. 313/87','L','Islam','Bandung','2006-10-03','Wiraswasta'),('0061006124','Ajeng Mela Sasti','VII','Jln. Sindang Palay','L','Islam','Bandung','2006-08-10','Wiraswasta'),('0061011099','Anton Julian Maulana','VII','Kampung Ciguriang Hilir','L','Islam','Bandung','2006-07-02','Wiraswasta'),('0061012084','Ahmad Aldi Hardiansyah','VII','Gang Babakan Ciseureuh Timur No 82/204A Jalan Moch','L','Islam','Bandung','2006-09-27','Karyawan Swasta'),('0061017110','Taufik Hilmawan Saputra','VII','Jalan Cibaduyut Gang. Ma Maja No. 06 RT/RW 03/05','L','Islam','Bandung','2006-06-13','Wiraswasta'),('0061037084','Diki Sahidan','VII','Mengger Tengah','L','Islam','Bandung','2006-06-19','Buruh'),('0061038119','Fikri Arya Nugraha','VII','Jl. Caringin No. 178 Rt.01/05','L','Islam','Bandung','2006-01-09','Wiraswasta'),('0061039125','Erika Mega Silvia','VII','Jl.Pagarsih Gg.Citepus Dalam II No.13 Rt.08 Rw.03','P','Islam','Bandung','2006-07-30','Wiraswasta'),('0061048113','Riky Fauzi Budiman','VII','Kampung Cilisung','L','Islam','Bandung','2006-07-01',''),('0061049109','Sendi Ferdiansyah','VII','Jl. Terusan Suryani Gg. Al-Husna 2','L','Islam','Bandung','2006-02-07','Buruh'),('0061050417','Luki Hidayat','VIII','Ancol Utara I No.46/136 D','L','Islam','Cianjur','2006-01-14','Wiraswasta'),('0061055021','Bagus Febriyan Muhammad Putra','VII','Bojong Malaka Indah H 5 -20','L','Islam','Jakarta','2006-02-22','Karyawan Swasta'),('0061055107','Cecep Sukma','VII','Babakan Tarogong Gang Raden Dewi VI RT 10','L','Islam','Bandung','2006-10-26',''),('0061056109','Rafi Daryl Hafiz','VII','Jl. Karasak Baru No. 15','L','Islam','Bandung','2006-06-28','Wiraswasta'),('0061064110','Anla Rijabani Ramsus','VII','Jl. Cijerah I Blok V No 83 RT 05/05','L','Islam','Bandung','2006-09-30',''),('0061065092','Gungun Gunawan','VII','Jl. Astana Anyar No.157 / 22 D RT.05/RW.03 Bandung','L','Islam','Garut','2006-08-23','Wiraswasta'),('0061070902','Rahmat Riyanto','VII','Jalan Emong 28/16D','L','Islam','Bandung','2006-03-27','Wiraswasta'),('0061071036','Dika Anggara','VII','Jl. Pelindung Hewan Gg. Mesjid Darusallam Rt. 01/0','L','Islam','Bandung','2006-03-01','Wiraswasta'),('0061071061','Rifqi Ahmad Febriansyah','VII','Jl.Cijerah Kp.Sayuran Gg.Manunggal II','L','Islam','Bandung','2006-02-05','Karyawan Swasta'),('0061073121','Wifaldi','VII','Gang Curug Candung No 80','L','Islam','Bandung','2006-09-02',''),('0061074086','Muhammad Rizky Alfharizy','VII','Jalan Kopo Gang Sukaleueur XI No 76','L','Islam','Bandung','2006-01-19','Karyawan Swasta'),('0061076087','Rienaldi','VII','Kampung Nyenang','L','Islam','Cimahi','2006-05-05','Wiraswasta'),('0061087106','Rafa Akhrojal','VII','Jl.Aki Padma','L','Islam','Bandung','2006-05-14','Wiraswasta'),('0061088091','Utep Kusmianto','VII','Jalan Caringin Gang Blok Upat RT/RW 03/13','L','Islam','Bandung','2006-06-16','Wiraswasta'),('0061131098','Riswanto','VII','Blok Lumbung','L','Islam','Pemalang','2006-09-25','Wiraswasta'),('0061180846','Angga Permana Saputra','VII','Jalan Cibuntu Timur','L','Islam','Bandung','2006-08-20','Buruh'),('0061220960','Dias Wahyudin','VII','Gg. Cikawao dalam ii no.12-36A','L','Islam','Bandung','2006-01-01',''),('0061241057','Nana Septiana','VII','Jl. Moch Toha No.27','L','Islam','Bandung','2006-09-25','Buruh'),('0061341193','Gema Fajar Anugerah','VII','Jalan Luna no 63/23 B','L','Islam','Bandung','2006-03-11','Buruh'),('0061371126','Nabil Rayhan','VII','Jalan Cibolerang Gang Abd Rohman No 2','L','Islam','Selayar','2006-12-05',''),('0061431063','Soni Setiawan','VII','Jl. Babakan Irigasi Gg.Amd 8','L','Islam','Bandung','2006-11-04','Buruh'),('0061451244','Sinta Maulida','VII','Jl. Cingkungkurak Rt 02 Rw 06','P','Islam','Bandung','2006-07-03','Wiraswasta'),('0061490191','Raka Apriana','VII','JL. Suka Pakir Dalam 2 No. 61/197C','L','Islam','Bandung','2006-04-08','Wiraswasta'),('0061501022','Rendi Andika Suwandi','VII','Kampung Cibiana','L','Islam','Bandung','2006-04-26','Wiraswasta'),('0061511112','Fitrah Ramadhan','VII','Jalan Kopo No 256/196B Blok 270 Gang Mesjid Jami A','L','Islam','Bandung','2006-01-03',''),('0061541203','Muhamad Rizki','VII','Sukaati V No 14','L','Islam','Bandung','2006-06-04',''),('0061590565','Efsa Firmansyah','VIII','Moch.Toha Gg.Murdasan','L','Islam','Bandung','2006-03-22',''),('0061601144','Alvin Defanno Manasye Arya S','VII','Jl. Caringin Gg. Lumbung I','L','Islam','Pasuruan','2006-09-08','Wiraswasta'),('0061650907','Septian Delkantira','VII','Sekekuda RT. 01 RW. 07','L','Islam','Bandung','2006-09-27','Tidak bekerja'),('0061690881','Al Farel Rinaldy','VII','Jalan Radio STT Telkom No 62','L','Islam','Bandung','2006-05-16',''),('0061741145','Alya Faizah Firgi','VII','Komplek Rahayu 3 B7 132','P','Islam','Bandung','2006-05-02','Wirausaha'),('0061751038','Erika Kurnia','VII','Jl.Terusan Jamika Gg.Mama Difa Rt.02/05','P','Islam','Bandung','2006-03-15','Wiraswasta'),('0061761143','Alif Rasidi','VII','Jl.Pelindung Hewan Gg Darussalam No.,26 Bandung','L','Islam','Bandung','2006-04-14','Wiraswasta'),('0061781049','Mochamad Sidik Permana','VII','Jl. Otista Awiwulung No. 151 Rt 04/08','L','Islam','Bandung','2006-06-24','Wiraswasta'),('0061790873','Rapid Ariq Hammam','VII','Jalan Waruga Jaya No 24/203','L','Islam','Bandung','2006-08-29','Wiraswasta'),('0061861234','Natalia Elisabeth','VII','Situ Gunting Rt 03/09 No.14 Kel Bacip Kec Bacip','P','Kristen','Bandung','2006-03-22','Wiraswasta'),('0061920707','Muhammad Fazri Ihsanuddin','VIII','Sindang palay no.128','L','Islam','bandung','2006-03-22','Petani'),('0061931177','Wawan Kurniawan','VII','Jl. Terusan Jamika Gg. Bah Pian RT 10/ 06','L','Islam','Bandung','2006-09-01','Wiraswasta'),('0061940671','Rudi Cahyadi','VIII','suryani no.17','L','Islam','bandung','2006-03-06','Buruh'),('0061951218','Yudhistira Arya Rusmana','VII','Kampung Sekeandur','L','Islam','Bandung','2006-07-17','Wiraswasta'),('0061980856','Hizkia Andre Gunawan','VII','Jalan Kopo Gang Masjid Al Hidayah No 33','L','Kristen','Bandung','2006-03-21','Wiraswasta'),('0061980928','Febby Summaker Agustinus','VII','Jalan Pagarsih RT/RW 05/09 Kel. Jamika Kec. Bojong','L','Islam','Bandung','2006-08-02','Wiraswasta'),('0061991318','Tibyan Alfath Syarif','VII','Jalan CIbolerang No 160','L','Islam','Bandung','2006-04-25',''),('0062041258','Ikeu Fuji Priantini','VII','Jl. Babakan Ciparay Gg. H. Abdul Rojak No.287','P','Islam','Bandung','2006-05-12','Wiraswasta'),('0062050739','Neng Resi Russhintari','VIII','Jl.Moch.Toha Gg.Mesjid','P','Islam','Garut','2006-04-08','Wiraswasta'),('0062101211','Rio Romansyah','VII','Jalan Cisirung Kampung Cibedug Girang','L','Islam','Bandung','2006-11-22',''),('0062131148','Cahyana','VII','Kampung Ciguriang Girang RT. 02 RW. 04','L','Islam','Bandung','2006-01-31','Wiraswasta'),('0062181281','Aldi Rinaldi','VII','Jalan Rajawali Timur No 158 Gang Budi Karya','L','Islam','Bandung','2006-10-31','Sudah Meninggal'),('0062191039','Fauzi Abdulloh Firdaus','VII','Jl. Cibuntu Timur','L','Islam','Bandung','2006-07-29','Wiraswasta'),('0062270935','Muhamad Ichsan Alfarisi','VII','Cibolerang Barat Rt.05 Rw.01 Bandung','L','Islam','Bandung','2006-05-01',''),('0062291087','Moch. Hafidz Hadiansyah','VII','Jl.Cibaduyut Lama Komp. Sauyunan Mas Raya I No.17','L','Islam','Bandung','2006-02-16',''),('0062301077','Edwin Yoga Pratama','VII','Gang Lumbung 4 Caringin Bandung','L','Islam','Boyolali','2006-07-10','Wiraswasta'),('0062301186','Dadang Dicky','VII','Jl. Mengger Girang Rt 03/08','L','Islam','Bandung','2006-05-11','Karyawan Swasta'),('0062470969','Muhamad Iqbal Syah Putra','VII','Jl. Caringin Gg. Lumbung 2 Rt. 02/03','L','Islam','Bandung','2006-10-01',''),('0062521119','Maulana Yusuf','VII','Jalan Sadang Pangan','L','Islam','Bandung','2006-03-23','Pedagang Kecil'),('0062550863','Maulana Mizan Fadillah','VII','Jalan Sukamenak No 34 Curug Dog Dog','L','Islam','Bandung','2006-07-12','Karyawan Swasta'),('0062551259','INDAH SRI PUTRI RAMDANI','VII','JL. CIBOLERANG N0 153','P','Islam','Bandung','2006-01-01','Wiraswasta'),('0062610940','Rifki Adji Zulfahmi','VII','Dayeuhkolot Bojong Asih Rt. 03 Rw.05','L','Islam','Klaten','2006-05-15','Wiraswasta'),('0062711089','Muhamad Fajar','VII','Jl. Babakan Ciamis No.260','L','Islam','Bandung','2006-05-16',''),('0062721158','Imania Sabila','VII','Jl. Leuwi Panjang Gg. Rukun Sari I No. 16 Rt. 05 R','P','Islam','Bandung','2006-05-26','Wiraswasta'),('0062780914','Zainoer Akhsan','VII','Ds Lengkong Rt 03/03 No.42','L','Islam','Bandung','2006-10-29','Wiraswasta'),('0062781314','Sandy Irawan','VII','Kampung Penclut','L','Islam','Bandung','2006-01-25',''),('0062801223','Desi Eka Putri','VII','Komplek Margahayu Kencana D8 No. 15','P','Islam','Bandung','2006-04-01','Wiraswasta'),('0062821016','Muchamad Teddy','VII','Kampung Pasir Pogor','L','Islam','Bandung','2006-08-16',''),('0062880293','Dimas Panji Maulana','VII','Rajawli Timur Gang Sukarela No 137','L','Islam','Bandung','2006-03-19',''),('0062920994','Aril Mustaqbillal','VII','Jalan Adikusuma','L','Islam','Bandung','2006-07-29','Buruh'),('0062950984','Wildan Noval Aditya','VII','Jl. Inhoftank No.30 Rt 01/05','L','Islam','Bandung','2006-07-06','Wiraswasta'),('0062960951','Ahmad Rizal Zalaludin','VII','Jalan Babakan Antasari Cangkuang Wetan, Dayeuhkolo','L','Islam','Bandung','2006-01-14','Wiraswasta'),('0062961064','Wildan Pirdaus','VII','Jl. Leuwianyar VII No. 56','L','Islam','Bandung','2006-11-01','Wiraswasta'),('0062970876','Rizky Muhammad Akbar','VII','Jalan Cibaduyut Gang Ibu Ilem No 152','L','Islam','Bandung','2006-05-09','Wiraswasta'),('0063020976','Rifqi Morand','VII','Jl. Astanaanyar No. 59 22/D Rt. 06/03','L','Islam','Bandung','2006-05-15','Buruh'),('0063051221','Annisa Nurfadilah','VII','Kp. Parunghalang Rt.05/02','L','Islam','Bandung','2006-07-08','Wiraswasta'),('0063060995','Asep Tarna','VII','Kp Sekeandur Jl. Cisirung Palasari','L','Islam','Bandung','2006-01-19','Karyawan Swasta'),('0063110916','Agis Saputra','VII','Gempol Sari Rt 02/RW 01','L','Islam','Bandung','2006-05-28','Wiraswasta'),('0063121239','Popy Julianti','VII','Jl.bbk.Irigasi Rt.06/03 no.622 kota bandung','P','Islam','Bandung','2006-07-01','Wiraswasta'),('0063140886','Bayu Aji Pratama','VII','Jl. Suryani Dalam IV Rt. 07/02','L','Islam','Bandung','2006-05-06','Wiraswasta'),('0063281125','Muhammad nashir kazhim','VII','Permata Kopo Blok CA 104 RT/RW 06/08','L','Islam','Bandung','2006-04-08',''),('0063290948','Yudha Agustina','VII','Jalan Babakan Tarogong Gang Laksana No 88 RT 01 RW','L','Islam','Bandung','2006-08-22','Wiraswasta'),('0063291029','Aan Krisjayanto','VII','Komp Pasadena Jl. Lantana E.125','L','Islam','Bandung','2006-03-18','Wiraswasta'),('0063301282','Alfonsus Alvin','VII','Jalan Srigunting Raya Gang Sauyunan II/29','L','Kristen','Bandung','2006-08-19',''),('0063341191','Fauzan Fikran Julian','VII','Perum Graha Ranca Manyar Jalan Tanjung No 17','L','Islam','Bandung','2006-07-23',''),('0063420874','Ridhoyatul Hidayat','VII','Jalan Mengger Tengah','L','Islam','Bandung','2006-04-15','Karyawan Swasta'),('0063441295','Faisal Akbar','VII','Jalan Babakan Tarogong','L','Islam','Bandung','2006-03-03',''),('0063460963','Febrian Nugroho','VII','Jl.warung Jambu No.3 Kiaracondong','L','Islam','Bandung','2006-02-13','Wiraswasta'),('0063480754','Tanzha Afriani Mutia Dewi','VIII','Kp.Cibago Cangkuang Kulon No.78/303','P','Islam','Bandung','2006-04-17','Wiraswasta'),('0063491171','Ramadhan','VII','Sekelda Girangu','L','Islam','Bandung','2006-12-29','Wiraswasta'),('0063701288','Bagas Bangbang Pramudia','VII','Blok Ager Sari','L','Islam','Bandung','2006-04-30',''),('0063751268','Riki Rian Saputra','VII','Per Pasanggrahan Lagadar Rt 01/01 No.16 Blok A 4','L','Islam','Cimahi','2006-04-18',''),('0063811133','Riki Matahari','VII','Kampung Penclut','L','Islam','Bandung','2006-04-20',''),('0063820966','Kinkin Hirmansah','VII','Ciparay Tengah Rt 06/05 Kel. Cibaduyut kidul Kec. ','L','Islam','Bandung','2006-06-13',''),('0063960853','Gemilang Dharma Rachbuti','VII','Pondok Rahayu','L','Islam','Bandung','2006-01-22','Karyawan Swasta'),('0063971075','David Ismail Herianto','VII','Jl. Babakan Tarogong No. 13 Rt. 05/05','L','Islam','Bandung','2006-03-01','Wiraswasta'),('0064030990','Aldi Sopiyan','VII','Jl. Caringin No 94','L','Islam','Bandung','2006-02-20','Wiraswasta'),('0064051247','Tri Setia Hernawati','VII','Jalan Soekarno hatta Blok agarsari','P','Islam','Bandung','2006-09-15','Wiraswasta'),('0064101271','Silvi Tinur','VII','Jalan Ciroyom Gang Ikhlas RT 09 RW 11','P','Islam','Bandung','2006-03-26',''),('0064111168','M. Naufal Al Ghifari','VII','Jl. Suryani Dalam IV No.26','L','Islam','Bandung','2006-03-07','PNS/TNI/Polri'),('0064151285','Andrian Ahmadi','VII','Jalan Caringin Cikungkurak','L','Islam','Bandung','2006-06-18',''),('0064251090','Muhammad Ruli','VII','Mata Endah Belakang C12 No.50','L','Islam','Bandung','2006-01-17','Wiraswasta'),('0064251157','Ilham Maulana Rahman','VII','Jl.Cibaduyut Gg. Ipong','L','Islam','Bandung','2006-05-04','Wiraswasta'),('0064261272','Sri Susi Susanti','VII','Gg. H.Hasan 1 Rt 04/07','P','Islam','Bandung','2006-08-23','Wiraswasta'),('0064341011','Mochamad Irvan Purnomo Sidik','VII','Perum Gading Junti Blok AC 3 No.25','L','Islam','Bandung','2006-09-18','Wiraswasta'),('0064360981','Tircka Rivaldie Prayoga','VII','Kp.Bojong Cilebak Rt 01/08','L','Islam','Bandung','2006-01-31','Wiraswasta'),('0064361034','Cecep Idan Ramdani','VII','Jalan Indrayasa, Kp.Warung nangka RT/RW 03/08','L','Islam','Bandung','2006-01-04',''),('0064471102','Yusni Nur Gina','VII','Kp.Kebon Kalapa No.24','P','Islam','Bandung','2006-01-29','Wiraswasta'),('0064471215','Sri Wahyuni','VII','Babakan Leuwi Bandung','L','Islam','Bandung','2006-01-31',''),('0064480989','Aji Priyatna','VII','Jl. Caringin No.14','L','Islam','Bandung','2006-03-17','Wiraswasta'),('0064520787','Putri Ayu Novianti','VIII','Babakan tarogong gg.bojong asih 4','P','Islam','Bandung','2006-01-15',''),('0064521023','Rizki Sulaeman','VII','Kampung Ciguriang Girang','L','Islam','Bandung','2006-07-14',''),('0064530636','Agung Gumilang','VIII','Pasirluyu','L','Islam','Bandung','2006-08-04','Wiraswasta'),('0064541149','Chairil Atthariq Sugiharto','VII','Jl. Moch. Toha Gg. Pauca 128/201 A Rt 05/06','L','Islam','Bandung','2006-02-24','Karyawan Swasta'),('0064541178','Yudha Suwarja','VII','Jl. Babakan Irigasi','L','Islam','Bandung','2006-09-11','Wiraswasta'),('0064551220','Anisha Handayani','IX','Jl.Soekarno hatta Blok Ageur sari','P','Islam','Bandung','2006-10-28',''),('0064571117','Irfan Yassid Fadillah','VII','Jalan Holis','L','Islam','Bandung','2006-09-23',''),('0064621129','Panji Alpian Nurfadhillah','VII','Jalan Siliwangi No 97','L','Islam','Bandung','2006-03-24',''),('0064641248','Aga Rangga','VII','Jl. Karasak Gg. Cadas Ngampar','L','Islam','Bandung','2006-03-02','Wiraswasta'),('0064651139','Yoga Apriliando','VII','Jl. Caringin Gg. Lumbung 2 Rt. 04/03','L','Islam','Bandung','2006-04-01','Wiraswasta'),('0064671128','Novi Ardianti','VII','Jalan Mekarwangi kampung Anggacarang','P','Islam','Bandung','2006-03-13',''),('0064681123','Muhamad Zaenal Abidin','VII','Pagarsih, Gang Indik RT/RW 03/01','L','Islam','Brebes','2006-06-11','Wiraswasta'),('0064731040','Fikri Bagja Gumelar','VII','Gg. Bapak Suhaya 1 No. 33A','L','Islam','Bandung','2006-12-01','Wiraswasta'),('0064740844','Alkah Pitria Nur\'ain','VII','Jalan Cintaasih No 363','P','Islam','Bandung','2006-12-28','Wiraswasta'),('0064751138','Teguh Saputro','VII','Jalan Maleber Utara Gang Tudung Sari','L','Islam','Kebumen','2006-08-04','Karyawan Swasta'),('0064761085','Jona Ray Mondo','VII','Jl.Suryani 53','L','Islam','Bandung','2006-01-01','Karyawan Swasta'),('0064780778','Lita Lestari','VIII','cibuntu timur','P','Islam','Bandung','2006-05-02',''),('0064791210','Rayhan Azka Muhammad','VII','Ga g Adikacih Tengah No 15','L','Islam','Bandung','2006-03-23','Wiraswasta'),('0064800869','Muhammad Fikri Zulfikar','VII','Jalan Cimindi Putri No 161/48','L','Islam','Bandung','2006-08-31','Wiraswasta'),('0064810938','Muhammad Iqbal Assyidik','VII','Jl. Rasdan V No. 11/94 rt 01/06 Bandung','L','Islam','Bandung','2006-03-28','Wirausaha'),('0064880061','Kevin Zuan Adya Lesmana','VIII','Jl.Kopo Gg Lapang 4','L','Islam','Bandung','2006-01-28','Wiraswasta'),('0064880230','Muhammad Ridho','VIII','Kp.Kulalet','L','Islam','Bandung','2006-04-30','Wiraswasta'),('0064890891','Fardin Muhamad Yuspar','VII','Jl.Astana Anyar - Gg.Pajagalan 5 Rt 5/03 No.157/22','L','Islam','Bandung','2006-06-01','Wiraswasta'),('0065040609','Donny Indrawan','VIII','Kp.Ciguriang hilir','L','Islam','Bandung','2006-06-01',''),('0065061212','Rizky Mardiatna','VII','Jalan Kota Baru VII No 5A','L','Islam','Hongkong','2006-11-17',''),('0065071115','Ilham Rahmattulloh','VII','Jalan Holis Gang Cibuntu 2','L','Islam','Bandung','2006-02-01',''),('0065080950','Adi Supriadi','VII','jl. Peta gg Buah 206 Bandung','L','Islam','Bandung','2006-04-25','Wiraswasta'),('0065091106','Cecep Tiska Antariksa','VII','BLk LP Banceuy Kp.Kebon Kelapa Rt.01 Rw.02','L','Islam','Bandung','2006-03-01','Wiraswasta'),('0065110917','Alfian Hafiansyah','VII','Cibaduyut Ciparay tengah RT/RW 05/05','L','Islam','Bandung','2006-01-01',''),('0065120904','Ricko Indriyanto','VII','Kamp.cilebak Rt.03/02','L','Islam','Bandung','2006-05-01','Wiraswasta'),('0065141037','Dzikri Abdillah Akbar','VII','Gg. Naripan Rt 02/04','L','Islam','Bandung','2006-09-05','Lainnya'),('0065181003','Faizal Ihsan Maulana','VII','Kampung CIbolerang','L','Islam','Bandung','2006-09-20','Karyawan Swasta'),('0065190841','Ahmad Fauzi','VII','Kampung Cigondewah Hilir','L','Islam','Bandung','2006-03-10',''),('0065190905','Rizki Annafi Kuswan','VII','Kp. Terate Mekar Rt 02/02','L','Islam','Bandung','2006-02-28','Karyawan Swasta'),('0065260921','Bayu Budianto','VII','Jl.Cibaduyut gg eleh umi rt.02/01','L','Islam','Bandung','2006-08-22','Wiraswasta'),('0065310909','Tedy Komara Mulya','VII','Jl.Babakan Tarogong Rt 06/05 No.521','L','Islam','Bandung','2006-02-24','Wiraswasta'),('0065340919','Anton Prayogo','VII','PI','L','Islam','Bandung','2006-01-01','Wiraswasta'),('0065411150','Devi Anita Sari','VII','Kp. Siguriang Girang','L','Islam','Bandung','2006-04-13','Wiraswasta'),('0065421080','Febriandi Rizky','VII','Jl.Cibaduyut Gg.TVRI I','L','Islam','Bandung','2006-02-07','Wiraswasta'),('0065440913','Yaris Zulkarnaen','VII','Permata Kopo Ga. 46','L','Islam','Bandung','2006-07-21','Wiraswasta'),('0065460882','Andi Jaenudin','VII','Jalan Kopo Gang Suka Leueur RT 08 RW 06 Bandung','L','Islam','Bandung','2006-11-03','Wiraswasta'),('0065501280','Aldi Ariyandi','VII','Cibuntu Timur','L','Islam','Bandung','2006-07-13','Buruh'),('0065511152','Eneng Chintia Paramita N','VII','Jl.Cigondewah Kidul','P','Islam','Cianjur','2006-01-24','Karyawan Swasta'),('0065531201','Mochamad Rival Pranajaya','VII','Gang Madrasah','L','Islam','Bandung','2006-04-03','PNS/TNI/Polri'),('0065540996','Bayu Akbar Januar','VII','Kp. Ciguriang Hilir','L','Islam','Bandung','2006-01-20','Wiraswasta'),('0065580939','Refky Ghandi','VII','Komp Kopo Permai II 3 AD No. 9','L','Islam','Bandung','2006-02-03','Wiraswasta'),('0065601180','Abdul Saefudin','VII','Jalan Caringin Cikungkurak Gang Mesjid At-Taqorrub','L','Islam','Bandung','2006-05-07',''),('0065641000','Dimas Andrias','VII','Jalan Kebon Kangkung XI No 70','L','Islam','Bandung','2006-03-20','Wiraswasta'),('0065651289','Bagus Fajar Sidiq','VII','Jalan Natawijaya No 13/19A','L','Islam','Tasikmalaya','2006-10-22','Karyawan Swasta'),('0065660992','Anjar Nugraha','VII','Jalan Buah Batu No 10','L','Islam','Garut','2006-07-16','Wiraswasta'),('0065701069','Andika Fauzi','VII','Perum Kota Baru Jl.Dahlia No.54 Terusan Cibaduyut','L','Islam','Bandung','2006-04-11','Wiraswasta'),('0065711251','Asti Fitriyani','VII','Jalan Inhofftank Kebon Lega 1','L','Islam','Bandung','2006-07-12','Wiraswasta'),('0065730991','Andri Sukma','VII','Komplek Taman Cibaduyut Indah Blok H-32A','L','Islam','Bandung','2006-06-18','Wiraswasta'),('0065790988','Agus Rudianto','VII','Kp. Ciseureuh No.36','L','Islam','Bandung','2006-08-24','Buruh'),('0065811131','Ridwan Hermawan Syah','VII','Gang Perikanan Tengah No 77','L','Islam','Bandung','2006-04-26',''),('0065861026','Zaenal Mutaqin','VII','Jalan Cisirung Palasari','L','Islam','Bandung','2006-01-31',''),('0065901189','Dimas Putra Mahesa','VII','Jalan kopo Sayati gang madkasih no.213','L','Islam','Bandung','2006-05-26','Wiraswasta'),('0065910934','Moch. Iqbal','VII','jl.karasak lama Gg. Cadas ngampar no.67 Rt.05 Rw.0','L','Islam','Bandung','2006-01-01',''),('0065911108','Diky Septiana','VII','Cibaduyut warung nangka Rt/RW 03/08','L','Islam','Bandung','2006-05-22','Wiraswasta'),('0065911127','Nanda Marta Sunarya','VII','Jalan Terusan Leuwi Anyar VII No 78','L','Islam','Bandung','2006-06-29',''),('0065951042','Hasyifa Nur Fadhillah','VII','Jalan Raya Laswi Blk 671 RT. 02/11','P','Islam','Bandung','2006-03-18',''),('0066071088','Mochammad Daffa','VII','Jl. Caringin No. 67','L','Islam','Bandung','2006-06-16','Wiraswasta'),('0066110599','Aldi Al Farizi','VIII','Raya dayeuhkolot no.152','L','Islam','Bandung','2006-03-15',''),('0066121199','Lukman Permana','VII','Jalan Babakam Orogaso Gang AmdVIII No 660','L','Islam','Bandung','2006-02-21',''),('0066130530','Muhamad Fitra Yanuar Sutedjo','VIII','Karasak lama Blok desa 107','L','Islam','Bandung','2006-01-09','Wiraswasta'),('0066181095','Rafa Purnama','VII','Kp. Penciut','L','Islam','Bandung','2006-02-20','Karyawan Swasta'),('0066190486','Muhamad Fauzi Ridwan','VIII','babakan tarogong gg.anom no.20','L','Islam','Bandung','2006-01-28',''),('0066200447','Irvan Kusumah','VIII','Kp.Citamiang kaler','L','Islam','bandung','2006-01-24','Wiraswasta'),('0066231219','Ai Riska Yulistiani','VII','Jalan Holis Tanjakan Ma aren 482','P','Islam','Garut','2006-02-26',''),('0066280243','Arie Muchamad Sidiq','VIII','Jl.Inhpfftank Gg Perikanan II','L','Islam','Bandung','2006-01-16','Karyawan Swasta'),('0066311233','Mira Sugiarti','VII','Jl. pagarsih Gg. Citepus Rt 09/03 No.76/9A','P','Islam','Bandung','2006-03-12',''),('0066331195','Hidayatul Aji','VII','Jalan Ma Eja','L','Islam','Padang','2006-01-10','Wiraswasta'),('0066421107','Deri Apriansyah','VII','Kp.Nusa No.89 Rt.01 Rw.15','L','Islam','Bandung','2006-04-05','Wiraswasta'),('0066421163','Muhammad Basil','VII','Kp. Situ Gunting','L','Islam','Tasikmalaya','2006-08-17','Karyawan Swasta'),('0066501274','Triani','VII','Cibintinu RT/RW 04/05','P','Islam','Bandung','2006-05-11','Wiraswasta'),('0066501305','Kris Saputra','VII','Jalan Peta Gang Buah No 216/95','L','Islam','Bandung','2006-02-17','Buruh'),('0066520182','Prayogi Padilah Ramadan','VII','Jl. Leuwi Panjang Gg. Kebon kalapa','L','Islam','Garut','2006-01-01','Wiraswasta'),('0066610549','Voby Buana Parastia','VIII','Kp.Ciguriang Hilir no.57','L','Islam','Bandung','2006-06-21','Buruh'),('0066660961','Elqi Ramdan Desprianto','VII','Jalan Pasirluyu no.349 blok 205A','L','Islam','Bandung','2006-01-01',''),('0066690838','Ade Fahmi Nurizal','VII','Bihbul Raya III No 25','L','Islam','Bandung','2006-06-20','Buruh'),('0066690965','Irwan Zaelani','VII','Jalan Citarip Barat RT 04 RW 07 kel kopo Kec. Bojo','L','Islam','Bandung','2006-09-19','Wiraswasta'),('0066721187','Dicky Ganesha','VII','Jl. Cicukang II Rt.07 Rw. 07','L','Islam','Bandung','2006-05-13','Wiraswasta'),('0066740930','Ikbal Andryansyah','VII','Bojong asih dayeuh kolot Rt 05 Rw 14','L','Islam','Bandung','2006-01-01','Wiraswasta'),('0066770878','Abyan Nugraha Ruslia','VII','Kopo Elok Jalan Bintang no.9','L','Islam','Bandung','2006-09-20','Wiraswasta'),('0066861225','Devi Sri Anjani','VII','Jl.Holis No 11 Rt 01/11 Kel Cogondewah Kaler Kec B','P','Islam','Bandung','2006-02-13',''),('0066900852','Firman Aan Ferdian','VII','Gang Pagarsih Barat IV','L','Islam','Bandung','2006-02-04','Buruh'),('0066991032','Aditia Firmansyah','VII','Jl. Cibuntu Timur RT/RW 04/03','L','Islam','Bandung','2006-08-07',''),('0067080868','Muhammad Daud Ibrahim','VII','Jalan Caringin Blok Beas No 201','L','Islam','Bandung','2006-05-10','Wiraswasta'),('0067140949','Zidan darsono','VII','jl. Inhoftank rt 04/06','L','Islam','Bandung','2006-05-12',''),('0067201092','Muhammad Khaidar Bagir','VII','Baleendah Kec. Baleendah Rt. 01/15','L','Islam','Bandung','2006-03-01','Wiraswasta'),('0067210492','Naufal Amiruddin Pratama','VIII','pagarsih gg.mastabir 179/89','L','Islam','Bandung','2006-02-15',''),('0067220942','Rizki Fadilah','VII','Jl. Denki Selatan III No. 96 Rt 03/02','L','Islam','Ciamis','2006-01-21','Wiraswasta'),('0067221024','Satiyandi Abdurrahman','VII','Jalan Rasdan No 62/94','L','Islam','Bandung','2006-01-11',''),('0067231182','Akbar Arifin','VII','Jalan Inhofftank Blok Desa XII/2','L','Islam','Bandung','2006-08-04',''),('0067231227','Fika Tanzillah','VII','Jalan Pasir Koja Gang H. Idrus Dalam No 43 RT 12 R','P','Islam','Cilacap','2006-06-01',''),('0067251252','Devi Anisa Apriliani','VII','Jl.Pelindung Hewan III Rt 03/09','P','Islam','Bandung','2006-04-28','Wiraswasta'),('0067281070','Ariyo Aditya','VII','Kampung Sampora RT 01/RW 17','L','Islam','Cianjur','2006-09-27','Wiraswasta'),('0067331298','Hilman Kamaludin','VII','Jalan Kopo Gang arasdi Dalam II No 36','L','Islam','Bandung','2006-06-01','Karyawan Swasta'),('0067381229','Jelita','VII','Jl. Bbk Leuwi Bandung Dayeuhkolot No. 79','P','Islam','Bandung','2006-07-07','Wiraswasta'),('0067401118','Khusnul Prasetya Wiar\'Faizn','VII','Graha Rancamanyar Jalan Anggrek 4 No 26','L','Islam','Bandung','2006-06-15',''),('0067430968','Moh Abdul Rozak','VII','Astana Anyar Gg.Pajagalan V Rt.05 Rw.03 No.59/22 D','L','Islam','Bandung','2006-02-07','Wiraswasta'),('0067471275','wanda afifah','VII','bbk Irigasi Rt. 04/07 bandung','P','Islam','Bandung','2006-05-15',''),('0067520954','Arif Rahman','VII','Gg. Perikanan II RT/RW 07/05 Pelindung Hewan Astan','L','Islam','Bandung','2006-01-24','Wiraswasta'),('0067570865','Mochamad Ilham Pratama','VII','Jalan Ranca Manyar Kapling Nusa No 4','L','Islam','Bandung','2006-09-29','Wiraswasta'),('0067580946','Tendi Septiandi','VII','Jl. Ters. Suryani GG. Al-Huda Rt 05/02 Kel. Babaka','L','Islam','Bandung','2006-09-20','Wiraswasta'),('0067640997','Billal Almahdi','VII','Kampung Curug Digdig Gang Sudirja','L','Islam','Klaten','2006-11-12','Karyawan Swasta'),('0067641121','Muhammad Nizar Pratama','VII','Rancamanyar II jl. Cendrawasih No.34 Rt 04/20','L','Islam','Bandung','2006-10-05',''),('0067651315','Shandy Ramadhan','VII','Jalan Sehat Bahagia','L','Islam','Bandung','2006-01-03',''),('0067741242','Rosmiati','VII','Cibintinu RT/RW 03/05','P','Islam','Bandung','2006-06-11','Wiraswasta'),('0067820912','Wahyu Kurnia','VII','Jalan Kopo Cirangrang RT/RW 02/04','L','Islam','Bandung','2006-01-01','Buruh'),('0067830726','Diyah Cofifah Mutangalin','VIII','Kp.Citamiang kaler','P','Islam','Magelang','2006-02-13','Buruh'),('0067861185','Cahyana ramdani','VII','Jl.Soekarno Hatta Blok Ager Sari Rt 07/10','L','Islam','Bandung','2006-01-04',''),('0067870388','Renaldy','VIII','Kp.Bojong sereuh','L','Islam','Bandung','2006-06-24','Wiraswasta'),('0067901066','Affan Firousy Rahmani Akbar','VII','Jl. Holis Cibuntu Barat No.87 Rt 04/01','L','Islam','Bandung','2006-01-15',''),('0067951001','Egi Abdul Rojak','VII','Kampung Cilisung Barat','L','Islam','Bandung','2006-10-16','Wiraswasta'),('0068011197','Intan Cahaya Utami','VII','Jalan Terusan Pasir Koja Gang Sukapakir Tengah','P','Islam','Bandung','2006-07-08',''),('0068030888','David Sohiry','VII','Jl. Peta 244','L','Islam','Bandung','2006-08-01','Sudah Meninggal'),('0068071111','Fajar Andriansyah','VII','Kampung Babakan','L','Islam','Bandung','2006-09-11',''),('0068071267','Restiana Inka Fauzi','VII','Kp Babakan Rt 05/06','P','Islam','Bandung','2006-02-28',''),('0068080901','Muhammad Halim Faturahman','VII','Jl. Kopo 66 Sukaleueur Rt. 02 Rw. 07 Kel. Babakan ','L','Islam','Bandung','2006-04-11','Wiraswasta'),('0068091006','Iqbal Firmansyah','VII','Jalan Kopo Gang Syukur No 5','L','Islam','Bandung','2006-09-01',''),('0068091130','Rama Maulana','VII','Gang Babakan Tarogong II No 181/196B','L','Islam','Bandung','2006-10-20',''),('0068091206','Muhammad Rizky','VII','Kp.Dayeuhkolot Rt.09/07 kab.bandung','L','Islam','Tanjung Pinang','2006-06-01','Wiraswasta'),('0068111116','Imam Shalahuddin','VII','Jalan Ciparay Tengah','L','Islam','Bandung','2006-01-18',''),('0068131096','RIAN FERDIANSYAH','VII','Gg. Citepus Dalam RT.10 RW.03','L','Islam','Bandung','2006-07-28','Wiraswasta'),('0068171246','Sita Sapta Suci','VII','Jalan Caringin Gg. Lumbung I Dalam Rt.04/Rw.03','P','Islam','Bandung','2006-05-15','Wiraswasta'),('0068180908','Sofian Taufik','VII','Cigondewah rahayu RT/RW 04/01 Bandung Kulon','L','Islam','Ciamis','2006-09-18','Wiraswasta'),('0068220839','Agung Afriyanto','VII','Kavling Ranca Mas Blok H 27','L','Islam','Bandung','2006-04-24','Karyawan Swasta'),('0068220895','Kevin Dhafa Alfauki','VII','Jl.Mengger Girang Rt.01 Rw.08 Pasirluyu Regol Band','L','Islam','Bandung','2006-02-01','Wiraswasta'),('0068241031','Adam Pamungkas','VII','Jl.SituAseur Timur 9 No 142/198 B','L','Islam','Tegal','2006-08-29','Buruh'),('0068320956','Bambang Yudistira','VII','Jl. Makam Caringin No.41 Bandung','L','Islam','Bandung','2006-11-15',''),('0068341302','Jaka Sutresna','VII','Jalan Terusan Suryani Gang Abadi No 146','L','Islam','Garut','2006-09-12',''),('0068361047','Luqman Aditya','VII','Jl. Cibuntu Timur','L','Islam','Bandung','2006-10-10','Wiraswasta'),('0068361190','Erik Gumelar Pratama','VII','Jl. Inhofftank No. 86 (Depan SD Dwikora)','L','Islam','Bandung','2006-06-20',''),('0068391056','Muhammad Zidan apriansyah','VII','Terusan suryani GG.aL hUDA rT.02 rW.02','L','Islam','Bandung','2006-04-13',''),('0068411072','Astried Yuniar','VII','Kp. Citamiang Kaler','P','Islam','Bandung','2006-06-22','Buruh'),('0068430978','Suchi Aditya Putra','VII','Jl. Cibaduyut Raya Gg.Maeja Rt 01/03 No. 150 Bandu','L','Islam','Bandung','2006-06-29','Wiraswasta'),('0068441311','Riza Hermawan Arbustoni','VII','Cigondewah Rahayu Ciherang','L','Islam','Banyumas','2006-01-27','Pedagang Kecil'),('0068531100','SYIFA ANDRIYANSAH','VII','KOMPLEKS BAHUAN JL. TEGAL CAMAT RT 005 RW 010','L','Islam','Bandung','2006-10-12','Karyawan Swasta'),('0068561265','Nanda Rahmanisa','VII','Jl.sukamenak No.90','P','Islam','Bandung','2006-05-01',''),('0068580772','Gabriyella Apriyani Christina','VIII','Kopo Permai III F 26/2','P','Kristen','Bandung','2006-04-17','Karyawan Swasta'),('0068580860','Khoirul Anam','VII','Jl.Terusan Suryani rt.01 rw.02','L','Islam','Banyumas','2006-02-23','Wiraswasta'),('0068601238','Nita Febrianti','VII','Jl. Ciparay Tengah Rt. 03/05','P','Islam','Bandung','2006-02-23','Karyawan Swasta'),('0068601240','Reni Siti Ambariah','VII','Blok Jambangan Rt 01/10 Kaler','P','Islam','Bandung','2006-02-28',''),('0068611093','Nanda Eka Mardiansyah','VII','Jl. Moh Toha Gg. Karnyamas FO/96','L','Islam','Bandung','2006-03-12','Karyawan Swasta'),('0068621254','Dewi Handayani','VII','Kebon Kelapa RT/RW 04/02','P','Islam','Bandung','2006-05-29','Wiraswasta'),('0068631245','Sintia Fitriyana','VII','Blok Aci RT 04 RW 08 Cibolerang','P','Islam','Cianjur','2006-06-13','Wiraswasta'),('0068800691','Fajar Aziz','VIII','Kp.Cilebak','L','Islam','bandung','2006-01-30','Wiraswasta'),('0068831079','Febri Eri Saputra','VII','Jl. Cigondewah Kidul Rt 05 Rw 01 No.33','L','Islam','Bandung','2006-02-25','Wiraswasta'),('0068840962','Fahmi Septia Langga','VII','Cibaduyut Gang Baru Raya No 3 RT 03 RW 11','L','Islam','Bandung','2006-09-22','Wiraswasta'),('0068840970','Muhamad Rofi','VII','Pasirkoja Rt.06 rw.13','L','Islam','Bandung','2006-09-01',''),('0068881004','Fauzi Firdaus','VII','Jalan Kopo Gang Parasdi Dalam V','L','Islam','Sumedang','2006-04-22','Karyawan Swasta'),('0068931153','Fajar Ramdan','VII','Jl. Babakan Tarogong Gg. I Sindangsih I','L','Islam','Tasikmalaya','2006-12-19','Wirausaha'),('0068931200','Miptah Zaenal Aripin','VII','Jl. Babakan tarogong. Gg. Bojong Asih RT 05/RW 04','L','Islam','Bandung','2006-01-09','Wiraswasta'),('0068991175','Rizqan Muhammad Ramdan','VII','Jl.Kopo Gg. Citarib Barat','L','Islam','Bandung','2006-01-18','Wiraswasta'),('0069000897','Muhamad Fauzi Nugraha','VII','Lembang','L','Islam','Ciamis','2006-01-19','Wiraswasta'),('0069011008','Irga Agriana','VII','Kampung Bojong Cileubak','L','Islam','Bandung','2006-01-10','Wiraswasta'),('0069091155','Galih Nugraha Pratama','VII','Jl. Leuwipanjang Blok No.62','L','Islam','Bandung','2006-09-09','Wiraswasta'),('0069101104','Arinda Disa Putri','VII','Jalan Babakan Ciparay Gang Panurhawi No 19','L','Islam','Bandung','2006-05-09',''),('0069111045','Iqbal Ramdiyansyah','VII','Rancamanyar RT/RW 03/13','L','Islam','Cimahi','2006-06-18','Wiraswasta'),('0069171120','Moch Naim Hayat','VII','Gg Muncang No.44 A Pungkur','L','Islam','Bandung','2006-07-01',''),('0069171235','Neng Elsa','VII','Jl.Pagarsih Barat IV Gg.Madrasah Rt.05 Rw.01','P','Islam','Bandung','2006-04-17','Wiraswasta'),('0069180864','Maulana Risji','VII','Jalan Kopo Bihbul Raya','L','Islam','Bandung','2006-06-04','Wiraswasta'),('0069180945','Syaeful Fadillah','VII','Jalan Rajawali Timur Gg. Sastra 007/007 Kel. Ciroy','L','Islam','Bandung','2006-06-01',''),('0069201014','Mochamad Rezky Nurfaizi','VII','Jalan Jendral Sudirman Gang Moch Fatah II No 315/1','L','Islam','Bandung','2006-06-26',''),('0069221033','Bayu Setiawan','VII','Jln. H. safari gg Budi asih no 215','L','Islam','Bandung','2006-09-11','Wiraswasta'),('0069281078','Fadli Firdaus','VII','Kp.Cinta Asih Rt 07/02','L','Islam','Bandung','2006-08-04','Wiraswasta'),('0069321110','Ega Suhandi','VII','Jl. Cibaduyut Rt 03/04','L','Islam','Bandung','2006-06-16','Wiraswasta'),('0069331073','Bayu Sukma Ramadhan','VII','Jalan Baladewa RT/RW 03/08','L','Islam','Bandung','2006-06-06','Wiraswasta'),('0069331136','Rizki Agustian Firmansyah','VII','Kampung Bojongkukun','L','Islam','Bandung','2006-08-28',''),('0069350866','Muhamad Aldi Reynaldi','VII','Jalan Cibaduyut Raya No 289','L','Islam','Bandung','2006-07-17','Tidak bekerja'),('0069390850','Dwiki Firdaus','VII','Jalan Soekarno Hatta No 230/196A','L','Islam','Bandung','2006-10-08','Karyawan Swasta'),('0069401162','Mochamad Faisal Fitrah','VII','Mengger Girang 4','L','Islam','Bandung','2006-01-08','Wiraswasta'),('0069401207','Nadya Nur Fadilah','VII','Jalan Soekarno Hatta Blk LP Banceuy','L','Islam','Bandung','2006-03-30',''),('0069480859','Imam Supriyanto','VII','Babakan Cisuminta','L','Islam','Bandung','2006-02-17',''),('0069480898','Mahesa AL Ghifari','VII','Jl. H. Alfi rt. 03/01 Kel. Cibuntu belakang no 37','L','Islam','Bandung','2006-05-01','Wiraswasta'),('0069480900','Muhamad Sultan Aditya','VII','Jl. Cibolerang Margasuka rt 02/06','L','Islam','Bandung','2006-04-01','Buruh'),('0069521082','Guntur','VII','Jalan Mahmud No.8 Kp. Kiaracondong Rt.05/18','L','Islam','Bandung','2006-05-15',''),('0069540964','Haidir Fajrul Falah','VII','Jl. Pajagalan Gg. Adimaja No. 15 Rt. 05 Rw. 06 ban','L','Islam','Bandung','2006-06-23','Wiraswasta'),('0069561232','Melasari','VII','pi','P','Islam','Ciamis','2006-06-30','Wiraswasta'),('0069600885','Asep Fani Handika Putra','VII','Jl. Kopo Sukaleueur Rt. 08/06','L','Islam','Bandung','2006-01-01','Wiraswasta'),('0069611236','Nia Febriana','VII','Jl.Sukaleeur Rt.07/06','P','Islam','Bandung','2006-02-01','Wiraswasta'),('0069660943','Syahrul Hudaeni','VII','Jalan Bojong Asih','L','Islam','Bandung','2006-03-07',''),('0069671237','Nida Dara Puspita','VII','Jl. Babakan Tarogong Gg. Sindang Asih no. 76/196 C','P','Islam','Bandung','2006-10-01','Wiraswasta'),('0069701058','Nauval Faksi Eriansyah','VII','Jl. Jend. Sudirman Gg.Radibrata','L','Islam','Bandung','2006-03-13','Karyawan Swasta'),('0069721226','Erika Alfitriani','VII','Jl Ters. Buah Batu Cipagalo','P','Islam','Bandung','2006-01-01','Wiraswasta'),('0069751160','Krisna Wijaya','VII','Jl. Pagarsih Gg. Mukalmi','L','Islam','Bandung','2006-03-09','Wiraswasta'),('0069780903','Ramdan','VII','Cibintinu No. 70','L','Islam','Bandung','2006-05-01','Wiraswasta'),('0069880326','Azka Mochamad Hadiyan Rusyda','VIII','Jl.Mochtoha  Gg Ijan No.17','L','Islam','Bandung','2006-02-19','Buruh'),('0069891308','Muhamad Fakhri Effendi','VII','Jalan Kopo Gang Gagak Handoko No 30','L','Islam','Bandung','2006-01-22',''),('0069911161','Michael Adriel','VII','Gg. Sejahtera II No.8','L','Kristen','Bandung','2006-08-25','Karyawan Swasta'),('0071014126','Juwita Intan Nur Alam','VII','Jl. Moch Toha Gg. Murdasan','P','Islam','Bandung','2007-01-26','Wiraswasta'),('0071019119','Isa Ibnu Salman','VII','Jalan Kopo Gang Babakan Rahayu','L','Islam','Bandung','2007-02-19',''),('0071033113','Riski Riyani','VII','Jalan Pasirkoja Gang Swadaya','P','Islam','Bandung','2007-06-03',''),('0071043101','Mochamad Fakhry Alfiansyah','VII','Jalan Cibaduyut Raya Blk No 27','L','Islam','Bandung','2007-01-30','Pedagang Kecil'),('0071371019','Muhamad Hengky Farizi','VII','Jalan Earna Cinta','L','Islam','Bandung','2007-05-11',''),('0073031035','Dandi Ardiansyah','VII','gg.Citepus dalam no. 83/9A Rt.09 Rw.03','L','Islam','Bandung','2007-04-01',''),('0073541084','Irfan Fadllurahman','VII','Jl. Babakan Ciparay Gg. Pa Oyo No.19','L','Islam','Bandung','2007-03-24','Wirausaha'),('0076021179','ZFRIZAL','VII','JL. BOJONG BUAH','L','Katholik','Tapanuli','2007-04-01','Wiraswasta'),('0076121017','Muhamad Aldi SP','VII','Kampung Legok Kaso','L','Islam','Bandung','2007-05-04',''),('0077991230','Livia Renjani','VII','Jl.Mengger hilir RT/RW 03/03 no 102','P','Islam','Bandung','2007-03-23',''),('9944510265','Mega Awaludin','VIII','Cigondewah Kaler','L','Islam','Bandung','1994-07-05','Wiraswasta');
+/*!40000 ALTER TABLE `siswa` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `absensi`
---
-ALTER TABLE `absensi`
-  ADD KEY `NISN` (`NISN`),
-  ADD KEY `Kode_Semester` (`Kode_Semester`);
-
---
--- Indexes for table `detail_ekskul`
---
-ALTER TABLE `detail_ekskul`
-  ADD PRIMARY KEY (`kode_detail_ekskul`),
-  ADD KEY `NISN` (`NISN`),
-  ADD KEY `Kd_Ekskul` (`Kd_Ekskul`),
-  ADD KEY `kode_semester` (`kode_semester`);
-
---
--- Indexes for table `detail_pelajaran`
---
-ALTER TABLE `detail_pelajaran`
-  ADD PRIMARY KEY (`Kode_Detail_Pelajaran`),
-  ADD KEY `Kode_Pelajaran` (`Kode_Pelajaran`),
-  ADD KEY `NIK` (`NIK`);
-
---
--- Indexes for table `ekskul`
---
-ALTER TABLE `ekskul`
-  ADD PRIMARY KEY (`Kd_Ekskul`);
-
---
--- Indexes for table `guru`
---
-ALTER TABLE `guru`
-  ADD PRIMARY KEY (`NIK`);
-
---
--- Indexes for table `nilai`
---
-ALTER TABLE `nilai`
-  ADD PRIMARY KEY (`kode_nilai`),
-  ADD KEY `NISN` (`NISN`),
-  ADD KEY `Kode_Semester` (`Kode_Semester`),
-  ADD KEY `Kode_Detail_Pelajaran` (`Kode_Detail_Pelajaran`);
-
---
--- Indexes for table `pelajaran`
---
-ALTER TABLE `pelajaran`
-  ADD PRIMARY KEY (`Kode_Pelajaran`);
-
---
--- Indexes for table `pengguna`
---
-ALTER TABLE `pengguna`
-  ADD PRIMARY KEY (`username`),
-  ADD KEY `nik` (`nik`);
-
---
--- Indexes for table `semester`
---
-ALTER TABLE `semester`
-  ADD PRIMARY KEY (`Kode_Semester`);
-
---
--- Indexes for table `siswa`
---
-ALTER TABLE `siswa`
-  ADD PRIMARY KEY (`NISN`);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `absensi`
---
-ALTER TABLE `absensi`
-  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
-  ADD CONSTRAINT `absensi_ibfk_2` FOREIGN KEY (`Kode_Semester`) REFERENCES `semester` (`Kode_Semester`);
-
---
--- Constraints for table `detail_ekskul`
---
-ALTER TABLE `detail_ekskul`
-  ADD CONSTRAINT `detail_ekskul_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
-  ADD CONSTRAINT `detail_ekskul_ibfk_2` FOREIGN KEY (`Kd_Ekskul`) REFERENCES `ekskul` (`Kd_Ekskul`),
-  ADD CONSTRAINT `detail_ekskul_ibfk_3` FOREIGN KEY (`kode_semester`) REFERENCES `semester` (`Kode_Semester`);
-
---
--- Constraints for table `detail_pelajaran`
---
-ALTER TABLE `detail_pelajaran`
-  ADD CONSTRAINT `detail_pelajaran_ibfk_1` FOREIGN KEY (`Kode_Pelajaran`) REFERENCES `pelajaran` (`Kode_Pelajaran`),
-  ADD CONSTRAINT `detail_pelajaran_ibfk_2` FOREIGN KEY (`NIK`) REFERENCES `guru` (`NIK`),
-  ADD CONSTRAINT `detail_pelajaran_ibfk_3` FOREIGN KEY (`NIK`) REFERENCES `guru` (`NIK`);
-
---
--- Constraints for table `nilai`
---
-ALTER TABLE `nilai`
-  ADD CONSTRAINT `nilai_ibfk_1` FOREIGN KEY (`NISN`) REFERENCES `siswa` (`NISN`),
-  ADD CONSTRAINT `nilai_ibfk_2` FOREIGN KEY (`Kode_Semester`) REFERENCES `semester` (`Kode_Semester`),
-  ADD CONSTRAINT `nilai_ibfk_3` FOREIGN KEY (`Kode_Detail_Pelajaran`) REFERENCES `detail_pelajaran` (`Kode_Detail_Pelajaran`);
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-12-25 15:03:13
