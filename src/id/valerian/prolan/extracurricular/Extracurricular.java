@@ -416,7 +416,7 @@ public class Extracurricular extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int maxID = 0;
-                String sqlmax = "SELECT MAX(kode_detail_ekskul) as max FROM detail_ekskul";
+                String sqlmax = "SELECT MAX(CAST(kode_detail_ekskul AS SIGNED)) as max FROM detail_ekskul";
                 java.sql.Connection conn1 = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn1.prepareStatement(sqlmax);
                 rs = pst.executeQuery();
@@ -563,10 +563,10 @@ public class Extracurricular extends javax.swing.JInternalFrame {
             int data_count = 0;
             if (cbSearch.getModel().getSelectedItem().equals("Nama Siswa")) {
                 sql = "SELECT * FROM detail_ekskul,ekskul,siswa,semester WHERE detail_ekskul.nisn=siswa.nisn AND detail_ekskul.kd_ekskul = ekskul.kd_ekskul AND detail_ekskul.kode_semester = semester.kode_semester"
-                        + " AND siswa.nama LIKE '"+txtSearch.getText()+"%'";
+                        + " AND siswa.nama LIKE '"+txtSearch.getText()+"%' ORDER BY (SELECT CAST(kode_detail_ekskul as SIGNED))";
             } else if (cbSearch.getModel().getSelectedItem().equals("Nama Ekskul")) {
                 sql = "SELECT * FROM detail_ekskul,ekskul,siswa,semester WHERE detail_ekskul.nisn=siswa.nisn AND detail_ekskul.kd_ekskul = ekskul.kd_ekskul AND detail_ekskul.kode_semester = semester.kode_semester"
-                        + " AND ekskul.ekskul LIKE '"+txtSearch.getText()+"%'";
+                        + " AND ekskul.ekskul LIKE '"+txtSearch.getText()+"%' ORDER BY (SELECT CAST(kode_detail_ekskul as SIGNED))";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();

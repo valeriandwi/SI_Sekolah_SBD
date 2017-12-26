@@ -6,6 +6,7 @@
 package id.valerian.prolan.attendances;
 
 import id.valerian.prolan.connection.db_connection;
+import static id.valerian.prolan.user.User.containsNumbers;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -123,6 +124,11 @@ public class reportAttendance extends javax.swing.JInternalFrame {
         jLabel7.setText("NISN");
 
         txtNISN.setEnabled(false);
+        txtNISN.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNISNKeyReleased(evt);
+            }
+        });
 
         txtTanggal.setDateFormatString("dd-MM-yyyy");
         txtTanggal.setEnabled(false);
@@ -249,6 +255,21 @@ public class reportAttendance extends javax.swing.JInternalFrame {
            txtTanggal.setDate(java.sql.Timestamp.from(java.time.Instant.now()));
         }
     }//GEN-LAST:event_cbBerdasarkanItemStateChanged
+
+    private void txtNISNKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNISNKeyReleased
+        Integer nipdLength = txtNISN.getText().length();
+        String subStr = txtNISN.getText();
+        if (!txtNISN.getText().equals("")) {
+            if (!containsNumbers(subStr)) {
+                txtNISN.setText(subStr.substring(0, nipdLength - 1));
+            } else {
+                if (nipdLength.compareTo(10) > 0) {
+                    txtNISN.setText(subStr.substring(0, nipdLength - 1));
+                    JOptionPane.showMessageDialog(this, "Maksimal karakter NIPD hanya bisa 10!", "Pesan", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_txtNISNKeyReleased
     
     private String checkDate() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

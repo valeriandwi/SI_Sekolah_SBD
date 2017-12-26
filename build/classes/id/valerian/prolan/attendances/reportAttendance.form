@@ -203,6 +203,9 @@
       <Properties>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNISNKeyReleased"/>
+      </Events>
     </Component>
     <Component class="com.toedter.calendar.JDateChooser" name="txtTanggal">
       <Properties>

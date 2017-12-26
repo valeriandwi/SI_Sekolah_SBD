@@ -5,8 +5,14 @@
  */
 package id.valerian.prolan.school;
 
+import id.valerian.prolan.connection.db_connection;
 import static id.valerian.prolan.connection.db_connection.settingPanel;
+import static id.valerian.prolan.school.MenuUtama.username;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -45,9 +51,9 @@ public class Backup extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        setTitle("Backup");
 
         btnChoose.setText("Choose Path");
-        btnChoose.setActionCommand("Choose Path");
         btnChoose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChooseActionPerformed(evt);
@@ -175,7 +181,7 @@ public class Backup extends javax.swing.JInternalFrame {
         }
         return file_name_new;
     }
-
+    
     private void saveBackup() {
         Process p=null;
         try {
@@ -184,6 +190,7 @@ public class Backup extends javax.swing.JInternalFrame {
             String pass = settingPanel("DBPassword"); //pass admin db
             String path = txtURL.getText().replace("\\", "/");
             Runtime runtime = Runtime.getRuntime();
+            resetAktif();
             if(pass == null || pass == "" || pass.equals("") || pass.isEmpty()){
                 p=runtime.exec("C:/xampp/mysql/bin/mysqldump.exe -u"+user+" --add-drop-database -B "+db+" -r "+path+"");
             }else{
@@ -195,11 +202,33 @@ public class Backup extends javax.swing.JInternalFrame {
             }else{
                 JOptionPane.showMessageDialog(null, "Data gagal dibackup!");
             }
+            setAktif();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
+    private void resetAktif(){
+        try{
+         String sql = "UPDATE pengguna SET aktif = 0";
+         java.sql.Connection conn = (Connection) db_connection.configDB();
+         java.sql.PreparedStatement pst2 = conn.prepareStatement(sql);
+            pst2.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setAktif(){
+        try{
+         String sql = "UPDATE pengguna SET aktif = 1 WHERE username ='"+ username +"'";
+         java.sql.Connection conn = (Connection) db_connection.configDB();
+         java.sql.PreparedStatement pst2 = conn.prepareStatement(sql);
+         pst2.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackup;
     private javax.swing.JButton btnChoose;

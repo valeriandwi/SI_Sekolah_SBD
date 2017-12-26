@@ -475,7 +475,7 @@ public class Course extends javax.swing.JInternalFrame {
     }
 
     private void show_courses() {
-        String sql = "SELECT MAX(kode_detail_pelajaran) as max FROM detail_pelajaran";
+        String sql = "SELECT MAX(CAST(kode_detail_pelajaran AS SIGNED)) as max FROM detail_pelajaran";
         try{
         java.sql.Connection conn = (Connection) db_connection.configDB();
         Statement st = conn.createStatement();

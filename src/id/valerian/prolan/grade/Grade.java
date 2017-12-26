@@ -80,11 +80,11 @@ public class Grade extends javax.swing.JInternalFrame {
             if (cbSearch.getModel().getSelectedItem().equals("Nama Siswa")) {
                 sql = "SELECT * FROM detail_pelajaran,nilai,guru,semester,siswa,pelajaran "
                     + "WHERE siswa.nisn = nilai.nisn AND semester.kode_semester = nilai.kode_semester AND detail_pelajaran.kode_detail_pelajaran = nilai.kode_detail_pelajaran "
-                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND siswa.nama LIKE '"+txtSearch.getText()+"%'";
+                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND siswa.nama LIKE '"+txtSearch.getText()+"%' ORDER BY (SELECT CAST(kode_nilai AS SIGNED))";
             } else if (cbSearch.getModel().getSelectedItem().equals("Mata Pelajaran")) {
                 sql = "SELECT * FROM detail_pelajaran,nilai,guru,semester,siswa,pelajaran "
                     + "WHERE siswa.nisn = nilai.nisn AND semester.kode_semester = nilai.kode_semester AND detail_pelajaran.kode_detail_pelajaran = nilai.kode_detail_pelajaran "
-                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND pelajaran.mata_pelajaran LIKE '"+txtSearch.getText()+"%'";
+                    + "AND detail_pelajaran.kode_pelajaran = pelajaran.kode_pelajaran AND detail_pelajaran.nik = guru.nik AND pelajaran.mata_pelajaran LIKE '"+txtSearch.getText()+"%' ORDER BY (SELECT CAST(kode_nilai AS SIGNED))";
             }
             java.sql.Connection conn = (Connection) db_connection.configDB();
             Statement st = conn.createStatement();
@@ -500,7 +500,7 @@ public class Grade extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int maxID = 0;
-                String sqlmax = "SELECT MAX(kode_nilai) as max FROM nilai";
+                String sqlmax = "SELECT MAX(CAST(kode_nilai AS SIGNED)) as max FROM nilai";
                 java.sql.Connection conn1 = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn1.prepareStatement(sqlmax);
                 rs = pst.executeQuery();

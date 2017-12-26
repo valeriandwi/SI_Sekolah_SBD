@@ -32,7 +32,7 @@ import javax.swing.JOptionPane;
  */
 public class MenuUtama extends javax.swing.JFrame {
 
-    private static String username;
+    public static String username;
     private static int hak_akses;
 
     /**
@@ -77,7 +77,7 @@ public class MenuUtama extends javax.swing.JFrame {
         mbMenuUtama.add(jMenu7);
         jMenu7.setText(username);
     }
-
+    
     private void exitAction(String username) {
         try {
             String sql2 = "UPDATE pengguna SET aktif = 0 WHERE username='" + username + "'";
@@ -476,7 +476,7 @@ public class MenuUtama extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu7;
+    public javax.swing.JMenu jMenu7;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;

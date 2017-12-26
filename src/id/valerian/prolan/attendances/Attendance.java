@@ -362,7 +362,7 @@ public class Attendance extends javax.swing.JInternalFrame {
         if (!invalid) {
             try {
                 int maxID = 0;
-                String sqlmax = "SELECT MAX(kode_absen) as max FROM absensi";
+                String sqlmax = "SELECT MAX(CAST(kode_absen AS SIGNED)) as max FROM absensi";
                 java.sql.Connection conn1 = (Connection) db_connection.configDB();
                 java.sql.PreparedStatement pst = conn1.prepareStatement(sqlmax);
                 rs = pst.executeQuery();
