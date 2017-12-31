@@ -533,9 +533,9 @@ public class Employee extends javax.swing.JInternalFrame {
     private void txtNIKKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNIKKeyReleased
         Integer nikLength = txtNIK.getText().length();
         String subStr = txtNIK.getText();
-        if (nikLength.compareTo(16) > 0) {
+        if (nikLength.compareTo(10) > 0) {
             txtNIK.setText(subStr.substring(0, nikLength - 1));
-            JOptionPane.showMessageDialog(this, "Maksimal karakter NIK hanya bisa 16!", "Pesan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Maksimal karakter NIK hanya bisa 10!", "Pesan", JOptionPane.WARNING_MESSAGE);
         }
         if (!containsNumbers(subStr)) {
             txtNIK.setText(subStr.substring(0, nikLength - 1));
@@ -655,6 +655,7 @@ public class Employee extends javax.swing.JInternalFrame {
         btnAdd.setEnabled(true);
         btnEdit.setEnabled(false);
         btnDelete.setEnabled(false);
+        txtNIK.setEnabled(true);
         txtNIK.setText("");
         txtNama.setText("");
         jRadioButton1.setSelected(false);
