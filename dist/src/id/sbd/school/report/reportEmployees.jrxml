@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="19f79836-2c32-4c80-bdcb-a42ed12b64a5">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="28"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -53,39 +53,39 @@
 	<title>
 		<band height="102" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="-8" width="802" height="110" backcolor="#0072BC" uuid="542be1dd-3e22-4936-bdb4-9cf26eb52117"/>
-				<staticText>
-					<reportElement style="SubTitle" x="131" y="29" width="369" height="29" forecolor="#FFFFFF" uuid="08b90460-fff8-4910-92e6-c1e5f2c12820"/>
-					<textElement textAlignment="Left">
-						<font size="22" isBold="false"/>
-					</textElement>
-					<text><![CDATA[SMK PRAKARYA INTERNASIONAL]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="SubTitle" x="131" y="58" width="606" height="29" forecolor="#FFFFFF" uuid="e8366f49-7b9a-40d5-9a97-a3a296e99da9"/>
-					<textElement textAlignment="Left">
-						<font size="16" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Jl. Inhoftank No.46-146, Pelindung Hewan, Astanaanyar, Kota Bandung, Jawa Barat 40243]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="SubTitle" x="131" y="80" width="606" height="29" forecolor="#FFFFFF" uuid="fb68562e-e6f4-41c7-9345-824f8b78f0ad"/>
-					<textElement textAlignment="Left">
-						<font size="16" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Telepon : (022) 5202834]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="SubTitle" x="131" y="0" width="369" height="29" forecolor="#FFFFFF" uuid="8dd0f7f3-f15f-4463-8c49-e7aedd226bce"/>
-					<textElement textAlignment="Left">
-						<font size="22" isBold="false"/>
-					</textElement>
-					<text><![CDATA[LAPORAN DATA PTK]]></text>
-				</staticText>
+				<reportElement mode="Opaque" x="0" y="-8" width="802" height="110" backcolor="#009900" uuid="542be1dd-3e22-4936-bdb4-9cf26eb52117"/>
 				<image hAlign="Center">
-					<reportElement x="10" y="1" width="121" height="109" uuid="75ffd8d6-eff1-41a7-a26c-90bd1e156565"/>
+					<reportElement x="18" y="8" width="94" height="86" uuid="49e82322-0d5c-498f-80f5-89fbf80d5118"/>
 					<imageExpression><![CDATA["src/id/sbd/school/report/logo.png"]]></imageExpression>
 				</image>
+				<staticText>
+					<reportElement style="SubTitle" x="112" y="29" width="369" height="29" forecolor="#FFFFFF" uuid="ad3b3322-71d9-4642-8630-f3580eb62932"/>
+					<textElement textAlignment="Left">
+						<font size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MTsN PASIRJAMBU]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="112" y="0" width="369" height="29" forecolor="#FFFFFF" uuid="d5517e3e-df36-4590-997b-05bdbd5bdf24"/>
+					<textElement textAlignment="Left">
+						<font size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[LAPORAN DATA GURU]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="112" y="58" width="631" height="29" forecolor="#FFFFFF" uuid="efaf43eb-1ce4-488e-8708-7baad10733dd"/>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Jl. Cidura Pasirjambu Kelurahan/Desa Pasirjambu Kecamatan Pasirjambu Kabupaten Bandung]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="112" y="80" width="606" height="29" forecolor="#FFFFFF" uuid="4812f400-34bc-4f47-beba-501eefec79d3"/>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Telepon : (022) 5927552]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</title>
@@ -208,7 +208,7 @@
 						<font size="14"/>
 						<paragraph lineSpacing="1_1_2"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Tanggal_Lahir}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{Tanggal_Lahir})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="395" y="0" width="79" height="18" uuid="000d4a87-f880-49a6-bebd-7d3cbecbfa1f"/>
@@ -266,7 +266,7 @@
 	<pageFooter>
 		<band height="25" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#0072BC" uuid="7a489717-3fd9-4fe2-b29c-e735475e49fc"/>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#009900" uuid="7a489717-3fd9-4fe2-b29c-e735475e49fc"/>
 				<textField evaluationTime="Report">
 					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="b4f3f2b2-6c37-4c0a-812d-bd030cb20bd5"/>
 					<textElement verticalAlignment="Middle">

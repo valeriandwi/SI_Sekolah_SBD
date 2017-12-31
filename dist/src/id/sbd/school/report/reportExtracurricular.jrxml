@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e408c167-4a92-478c-91bb-945fd9b94ee7">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="95"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
@@ -39,37 +39,37 @@ FROM
 	<title>
 		<band height="102" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="-8" width="802" height="110" backcolor="#0072BC" uuid="542be1dd-3e22-4936-bdb4-9cf26eb52117"/>
+				<reportElement mode="Opaque" x="0" y="-8" width="802" height="110" backcolor="#009900" uuid="542be1dd-3e22-4936-bdb4-9cf26eb52117"/>
 				<staticText>
-					<reportElement style="SubTitle" x="131" y="29" width="369" height="29" forecolor="#FFFFFF" uuid="08b90460-fff8-4910-92e6-c1e5f2c12820"/>
-					<textElement textAlignment="Left">
-						<font size="22" isBold="false"/>
-					</textElement>
-					<text><![CDATA[SMK PRAKARYA INTERNASIONAL]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="SubTitle" x="131" y="58" width="606" height="29" forecolor="#FFFFFF" uuid="e8366f49-7b9a-40d5-9a97-a3a296e99da9"/>
+					<reportElement style="SubTitle" x="132" y="80" width="606" height="29" forecolor="#FFFFFF" uuid="2ad293da-49d7-414c-b3ab-7c0257716164"/>
 					<textElement textAlignment="Left">
 						<font size="16" isBold="false"/>
 					</textElement>
-					<text><![CDATA[Jl. Inhoftank No.46-146, Pelindung Hewan, Astanaanyar, Kota Bandung, Jawa Barat 40243]]></text>
+					<text><![CDATA[Telepon : (022) 5927552]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="SubTitle" x="131" y="80" width="606" height="29" forecolor="#FFFFFF" uuid="fb68562e-e6f4-41c7-9345-824f8b78f0ad"/>
+					<reportElement style="SubTitle" x="132" y="58" width="625" height="29" forecolor="#FFFFFF" uuid="bca23457-aca6-4589-8986-58830335e035"/>
 					<textElement textAlignment="Left">
 						<font size="16" isBold="false"/>
 					</textElement>
-					<text><![CDATA[Telepon : (022) 5202834]]></text>
+					<text><![CDATA[Jl. Cidura Pasirjambu Kelurahan/Desa Pasirjambu Kecamatan Pasirjambu Kabupaten Bandung]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="SubTitle" x="131" y="0" width="369" height="29" forecolor="#FFFFFF" uuid="8dd0f7f3-f15f-4463-8c49-e7aedd226bce"/>
+					<reportElement style="SubTitle" x="132" y="29" width="369" height="29" forecolor="#FFFFFF" uuid="cabf00a0-9bcb-4415-8289-e9b830f604ba"/>
 					<textElement textAlignment="Left">
 						<font size="22" isBold="false"/>
 					</textElement>
-					<text><![CDATA[LAPORAN DATA PTK]]></text>
+					<text><![CDATA[MTsN PASIRJAMBU]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="132" y="0" width="410" height="29" forecolor="#FFFFFF" uuid="d5d27720-d1b4-46f9-88bf-690fb6206931"/>
+					<textElement textAlignment="Left">
+						<font size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[LAPORAN DATA EKSTRAKULIKULER]]></text>
 				</staticText>
 				<image hAlign="Center">
-					<reportElement x="10" y="1" width="121" height="109" uuid="75ffd8d6-eff1-41a7-a26c-90bd1e156565"/>
+					<reportElement x="18" y="8" width="94" height="86" uuid="98ba8150-7b44-4d8e-acd1-3981ef81397a"/>
 					<imageExpression><![CDATA["src/id/sbd/school/report/logo.png"]]></imageExpression>
 				</image>
 			</frame>
@@ -186,7 +186,7 @@ FROM
 	<pageFooter>
 		<band height="25" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#0072BC" uuid="8835dcc7-d973-45db-8ad7-4e05879396aa"/>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#009900" uuid="8835dcc7-d973-45db-8ad7-4e05879396aa"/>
 				<textField evaluationTime="Report">
 					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="50a1ef60-7797-4222-ad2e-5b18bc7431df"/>
 					<textElement verticalAlignment="Middle">
